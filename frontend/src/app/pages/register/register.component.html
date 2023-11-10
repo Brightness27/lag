@@ -1,0 +1,48 @@
+<app-head-nav></app-head-nav>
+<div class="container h-75">
+    <div class="container-fluid h-100">
+        <div class="row h-100 mt-5">
+            <div class="col-8 design-area">
+    
+            </div>
+
+            <div class="col register-area d-flex flex-column justify-content-around px-5">
+                <form [formGroup]="registerForm" (submit)="register()">
+                    <div class="row mb-3">
+                        <label for="fn" class="form-label fs-5">Name</label>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="fn" placeholder="First name" formControlName="fn">
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="form-control" id="mi" placeholder="M.I" formControlName="mi">
+                        </div>
+                        <div class="col-5">
+                            <input type="text" class="form-control" id="ln" placeholder="Last name" formControlName="ln">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label fs-5">Address</label>
+                        <input type="email" class="form-control" id="address" formControlName="address">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contact-number" class="form-label fs-5">Contact number</label>
+                        <input type="email" class="form-control" id="contact-number" formControlName="contact_number">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email-address" class="form-label fs-5">Email address</label>
+                        <input type="email" class="form-control" id="email-address" formControlName="email">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fs-5">Password</label>
+                        <input type="password" class="form-control" id="password" formControlName="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary form-control" [disabled]="!registerForm.valid">signup</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

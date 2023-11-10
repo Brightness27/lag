@@ -1,0 +1,58 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)"  [name]="name"></app-superadmin-side-nav>
+
+<!-- main container section for the page -->
+<section class="body border-top border-bottom border-dark" id="services"  [ngClass]="getBodyClass()">
+    <div class="container-fluid">
+        <div class="services">
+            <h1 class="fw-bolder fs-1">DASHBOARD</h1>
+    
+            <div class="container-fluid mt-5">
+                <div class="row row-cols-4 row-cols-md-2 g-4 mx-auto w-75 justify-content-around">
+                    <div class="card card-width" id="load-site" routerLink="/services/load-side-and-service-entrance">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Load Side and Service Entrance</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" id="residential" routerLink="/services/residential-commercial-and-industrial-electrical-services">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Residential, Commercial, and Industrial Electrical Services</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" routerLink="/services/net-metering-installation">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Net Metering Installation</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" routerLink="/services/designing-of-electric-plan">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Designing of Electric Plan</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" routerLink="/services/fabrication-of-gutter-box-for-multi-metering-service-entrance">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Fabrication of Gutter Box for Multi-metering Service Entrance</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" routerLink="/services/installation-of-concrete-post-and-intermediate-pole">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Installation of Concrete Post and Intermediate Pole</h3>
+                        </div>
+                    </div>
+    
+                    <div class="card card-width" routerLink="/services/meralco-service-applications">
+                        <div class="card-body d-flex align-items-center">
+                            <h3 class="card-title fw-bold service-title">Meralco Service Applications</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

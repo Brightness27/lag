@@ -1,0 +1,25 @@
+<div class="container h-75">
+    <div class="container-fluid h-100">
+        <div class="row h-100 mt-5">
+            <div class="col-8 design-area">
+    
+            </div>
+            <div class="col login-area d-flex flex-column justify-content-around px-5">
+                <form [formGroup]="loginForm" (submit)="login()">
+                    <div class="mb-3">
+                        <label for="username" class="form-label fs-5">username</label>
+                        <input type="username" class="form-control" id="username" formControlName="username" (keyup.enter)="login()">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label fs-5">Password</label>
+                        <input type="password" class="form-control" id="password" formControlName="password" (keyup.enter)="login()">
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary form-control mb-3" (click)="login()">login</button>
+                </form>
+
+                  
+            </div>
+        </div>
+    </div>
+</div>

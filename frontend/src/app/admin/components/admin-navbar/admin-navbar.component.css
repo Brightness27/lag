@@ -1,0 +1,36 @@
+.dark-bg {
+    background-color: gray;
+    position: fixed;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    padding: 1rem;
+}
+
+.dark-bg li.bg-white a {
+    color: #201e1e !important;
+    transition: color ease-in-out 0.2s;
+}
+
+.dark-bg li.bg-white {
+    background-color: white !important;
+}
+    
+/* .navbar-brand img {
+    height: 80px !important;
+} */
+
+.navbar-collapse {
+    flex-grow: 0;
+    background-color: gray;
+}
+
+ul li a {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+    .dark-bg {
+        height: 94px;
+    }
+}

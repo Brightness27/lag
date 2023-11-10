@@ -1,0 +1,113 @@
+<app-head-nav></app-head-nav>
+
+<section class="border-top border-bottom border-dark">
+    <div class="container-fluid position-relative bg-success">
+        <div class="carousel-container-in-components">
+            <app-carousel [images]="images" [autoSlide]="true"></app-carousel>
+        </div>
+
+        <div class="about text-center">
+            <h1 class="fw-bolder fs-1 text-uppercase">COMPANY PROFILE</h1>
+        </div>
+    </div>
+</section>
+
+<section class="w-100 p-0">
+    <div class="container-fluid">
+        <div class="row p-5 border-bottom border-top flex-direction-on-md bg-light" id="load-side-and-service-entrance">
+            <div class="col mx-5">
+                <img src="" alt="background">
+            </div>
+            <div class="col mx-5 text-center">
+                <h2 class="mt-5 text-uppercase fw-bolder">The background</h2>
+                <div class="text-justified">
+                    <p class="mt-5 text-indention fs-5">
+                        {{ background }}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row p-5 border-bottom reverse-direction-flex bg-light" id="residential-commercial-and-industrial-electrical-services">
+            <div class="col mx-5">
+                <img src="" alt="background2">
+            </div>
+            <div class="col mx-5 text-center">
+                <div class="text-justified">
+                    <p class="mt-5 text-indention fs-5">
+                        {{ background2 }}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row p-5 border-bottom flex-direction-on-md bg-light" id="net-metering-installation">
+            <div class="col mx-5">
+                <img src="" alt="background3">
+            </div>
+            <div class="col mx-5 text-center">
+                <div class="text-justified">
+                    <p class="mt-5 text-indention fs-5">
+                        {{ background3 }}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row p-5 border-bottom reverse-direction-flex bg-light" id="designing-of-electric-plan">
+            <div class="col mx-5">
+                <img src="" alt="Designing of Electric Plan">
+            </div>
+            <div class="col mx-5 text-center">
+                <div class="text-justified">
+                    <p class="mt-5 text-indention fs-5">
+                        {{ background4 }}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row p-5 border-bottom flex-direction-on-md bg-light" id="fabrication-of-gutter-box-for-multi-metering-service-entrance">
+            <div class="col mx-5">
+                <img src="" alt="Fabrication of Gutter Box for Multi-metering Service Entrance">
+            </div>
+            <div class="col mx-5 text-center">
+                <div class="text-justified">
+                    <ul>
+                        <li *ngFor="let service of services" class="fs-5 text-left">
+                            {{ service }}
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="row p-5 border-bottom reverse-direction-flex bg-light" id="installation-of-concrete-post-and-intermediate-pole">
+            <div class="col mx-5">
+                <img src="" alt="Our Company's Best Services">
+            </div>
+            <div class="col mx-5 text-center">
+                <h2 class="mt-5 text-uppercase fw-bolder">Our Company's Best Services</h2>
+                <div class="text-justified">
+                    <p class="mt-5 text-indention fs-5">
+                        {{ bestServices }}
+                    </p>
+                    <p class="mt-5 text-indention fs-5">
+                        {{ bestServices2 }}
+                    </p>
+                    <p class="mt-5 text-indention fs-5">
+                        {{ bestServices3 }}
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-footer></app-footer>

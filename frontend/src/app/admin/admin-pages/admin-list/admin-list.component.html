@@ -1,0 +1,69 @@
+<app-admin-navbar [department]="department"></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<section class="body contents border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Admin List</h1>
+
+    <div class="mx-2 w-100 d-flex justify-content-between">
+        <button type="button" class="btn btn-light border border-dark p-2" [routerLink]="['/admin/add-new-admin']">
+            <fa-icon [icon]="addAdmin"></fa-icon>
+            <span class="ms-2" *ngIf="hideAddText">Add new Admin</span>
+        </button>
+
+        <div class="border w-25 p-0 rounded align-self-right">
+            <input type="text" class="border-0 h-100 px-3 rounded search-input" [value]="searchKey" (input)="updateSearchKey($event)">
+            <button class="search-btn border-0 rounded-end" (click)="searchEmployees()">
+                <fa-icon [icon]="search"></fa-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="tab mt-3">
+        <button class="tablinks" (click)="showTab('ad-activebtn', 'Active')" id="ad-activebtn">Active</button>
+        <button class="tablinks" (click)="showTab('ad-resignedbtn', 'Resigned')" id="ad-resignedbtn">Resigned</button>
+    </div>
+
+    <div id="Active" class="tabcontent" [ngClass]="active_class">
+        <table class="table table-striped table-hover table-bordered border-dark my-4">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col" class="text-start">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let admin of activeAdmins" [routerLink]="admin.link">
+                    <th scope="row">{{ admin.id }}</th>
+                    <td>{{ admin.fullName }}</td>
+                    <td>{{ admin.position }}</td>
+                    <td>{{ admin.department }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="Resigned" class="tabcontent"  [ngClass]="resigned_class">
+        <table class="table table-striped table-hover table-bordered border-dark my-4">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col" class="text-start">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let admin of resignedAdmins" [routerLink]="admin.link">
+                    <th scope="row">{{ admin.id }}</th>
+                    <td>{{ admin.fullName }}</td>
+                    <td>{{ admin.position }}</td>
+                    <td>{{ admin.department }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>

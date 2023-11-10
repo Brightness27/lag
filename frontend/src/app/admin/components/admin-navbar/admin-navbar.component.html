@@ -1,0 +1,30 @@
+<div class="dark-bg" id="navigator">
+    <div class="container-md">
+        <nav class="navbar navbar-expand-md navbar-dark" id="navbar">
+            <div class="container-fluid  justify-content-end">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item rounded-pill  px-2" [routerLinkActive]="'bg-white'">
+                            <a class="nav-link fs-5 fw-bold" [routerLink]="['/admin/dashboard']" [routerLinkActive]="'text-dark'">Dashboard</a>
+                        </li>
+
+                        <li class="nav-item rounded-pill px-2" [routerLinkActive]="'bg-white'">
+                            <a class="nav-link fs-5 fw-bold" [ngClass]="nonHrClass()" [routerLink]="['/admin/employees']" [routerLinkActive]="'text-dark'">Employees</a>
+                        </li>
+
+                        <li class="nav-item rounded-pill px-2" [routerLinkActive]="'bg-white'" >
+                            <a class="nav-link fs-5 fw-bold" [ngClass]="nonAccountingClass()" [routerLink]="['/admin/inventory/']" [routerLinkActive]="'text-dark'">Inventory</a>
+                        </li>
+
+                        <li class="nav-item rounded-pill px-2">
+                            <a class="nav-link fs-5 fw-bold" (click)="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

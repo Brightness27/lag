@@ -1,0 +1,175 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<div class="modal fade" tabindex="-1" id="resign-employee-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Admin Resign</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="emp-resign-close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ employeeName }} has resigned?</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >No</button>
+                <button type="button" class="btn btn-primary" (click)="resignEmployee()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="active-employee-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Admin Activate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="emp-active-close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>Bring {{ employeeName }} back?</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >No</button>
+                <button type="button" class="btn btn-primary" (click)="activateEmployee()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="alert-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ alertTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="emp-close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ alertMessage }}</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="emp-open-modal">open modal</button>
+
+<section class="body border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Employee Details</h1>
+
+    <div class="container border border-dark mt-5 h-75 rounded">
+        <form class="p-4" [formGroup]="editForm">
+            <div class="mb-3">
+                <label for="id" class="form-label fs-5">Id</label>
+                <input type="text" class="form-control border-secondary" id="id" formControlName="id">
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label fs-5">Name</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control border-secondary" id="fname" formControlName="fname" placeholder="First Name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control border-secondary" id="mname" formControlName="mname" placeholder="Middle Name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control border-secondary" id="lname" formControlName="lname" placeholder="Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="contact_number" class="form-label fs-5">Contact Number</label>
+                <input type="text" class="form-control border-secondary" id="contact_number" formControlName="contact_number">
+            </div>
+
+            <div class="mb-3">
+                <label for="email_address" class="form-label fs-5">Email address</label>
+                <input type="email" class="form-control border-secondary" id="emaemail_addressil" formControlName="email_address">
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label fs-5">Address</label>
+                <input type="text" class="form-control border-secondary" id="address" formControlName="address">
+            </div>
+
+            <div class="mb-3">
+                <label for="tin" class="form-label fs-5">TIN Number</label>
+                <input type="text" class="form-control border-secondary" id="tin" formControlName="tin">
+            </div>
+
+            <div class="mb-3">
+                <label for="sss" class="form-label fs-5">SSS Number</label>
+                <input type="text" class="form-control border-secondary" id="sss" formControlName="sss">
+            </div>
+
+            <div class="mb-3">
+                <label for="philhealth" class="form-label fs-5">Philhealth</label>
+                <input type="email" class="form-control border-secondary" id="philhealth" formControlName="philhealth">
+            </div>
+
+            <div class="mb-3">
+                <label for="pagibig" class="form-label fs-5">PAGIBIG</label>
+                <input type="text" class="form-control border-secondary" id="pagibig" formControlName="pagibig">
+            </div>
+
+            <div class="mb-1 mt-5">
+                <label class="form-label fs-5">In case of Emergency Contact Person</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="emergency_contact_name" class="form-label fs-5">Name</label>
+                <input type="text" class="form-control border-secondary" id="emergency_contact_name" formControlName="emergency_contact_name">
+            </div>
+
+            <div class="mb-3">
+                <label for="emergency_contact_number" class="form-label fs-5">Contact Number</label>
+                <input type="text" class="form-control border-secondary" id="emergency_contact_number" formControlName="emergency_contact_number">
+            </div>
+
+            <div class="mb-3">
+                <label for="beneficiary" class="form-label fs-5">Beneficiary</label>
+                <input type="email" class="form-control border-secondary" id="beneficiary" formControlName="beneficiary">
+            </div>
+            
+            <div class="mb-3">
+                <label for="position" class="form-label fs-5">Position</label>
+                <input type="text" class="form-control border-secondary" id="position" formControlName="position">
+            </div>
+
+            <div class="mb-4">
+                <label for="status" class="form-label fs-5">Status</label>
+                <input type="text" class="form-control border-secondary" id="status" formControlName="status">
+            </div>
+
+            <div class="row mb-3" *ngIf="disabled">
+                <div class="col">
+                    <button type="button" class="btn btn-primary form-control" (click)="update()" [disabled]="resigned">Update Employee</button>
+                </div>
+
+                <div class="col">
+                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#resign-employee-modal" *ngIf="!resigned">Resign</button>
+                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#active-employee-modal" *ngIf="resigned">Activate</button>
+                </div>
+                
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary form-control mb-3" (click)="updateDetails()" *ngIf="!disabled">Update employee</button>
+                <button type="button" class="btn btn-secondary form-control mb-3" (click)="cancelUpdate()" *ngIf="!disabled">Cancel Update</button>
+            </div>
+            
+            
+        </form>
+    </div>
+</section>

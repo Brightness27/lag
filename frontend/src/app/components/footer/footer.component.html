@@ -1,0 +1,75 @@
+<div class="bg-light text-dark float-end">
+    <div class="container-fluid">
+        <div class="footer d-flex justify-content-center">
+            <div>
+                <div class="row grid-in-md gap-3 w-75 mx-auto">
+                    <div class="col me-5">
+                        <h4>Connect with Us</h4>
+                        <div class="row mb-2">
+                            <div class="col-1 text-right">
+                                <fa-icon [icon]="loc"></fa-icon>
+                            </div>
+                            <div class="col-11 text-left">
+                                <span>
+                                    {{ location }}
+                                </span>
+                            </div> 
+                        </div>
+        
+                        <div class="row mb-2">
+                            <div class="col-1 text-right">
+                                <fa-icon [icon]="phone"></fa-icon>
+                            </div>
+                            <div class="col-11 text-left">
+                                <span class="contactSpan">
+                                    {{ phoneNumber }}
+                                </span>
+                            </div>
+                        </div>
+        
+                        <div class="row mb-2">
+                            <div class="col-1 text-right">
+                                <fa-icon [icon]="env"></fa-icon>
+                            </div>
+                            <div class="col-11 text-left">
+                                <span>
+                                    {{ emailAddress }}
+                                </span>
+                            </div>
+                        </div>
+        
+                        <div class="row mb-2">
+                            <div class="col-1 text-right">
+                                <fa-icon [icon]="fbIcon"></fa-icon>
+                            </div>
+                            <div class="col-11 text-left">
+                                <span>
+                                    {{ fbUrl }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col ms-5">
+                        <h4>About {{ companyName }}</h4>
+        
+                        <div class="text-justified text-indention">
+                            <span>
+                                {{ aboutText }}
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
+        
+                <div class="row mt-3">
+                    <div class="col copyright">
+                        <span>
+                            &copy; {{ companyName }} {{ copyrightText }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

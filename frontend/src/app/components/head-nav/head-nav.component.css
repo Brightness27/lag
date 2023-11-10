@@ -1,0 +1,53 @@
+.dark-bg {
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+    width: 100%;
+    
+}
+
+.top-nav {
+    background-color: transparent;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.scrolled-nav, #navigator:hover {
+    background-color: gray;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.top-nav li.bg-white {
+    background-color: gray !important;
+    color: white;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.top-nav li.bg-white a {
+    color: #F8F9FA !important;
+    transition: color ease-in-out 0.2s;
+}
+
+.top-nav:hover li.bg-white a {
+    color: #201e1e !important;
+    transition: color ease-in-out 0.2s;
+}
+
+.top-nav:hover li.bg-white {
+    background-color: white !important;
+}
+    
+.navbar-brand img {
+    height: 80px !important;
+}
+
+.navbar-collapse {
+    flex-grow: 0;
+}
+
+ul li a {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+    
+}

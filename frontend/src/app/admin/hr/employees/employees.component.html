@@ -1,0 +1,81 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<section class="body contents border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Employee List</h1>
+
+    <div class="mx-2 w-100 d-flex justify-content-between">
+        <button type="button" class="btn btn-light border border-dark p-2" [routerLink]="['/admin/employees/add-new-employee']" [ngClass]="hideButton()">
+            <fa-icon [icon]="addEmployee"></fa-icon>
+            <span class="ms-2" *ngIf="hideAddText">Add new Employee</span>
+        </button>
+
+        <div class="border w-25 p-0 rounded align-self-right">
+            <input type="text" class="border-0 h-100 px-3 rounded search-input" [value]="searchKey" (input)="updateSearchKey($event)">
+            <button class="search-btn border-0 rounded-end" (click)="searchEmployees()">
+                <fa-icon [icon]="search"></fa-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="tab mt-3">
+        <button class="tablinks" (click)="showTab('emp-activebtn', 'Active')" id="emp-activebtn">Active</button>
+        <button class="tablinks" (click)="showTab('emp-resignedbtn', 'Resigned')" id="emp-resignedbtn">Resigned</button>
+    </div>
+
+    <div id="Active" class="tabcontent" [ngClass]="active_class">
+        <table class="table table-striped table-hover table-bordered border-dark my-4">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col" class="text-start">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Middle Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Email Adrress</th>
+                    <th scope="col">Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of activeEmployees" [routerLink]="employee.link">
+                    <th scope="row">{{ employee.id }}</th>
+                    <td>{{ employee.fname }}</td>
+                    <td>{{ employee.mname }}</td>
+                    <td>{{ employee.lname }}</td>
+                    <td>{{ employee.contact_number }}</td>
+                    <td>{{ employee.email_address }}</td>
+                    <td>{{ employee.position }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="Resigned" class="tabcontent"  [ngClass]="resigned_class">
+        <table class="table table-striped table-hover table-bordered border-dark my-4">
+            <thead class="text-center">
+                <tr>
+                    <th scope="col" class="text-start">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Middle Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Email Adrress</th>
+                    <th scope="col">Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of resignedEmployees" [routerLink]="employee.link">
+                    <th scope="row">{{ employee.id }}</th>
+                    <td>{{ employee.fname }}</td>
+                    <td>{{ employee.mname }}</td>
+                    <td>{{ employee.lname }}</td>
+                    <td>{{ employee.contact_number }}</td>
+                    <td>{{ employee.email_address }}</td>
+                    <td>{{ employee.position }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</section>

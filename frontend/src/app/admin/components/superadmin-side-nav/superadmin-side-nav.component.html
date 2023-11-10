@@ -1,0 +1,70 @@
+<div class="sidenav bg-dark" [ngClass]="collapsed ? 'sidenav-collapsed' : ''">
+    <div class="logo-container">
+        <button type="button" class="logo" (click)="toggleCollapse()"><img src="assets/LAG LOGO.png" alt="logo"></button>
+        <div class="logo-text" @fadeInOut *ngIf="collapsed">L.A. Garcia</div>
+        <button class="close-btn" @fadeInOut *ngIf="collapsed" (click)="toggleCollapse()">
+            <fa-icon class="close-icon" [icon]="closeIcon"></fa-icon>
+        </button>
+    </div>
+
+    <div class="profile-container">
+        <ul class="sidenav-nav ">
+            <div class="border-bottom border-top w-100">
+                <li class="sidenav-nav-item profile-link">
+                    <a class="sidenav-nav-link" [routerLink]="['/admin/profile']"  routerLinkActive="active">
+                        <fa-icon class="sidenav-link-icon" [icon]="profileIcon"></fa-icon>
+                        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ name }} </span>
+                    </a>
+                </li>
+            </div>
+        </ul>
+
+    </div>
+
+    <div class="scrollable w-100">
+        <div class="w-100" *ngIf="superadmin">
+            <div class="title-container mt-2 border-bottom border-top py-3">
+                <span class="title text-white">{{ title }}</span>
+            </div>
+        
+            <ul class="sidenav-nav">
+                <li class="sidenav-nav-item" *ngFor="let data of navData">
+                    <a class="sidenav-nav-link" [routerLink]="data.routeLink"  routerLinkActive="active">
+                        <fa-icon class="sidenav-link-icon" [icon]="data.icon"></fa-icon>
+                        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ data.label }} </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
+        <div class="w-100" *ngIf="superadmin || hr">
+            <div class="title-container mt-2 border-bottom border-top py-3">
+                <span class="title text-white">{{ staffTitle }}</span>
+            </div>
+        
+            <ul class="sidenav-nav">
+                <li class="sidenav-nav-item" *ngFor="let data of staffNavData">
+                    <a class="sidenav-nav-link" [routerLink]="data.routeLink"  routerLinkActive="active">
+                        <fa-icon class="sidenav-link-icon" [icon]="data.icon"></fa-icon>
+                        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ data.label }} </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    
+        <div class="w-100" *ngIf="superadmin || accounting">
+            <div class="title-container mt-2 border-bottom border-top py-3">
+                <span class="title text-white">{{ inventoryTitle }}</span>
+            </div>
+        
+            <ul class="sidenav-nav">
+                <li class="sidenav-nav-item" *ngFor="let data of inventoryNavData">
+                    <a class="sidenav-nav-link" [routerLink]="data.routeLink"  routerLinkActive="active">
+                        <fa-icon class="sidenav-link-icon" [icon]="data.icon"></fa-icon>
+                        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ data.label }} </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

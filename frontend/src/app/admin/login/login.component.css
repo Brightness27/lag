@@ -1,0 +1,17 @@
+.container {
+    max-width: 1800px;
+}
+
+.container-fluid {
+    margin: auto 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.design-area {
+    background-color: #78beec;
+}
+
+.login-area {
+    background-color: #faa06b;
+}

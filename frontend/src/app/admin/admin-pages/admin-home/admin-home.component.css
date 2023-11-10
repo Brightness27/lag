@@ -1,0 +1,94 @@
+.body {
+    width: calc(100% - 5rem);
+    margin-left: 5rem;
+    z-index: 0;
+    position: relative;
+    top: 94px;
+    transition: all .3s ease;
+}
+
+.body-trimmed {
+    width: calc(100% - 16.5625rem);
+    margin-left: 16.5625rem;
+}
+
+.body-md-screen {
+    width: calc(100% - 5rem);
+    margin-left: 5rem;
+}
+
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.services {
+    padding: 5% 0;
+    text-align: center;
+}
+
+.card-width {
+    width: 18rem;
+    height: 12rem;
+    margin: 2% 0;
+    transition: all .4s ease-out 0s;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.card-width div {
+    transition: all ease-in-out .2s;
+}
+
+.card-width:hover {
+    box-shadow: 0 20px 30px rgba(35,47,85,0.3);
+    transform: scale(1.05) translateY(-20px);
+
+}
+
+.card-width:hover div {
+    transform: scale(1.15);
+    /* color: white; */
+}
+
+.card-width::before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    background: rgb(245, 244, 208) url('/assets/LAG LOGO.png') no-repeat center center fixed;
+    background-size: contain;
+    transition: .6s;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    opacity: .7;
+}
+
+/* #load-site:hover::before {
+    transform: rotate(360deg);
+}
+
+#residential:hover::before {
+    transform: rotate(-360deg);
+} */
+
+.card-width:hover::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (max-width: 767px) {
+    .card-width {
+        width: 14rem;
+        height: 8rem;
+    }
+
+    .card-width div h3 {
+        font-size: calc(1rem + .6vw);;
+    }
+}
+

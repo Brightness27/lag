@@ -1,0 +1,31 @@
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.intro {
+    padding: 15% 0;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.intro h1 {
+    margin-bottom: 20px;
+}
+
+.intro p {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.carousel-container-in-components {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 1;
+    z-index: 1;
+}
+

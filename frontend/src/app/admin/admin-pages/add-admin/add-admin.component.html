@@ -1,0 +1,65 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<div class="modal fade" tabindex="-1" id="alert-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ alertTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ alertMessage }}</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="open-modal">open modal</button>
+
+<!-- main container section for the page -->
+<section class="body contents border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Add new Admin</h1>
+    
+    <div class="container border mt-5 rounded">
+        <form [formGroup]="addForm" class="p-4">
+
+            <div class="mb-3">
+                <label for="employeeId" class="form-label fs-5">Employee Name</label>
+                <select type="text" class="form-select" id="employeeId" formControlName="employeeId">
+                    <option value="" selected hidden class="text-dark"> -- Choose Employee --</option>
+                    <option class="form-option" *ngFor="let employee of employees" value="{{ employee.id }}">{{ employee.fullName }}</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="department" class="form-label fs-5">Department</label>
+                <select type="text" class="form-select" id="department" formControlName="department">
+                    <option value="" selected hidden class="text-dark"> -- Choose Department --</option>
+                    <option value="general admin">General Admin</option>
+                    <option value="hr">Human Resource</option>
+                    <option value="accounting">Accounting</option>
+                    <option value="engineering">Engineering</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="form-label fs-5">Username</label>
+                <input type="text" class="form-control" id="username" formControlName="username">
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label fs-5">Password</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+            </div>
+
+            <button type="button" class="btn btn-primary form-control mb-3" (click)="submit()">Submit</button>
+        </form>
+    </div>
+</section>

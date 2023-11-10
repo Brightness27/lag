@@ -1,0 +1,114 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<div class="modal fade" tabindex="-1" id="change-password-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <form [formGroup]="changePasswordForm" (submit)="changePassword()">
+                    <span class="error-message" *ngIf="error">*{{ error_message }}</span>
+                    <div class="mb-3">
+                        <label for="name" class="form-label fs-5">Old Password <sup class="star">*</sup></label>
+                        <input type="password" class="form-control" id="name" formControlName="old_password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label fs-5">New Password <sup class="star">*</sup></label>
+                        <input type="password" class="form-control" id="date" formControlName="new_password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="leaveType" class="form-label fs-5">Confirm Password <sup class="star">*</sup></label>
+                        <input type="password" class="form-control" id="leaveType" formControlName="confirm_password">
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="changePassword()">Change Password</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="body border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Your Profile</h1>
+
+    <div class="container border border-dark mt-5 h-75 rounded">
+        <form class="p-4" [formGroup]="profileForm">
+
+            <div class="mb-3">
+                <label for="name" class="form-label fs-5">Name</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control input-bg border-secondary" id="fname" formControlName="fname" placeholder="First Name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control input-bg border-secondary" id="mname" formControlName="mname" placeholder="Middle Name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control input-bg border-secondary" id="lname" formControlName="lname" placeholder="Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="contact_number" class="form-label fs-5">Contact Number</label>
+                <input type="text" class="form-control input-bg border-secondary" id="contact_number" formControlName="contact_number">
+            </div>
+
+            <div class="mb-3">
+                <label for="email_address" class="form-label fs-5">Email address</label>
+                <input type="email" class="form-control input-bg border-secondary" id="emaemail_addressil" formControlName="email_address">
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label fs-5">Address</label>
+                <input type="text" class="form-control input-bg border-secondary" id="address" formControlName="address">
+            </div>
+
+            <div class="mb-1 mt-5">
+                <label class="form-label fs-5">In case of Emergency Contact Person</label>
+            </div>
+
+            <div class="mb-3">
+                <label for="emergency_contact_name" class="form-label fs-5">Name</label>
+                <input type="text" class="form-control input-bg border-secondary" id="emergency_contact_name" formControlName="emergency_contact_name">
+            </div>
+
+            <div class="mb-3">
+                <label for="emergency_contact_number" class="form-label fs-5">Contact Number</label>
+                <input type="text" class="form-control input-bg border-secondary" id="emergency_contact_number" formControlName="emergency_contact_number">
+            </div>
+
+            <div class="mb-3">
+                <label for="beneficiary" class="form-label fs-5">Beneficiary</label>
+                <input type="email" class="form-control input-bg border-secondary" id="beneficiary" formControlName="beneficiary">
+            </div>
+            
+            <div class="mb-3">
+                <label for="position" class="form-label fs-5">Position</label>
+                <input type="text" class="form-control input-bg border-secondary" id="position" formControlName="position">
+            </div>
+
+            <div class="mb-4">
+                <label for="username" class="form-label fs-5">Username</label>
+                <input type="email" class="form-control input-bg border-secondary" id="username" formControlName="username">
+            </div>
+
+            <button type="button" class="btn btn-primary form-control mb-3" (click)="update()" *ngIf="disabled">Update</button>
+            <button class="btn btn-success border border-dark  form-control mb-3" data-bs-toggle="modal" data-bs-target="#change-password-modal" *ngIf="disabled">
+                Change Password
+            </button>
+            <button type="button" class="btn btn-primary form-control mb-3" (click)="updateDetails()" *ngIf="!disabled">Update</button>
+            <button type="button" class="btn btn-secondary form-control mb-3" (click)="cancelUpdate()" *ngIf="!disabled">Cancel</button>
+        </form>
+    </div>
+</section>

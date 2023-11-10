@@ -1,0 +1,61 @@
+<section class="text-dark" id="about">
+    <div class="container-fluid">
+        <div class="about">
+            <h3 class="fw-bolder">ABOUT US</h3>
+            <div class="container-fluid mt-5">
+                <div class="row w-100 p-5 flex-direction-on-md">
+                    <div class="col mx-5">
+                        <img src="" alt="about text image 1">
+                    </div>
+
+                    <div class="col mx-5 text-justified fs-4">
+                        <span>
+                            {{ aboutText }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row w-100  p-5 reverse-direction-flex">
+                    <div class="col mx-5">
+                        <img src="" alt="about text image 2">
+                    </div>
+
+                    <div class="col mx-5 text-justified fs-4">
+                        <span>
+                            {{ aboutText2 }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row w-100 p-5 flex-direction-on-md">
+                    <div class="col mx-5">
+                        <img src="" alt="mission image">
+                    </div>
+
+                    <div class="col mx-5 text-justified fs-4">
+                        <h3 class="text-center fw-bolder text-uppercase">OUR MISSION</h3>
+                        <span>
+                            {{ mission }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row w-100  p-5 reverse-direction-flex">
+                    <div class="col mx-5">
+                        <img src="" alt="vision image">
+                    </div>
+
+                    <div class="col mx-5 text-justified fs-4">
+                        <h3 class="text-center fw-bolder text-uppercase">OUR VISION</h3>
+                        <span>
+                            {{ vision }}
+                        </span>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-secondary rounded-pill" [routerLink]="['/about-us']">Read More -></button>
+            </div>
+        </div>
+    </div>
+</section>
+

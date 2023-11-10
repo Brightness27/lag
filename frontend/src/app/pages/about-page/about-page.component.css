@@ -1,0 +1,52 @@
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.about {
+    position: relative;
+    padding: 15% 0;
+    text-align: center;
+    z-index: 2;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-justified {
+    text-align: justify;
+}
+
+.reverse-direction-flex {
+    flex-direction: row-reverse;
+}
+
+.text-indention {
+    text-indent: 5rem;
+}
+
+.carousel-container-in-components {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 1;
+    z-index: 1;
+}
+
+@media screen and (max-width: 767px) {
+    .reverse-direction-flex, .flex-direction-on-md {
+        flex-direction: column;
+    }
+
+    .col{
+        width: 100%;
+    }
+
+    .col.mx-5 {
+        margin-left: unset !important;
+    }
+}
+

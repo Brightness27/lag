@@ -1,0 +1,33 @@
+<div class="dark-bg" (scroll)="onScroll()" [ngClass]="navbarScrolled? 'scrolled-nav' : 'top-nav'" id="navigator">
+    <div class="container-md">
+        <nav class="navbar navbar-expand-md navbar-dark" id="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" [routerLink]="['/']">
+                    <img src="assets/LAG LOGO.png" class="">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item rounded-pill  px-2" [routerLinkActive]="'bg-white'" [routerLinkActiveOptions]="{exact:true}">
+                            <a class="nav-link fs-5 fw-bold" [routerLink]="['/']" [routerLinkActive]="'text-dark'" [routerLinkActiveOptions]="{exact:true}">Home</a>
+                        </li>
+
+                        <li class="nav-item rounded-pill px-2" [routerLinkActive]="'bg-white'">
+                            <a class="nav-link fs-5 fw-bold" [routerLink]="['/about-us']" [routerLinkActive]="'text-dark'">About Us</a>
+                        </li>
+
+                        <li class="nav-item rounded-pill px-2" [routerLinkActive]="'bg-white'">
+                            <a class="nav-link fs-5 fw-bold" [routerLink]="['/services']" [routerLinkActive]="'text-dark'">Services</a>
+                        </li>
+    
+                        <li class="nav-item rounded-pill px-2">
+                            <a class="nav-link fs-5 fw-bold" [routerLink]="['/login']">Application Tracker</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
