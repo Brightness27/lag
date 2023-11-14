@@ -7,6 +7,7 @@ const cors = require('cors');
 const employeeRoutes = require('./routes/employees');
 const adminRoutes = require('./routes/admin');
 const leaveRoutes = require('./routes/leave');
+const inventoryRoutes = require('./routes/inventory');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 app.use('/employees', employeeRoutes);
 app.use('/admin', adminRoutes);
 app.use('/leave', leaveRoutes);
+app.use('/inventory', inventoryRoutes);
   
 app.listen(3000, () => {
     console.log(`listening to port ${ports}`);

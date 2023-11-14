@@ -1,0 +1,78 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<div class="modal fade" tabindex="-1" id="alert-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ alertTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ alertMessage }}</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="open-modal">open modal</button>
+
+<section class="body border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Admin Details</h1>
+
+    <div class="container border border-dark mt-5 h-75 rounded">
+        <form class="p-4" [formGroup]="editForm">
+            <div class="row mb-3">
+                <div class="col-5"></div>
+                <div class="col-5"></div>
+                <div class="col-2 justify-content-end">
+                    <button class="btn btn-secondary align" (click)="generateNewBarcode()">Download Barcode</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label fs-5">Item Name</label>
+                <input type="text" class="form-control border-secondary" id="name" formControlName="name">
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label fs-5">Category</label>
+                <input type="text" class="form-control border-secondary" id="category" formControlName="category">
+            </div>
+
+            <div class="mb-3">
+                <label for="stock" class="form-label fs-5">Remaining Stock</label>
+                <input type="text" class="form-control border-secondary" id="stock" formControlName="stock">
+            </div>
+
+            <div class="mb-4">
+                <label for="last_stock_date" class="form-label fs-5">Last Stock Update</label>
+                <input type="text" class="form-control border-secondary" id="last_stock_date" formControlName="last_stock_date">
+            </div>
+
+            <!-- <div class="row mb-3" *ngIf="disabled">
+                <div class="col">
+                    <button type="button" class="btn btn-primary form-control" (click)="update()" [disabled]="resigned">Update</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#resign-admin-modal" *ngIf="!resigned">Resign</button>
+                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#active-admin-modal" *ngIf="resigned">Activate</button>
+                </div>
+                
+            </div> -->
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary form-control mb-3" (click)="updateDetails()" *ngIf="!disabled">Update Admin</button>
+                <button type="button" class="btn btn-secondary form-control mb-3" (click)="cancelUpdate()" *ngIf="!disabled">Cancel Update</button>
+            </div>
+        </form>
+    </div>
+
+    
+</section>
+

@@ -12,6 +12,8 @@ export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
 
+  errorMessage = '';
+
   constructor(private adminServices: AdminServicesService, private router: Router) {}
 
   ngOnInit(): void {
@@ -27,13 +29,13 @@ export class LoginComponent implements OnInit {
 
   login() {
     if(!this.loginForm.valid) {
-      console.log("Please enter username and password");
+      this.errorMessage = "*Please enter username and password";
     }
     else {
       this.adminServices.login(this.loginForm.value.username, this.loginForm.value.password).subscribe( tokenObject => {
       
         if(tokenObject.error) {
-          console.log(tokenObject.message);
+          this.errorMessage = '*' + tokenObject.message;
           
         }
         else {

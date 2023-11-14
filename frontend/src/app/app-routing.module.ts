@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Router, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { LoginComponent } from './admin/login/login.component';
 import { AdminHomeComponent } from './admin/admin-pages/admin-home/admin-home.component';
@@ -12,11 +12,12 @@ import { EmployeeDetailsComponent } from './admin/hr/employee-details/employee-d
 import { SickLeaveComponent } from './admin/hr/sick-leave/sick-leave.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { authGuardGuard } from './services/guard/auth-guard.guard';
-import { AdminServicesService } from './services/admin-services/admin-services.service';
 import { AdminListComponent } from './admin/admin-pages/admin-list/admin-list.component';
 import { AddAdminComponent } from './admin/admin-pages/add-admin/add-admin.component';
 import { ProfilePageComponent } from './admin/profile-page/profile-page.component';
 import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-details.component';
+import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inventory.component';
+import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -35,8 +36,10 @@ const routes: Routes = [
   {path: 'admin/employees/list/details/:id', canActivate: [authGuardGuard], component: EmployeeDetailsComponent},
   {path: 'admin/employees/add-new-employee', canActivate: [authGuardGuard], component: AddEmployeeComponent},
   {path: 'admin/employees/leave', component: SickLeaveComponent},
-  {path: 'admin/inventory', redirectTo: '/admin/inventory/dashboard', pathMatch: 'full'},
-  {path: 'admin/inventory/dashboard', canActivate: [authGuardGuard], component: InventoryComponent},
+  {path: 'admin/inventory', redirectTo: '/admin/inventory/list', pathMatch: 'full'},
+  {path: 'admin/inventory/list', canActivate: [authGuardGuard], component: InventoryComponent},
+  {path: 'admin/inventory/details/:id', canActivate: [authGuardGuard], component: InventoryDetailsComponent},
+  {path: 'admin/inventory/add', canActivate: [authGuardGuard], component: AddInventoryComponent},
   {path: '**', component: NotFoundComponent},
 ];
 

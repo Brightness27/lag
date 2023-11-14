@@ -31,6 +31,8 @@ import { AdminListComponent } from './admin/admin-pages/admin-list/admin-list.co
 import { AddAdminComponent } from './admin/admin-pages/add-admin/add-admin.component';
 import { ProfilePageComponent } from './admin/profile-page/profile-page.component';
 import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-details.component';
+import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inventory.component';
+import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 
 
 @NgModule({
@@ -58,7 +60,9 @@ import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-d
     AdminListComponent,
     AddAdminComponent,
     ProfilePageComponent,
-    AdminDetailsComponent
+    AdminDetailsComponent,
+    AddInventoryComponent,
+    InventoryDetailsComponent
   ],
   imports: [
     BrowserModule,

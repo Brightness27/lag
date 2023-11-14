@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
+import { InventoryService } from 'src/app/services/inventory-services/inventory.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -16,6 +17,8 @@ export class InventoryComponent implements OnInit {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
+  inventories: any[] = [];
+
   department!: any;
 
   name: string =  '';
@@ -27,7 +30,7 @@ export class InventoryComponent implements OnInit {
 
   token: any;
 
-  constructor(private adminService: AdminServicesService) {}
+  constructor(private adminService: AdminServicesService, private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
     this.token = this.adminService.getTokenDetails();
@@ -40,6 +43,8 @@ export class InventoryComponent implements OnInit {
         this.setActiveDepartment();
       });
     }
+
+    this.getAllInventories();
   }
 
   setActiveDepartment() {
@@ -74,5 +79,16 @@ export class InventoryComponent implements OnInit {
     }
 
     return styleClass;
+  }
+
+  getAllInventories() {
+    this.inventoryService.getAllInventories().subscribe(inventories => {
+      this.inventories = inventories.map(inventory => {
+        return {
+          ...inventory,
+          link: '/admin/inventory/details/' + inventory.item_code
+        };
+      });
+    });
   }
 }
