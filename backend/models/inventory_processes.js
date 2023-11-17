@@ -1,14 +1,13 @@
 const db = require('../utils/database');
 
 module.exports = class InventoryProcesses {
-    constructor (id, item_code, name, category , stock, last_stock_date, status) {
+    constructor (id, item_code, process_count, count_date , process_type, details) {
         this.id = id;
         this.item_code = item_code;
-        this.name = name;
-        this.category  = category ;
-        this.stock = stock;
-        this.last_stock_date = last_stock_date;
-        this.status = status;
+        this.process_count = process_count;
+        this.count_date  = count_date ;
+        this.process_type = process_type;
+        this.details = details;
     }
 
     static updateProcess(processDetails) {
