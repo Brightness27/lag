@@ -17,16 +17,30 @@ router.post(
 router.get(
     '/all-categories',
     inventoryController.getCategories
-)
+);
 
 router.get(
     '/all-inventories',
     inventoryController.getInventories
-)
+);
 
 router.get(
     '/details/:code',
     inventoryController.getItemByCode
-)
+);
+
+router.get(
+    '/search/:searchKey',
+    inventoryController.searchInventories
+);
+
+router.post(
+    '/process/:type/:id',
+    [
+        body('stockCount').trim().not().isEmpty().withMessage('invalid stock count'),
+        body('details').trim().not().isEmpty().withMessage('invalid details')
+    ],
+    inventoryController.processInventories
+);
 
 module.exports = router;

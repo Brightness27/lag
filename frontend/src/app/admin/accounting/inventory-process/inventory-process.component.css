@@ -17,8 +17,21 @@
     margin-left: 5rem;
 }
 
-table tbody tr {
+.tbl-link {
     cursor: pointer;
+}
+
+.tbl-link:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+.tbl-link:active{
+    color: rgb(238, 96, 96);
+}
+
+.search-container {
+    min-height: 42px;
 }
 
 .search-input {
@@ -34,4 +47,10 @@ table tbody tr {
     height: 100%;
     line-height: 0;
     margin-top: -2px;
+}
+
+#details {
+    resize: none;
+    text-align: justify;
+    padding: 10px;
 }

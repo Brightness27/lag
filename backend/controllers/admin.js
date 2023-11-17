@@ -201,15 +201,11 @@ exports.getAllAdmins = async (req, res, next) => {
 
 exports.searchAdmins = async (req, res, next) => {
 
-    const sKey = req.params.searchKey;
+    const searchKey = `%${req.params.searchKey}%`;
 
-    const keys = sKey.split('_');
+    const status = req.params.status;
 
     try {
-
-        const searchKey = `%${keys[0]}%`;
-
-        const status = keys[1];
 
         const [admins] = await Admin.searchAdmin(searchKey, status);
 

@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 
 const Category = require('../models/category');
 const Inventory = require('../models/inventory');
+const InventoryProcesses = require('../models/inventory_processes');
 
 exports.addInventory = async (req, res, next) => {
     const errors = validationResult(req);
@@ -13,9 +14,14 @@ exports.addInventory = async (req, res, next) => {
     const name = req.body.name;
     const category  = req.body.category ;
     const stock = req.body.stock;
-
     const status = "On Stock";
-    const last_stock_date = new Date().toISOString().slice(0,10);
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const day = today.getDate().toString().padStart(2, '0');
+
+    const last_stock_date = `${year}-${month}-${day}`;
 
     try {
         let categoryId = 0;
@@ -39,13 +45,13 @@ exports.addInventory = async (req, res, next) => {
 
         const inventoryId = await Inventory.addInventory(inventoryDetails);
 
-        const currentYear = last_stock_date.substring(0, 4);
+        const itemCount = await Category.countItemByCategory(categoryId);
 
-        const paddedInventoryId = inventoryId.toString().padStart(4, "0");
+        const paddedInventoryId = itemCount[0][0].count.toString().padStart(4, "0");
 
         const paddedCategoryId = categoryId.toString().padStart(4, "0");
 
-        const item_code = currentYear + paddedCategoryId + paddedInventoryId;
+        const item_code = year + paddedCategoryId + paddedInventoryId;
 
         const updateCode = await Inventory.updateItemCode(item_code, inventoryId);
 
@@ -53,6 +59,7 @@ exports.addInventory = async (req, res, next) => {
             error: false,
             message: 'Item Added'
         });
+
 
     } catch (error) {
         return res.json({
@@ -123,6 +130,90 @@ exports.getItemByCode = async (req, res, next) => {
 
     } catch (error) {
         return res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
+exports.searchInventories = async (req, res, next) => {
+
+    const sKey = req.params.searchKey;
+
+    try {
+
+        const searchKey = `%${sKey}%`;
+
+
+        const [inventories] = await Inventory.searchInventories(searchKey);
+
+        const formattedInventories = inventories.map(inventory => ({
+            ...inventory,
+            last_stock_date: new Date(inventory.last_stock_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        }));
+
+        return res.json(formattedInventories);
+
+    } catch (error) {
+        res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
+exports.processInventories = async (req, res, next) => {
+
+    const type = req.params.type;
+    const id = req.params.id;
+
+    const stockCount = req.body.stockCount;
+    const details = req.body.details;
+
+    try {
+
+        const inventory = await Inventory.getItemByCode(id);
+
+        const current_stock = inventory[0][0].stock;
+
+        if(current_stock < stockCount) {
+            return res.json({
+                error: true,
+                message: "not enough stock to release."
+            });
+        }
+
+        let afterProcessStock = 0;
+
+        if (type === 'IN') {
+            afterProcessStock = Number(current_stock) + Number(stockCount);
+        }
+
+        else if (type === 'OUT') {
+            afterProcessStock = Number(current_stock) - Number(stockCount);
+        }
+
+        const date_process = new Date().toISOString().slice(0,10);
+
+        const processDetails = {
+            item_code: id,
+            process_count: stockCount,
+            count_date: date_process,
+            process_type: type,
+            details: details
+        };
+
+        const updateProcess = await InventoryProcesses.updateProcess(processDetails);
+
+        const updateStocks = await Inventory.updateStocks(afterProcessStock, id);
+
+        res.json({
+            error: false,
+            message: "Stocks Have been Updated."
+        })
+
+    } catch (error) {
+        res.json({
             error: true,
             message: error.message
         })

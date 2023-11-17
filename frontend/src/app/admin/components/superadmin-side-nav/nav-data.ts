@@ -1,6 +1,6 @@
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { faFolder, faFolderPlus } from '@fortawesome/free-solid-svg-icons';
-import { faHeadSideCough, faUsersCog, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faFolderPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarTimes, faUsersCog, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 export const navbarData = [
 
@@ -30,7 +30,7 @@ export const staffNavbarData = [
     },
     {
         routeLink: '/admin/employees/leave',
-        icon: faHeadSideCough,
+        icon: faCalendarTimes,
         label: 'Leave'
     },
     {
@@ -48,9 +48,14 @@ export const inventoryNavbarData = [
         label: 'Inventory'
     },
     {
+        routeLink: '/admin/inventory/process',
+        icon: faFolderOpen,
+        label: 'Processes'
+    },
+    {
         routeLink: '/admin/inventory/add',
         icon: faFolderPlus,
-        label: 'Inventory'
+        label: 'Add Item'
     }
 
 ];

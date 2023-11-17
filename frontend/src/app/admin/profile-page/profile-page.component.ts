@@ -40,6 +40,9 @@ export class ProfilePageComponent implements OnInit {
 
   name: string = '';
 
+  alertTitle: string = '';
+  alertMessage: string = '';
+
   constructor(private adminService: AdminServicesService) {}
 
   ngOnInit(): void {
@@ -159,7 +162,10 @@ export class ProfilePageComponent implements OnInit {
 
   updateDetails() {
     this.adminService.updateAdmin(this.profileForm.value, this.id).subscribe((msg) => {
-      console.log(msg.message);
+      this.alertTitle = 'Update Admin';
+      this.alertMessage = msg.message;
+
+      document.getElementById('open-modal')?.click();
       
       if(!msg.error) {
         this.getAdmin();
@@ -229,9 +235,19 @@ export class ProfilePageComponent implements OnInit {
         this.error_message = '';
         this.error = false;
         document.getElementById('close-btn')?.click();
+
+        this.alertTitle = 'Success';
+        this.alertMessage = msg.message;
+
+        document.getElementById('open-modal')?.click();
+
       }
       
     });
+  }
+
+  cancelChangepassword() {
+    this.changePasswordForm.reset();
   }
 
 }

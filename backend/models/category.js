@@ -37,4 +37,11 @@ module.exports = class Category {
             [id]
         );
     }
+
+    static countItemByCategory(id) {
+        return db.execute(
+            'SELECT COUNT(*) AS count FROM inventory i INNER JOIN inventory_category c ON i.category = c.id WHERE c.id = ?',
+            [id]
+        );
+    }
 }

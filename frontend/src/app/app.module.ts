@@ -33,6 +33,7 @@ import { ProfilePageComponent } from './admin/profile-page/profile-page.componen
 import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-details.component';
 import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inventory.component';
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
+import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { InventoryDetailsComponent } from './admin/accounting/inventory-details/
     ProfilePageComponent,
     AdminDetailsComponent,
     AddInventoryComponent,
-    InventoryDetailsComponent
+    InventoryDetailsComponent,
+    InventoryProcessComponent
   ],
   imports: [
     BrowserModule,

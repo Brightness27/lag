@@ -77,6 +77,9 @@ router.get(
 
 router.get('/status/:status', adminController.getAllAdmins);
 
-router.get('/search/:searchKey', adminController.searchAdmins);
+router.get(
+    '/search/:searchKey/:status',
+    adminController.searchAdmins
+);
 
 module.exports = router;

@@ -63,15 +63,11 @@ exports.getAllLeaves = async (req, res, next) => {
 }
 
 exports.getSpecificLeavebyEmployee = async (req, res, next) => {
-
-    const params = req.params.par;
-
-    const splitParams = params.split('_');
+        
+    const employeeId = req.params.id;
+    const leaveType = req.params.type;
 
     try {
-        const employeeId = splitParams[0];
-        const leaveType = splitParams[1];
-
         const leave_type = leaveType.replace("-", " ");
 
         const employee = await Employee.findEmployeeById(employeeId);

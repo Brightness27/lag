@@ -33,4 +33,12 @@ export class InventoryService {
   getItemByCode(itemCode: string): Observable<any> {
     return this.http.get<any>(`${this.inventory_url}/details/${itemCode}`, this.httpOptions);
   }
+
+  searchInventories(searchKey: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.inventory_url}/search/${searchKey}`, this.httpOptions);
+  }
+
+  processInventories(processDetails: any, processType: string, itemCode: any): Observable<any> {
+    return this.http.post(`${this.inventory_url}/process/${processType}/${itemCode}`, processDetails, this.httpOptions);
+  }
 }

@@ -69,6 +69,6 @@ router.get(
     employeeController.getEmployeeByEmail
 );
 
-router.get('/search/:searchKey', employeeController.searchEmployees);
+router.get('/search/:searchKey/:status', employeeController.searchEmployees);
 
 module.exports = router;

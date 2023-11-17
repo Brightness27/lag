@@ -148,6 +148,7 @@ export class AddInventoryComponent {
       this.addForm.reset();
       this.newCategoryname = '';
       this.newCategory = false;
+      this.getAllCategories();
     });
   }
 }

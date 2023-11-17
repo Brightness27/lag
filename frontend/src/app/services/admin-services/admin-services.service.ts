@@ -64,7 +64,7 @@ export class AdminServicesService {
   }
 
   searchAdmins(searchKey: string, status: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.admin_url}/search/${searchKey}_${status}`, this.httpOptions);
+    return this.http.get<any[]>(`${this.admin_url}/search/${searchKey}/${status}`, this.httpOptions);
   }
   
   addAdmin(adminDetails: any): Observable<any> {

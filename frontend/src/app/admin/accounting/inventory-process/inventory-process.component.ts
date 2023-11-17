@@ -1,8 +1,8 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 import { InventoryService } from 'src/app/services/inventory-services/inventory.service';
 
-import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -10,24 +10,20 @@ interface SideNavToggle {
 }
 
 @Component({
-  selector: 'app-inventory',
-  templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+  selector: 'app-inventory-process',
+  templateUrl: './inventory-process.component.html',
+  styleUrls: ['./inventory-process.component.css']
 })
-export class InventoryComponent implements OnInit {
-
+export class InventoryProcessComponent implements OnInit {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
   inventories: any[] = [];
+  inventory: any = {};
 
   department!: any;
 
   name: string =  '';
-
-  addInventory = faPlus;
-
-  hideAddText = true;
 
   search = faSearch;
   searchKey: string = "";
@@ -39,15 +35,12 @@ export class InventoryComponent implements OnInit {
 
   token: any;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if(window.innerWidth > 768) {
-      this.hideAddText = true;
-    }
-    else if(window.innerWidth <= 768 && window.innerWidth > 0) {
-      this.hideAddText = false;
-    }
-  }
+  getItem = 0;
+  addStocks = 0;
+  details = '';
+
+  alertTitle = '';
+  alertMessage = '';
 
   constructor(private adminService: AdminServicesService, private inventoryService: InventoryService) {}
 
@@ -61,13 +54,6 @@ export class InventoryComponent implements OnInit {
         this.name = 'Hello, ' + admin.fname;
         this.setActiveDepartment();
       });
-    }
-
-    if(window.innerWidth > 768) {
-      this.hideAddText = true;
-    }
-    else if(window.innerWidth <= 768 && window.innerWidth > 0) {
-      this.hideAddText = false;
     }
 
     this.getAllInventories();
@@ -107,19 +93,66 @@ export class InventoryComponent implements OnInit {
     return styleClass;
   }
 
+  process(inventory: any) {
+    this.inventory = inventory;
+    this.getItem = inventory.stock;
+    
+  }
+
   getAllInventories() {
     this.inventoryService.getAllInventories().subscribe(inventories => {
-      this.inventories = inventories.map(inventory => {
-        return {
-          ...inventory,
-          link: '/admin/inventory/details/' + inventory.item_code
-        };
-      });
+      this.inventories = inventories;
+      this.inventory = inventories[0];
     });
   }
 
   updateSearchKey(event: any) {
     this.searchKey = event.target.value;
+  }
+
+  updateAddStocks(event: any) {
+    this.addStocks = event.target.value;
+  }
+
+  updateGetItem(event: any) {
+    this.getItem = event.target.value;
+  }
+
+  updateDetails(event: any) {
+    this.details = event.target.value;
+  }
+
+  addStockCounts() {
+    const processDetails = {
+      stockCount: this.addStocks,
+      details: "Refreshing Supplies"
+    };
+
+    this.inventoryService.processInventories(processDetails, "IN", this.inventory.item_code).subscribe(msg => {
+      this.alertTitle = 'Stocks Updated';
+      this.alertMessage = msg.message;
+
+      document.getElementById('open-modal')?.click();
+      this.addStocks = 0;
+      this.getAllInventories();
+    });
+  }
+
+  getItemCounts() {
+    const processDetails = {
+      stockCount: this.getItem,
+      details: this.details
+    };
+
+    this.inventoryService.processInventories(processDetails, "OUT", this.inventory.item_code).subscribe(msg => {
+      this.alertTitle = 'Stocks Updated';
+      this.alertMessage = msg.message;
+
+      document.getElementById('open-modal')?.click();
+      this.getItem = 0;
+      this.details = '';
+      this.getAllInventories();
+    });
   }
 
   searchItem() {

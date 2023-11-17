@@ -89,12 +89,10 @@
 
             <div class="modal-body">
 
-                <div class="d-flex justify-content-between px-3">
-                    <h3>{{ leaveDetails?.name }}</h3>
-                    <h5>Position: {{ leaveDetails?.position }}</h5>
-                </div>
+                <span class="px-3 d-block">{{ leaveDetails?.name }}</span>
+                <span class="px-3 d-block">Position: {{ leaveDetails?.position }}</span>
                 
-                <span class="px-3">Leave type: {{ leaveDetails?.leave_type }}</span>
+                <span class="px-3 d-block">Leave type: {{ leaveDetails?.leave_type }}</span>
 
                 <div class="border mt-3 w-100" *ngIf="!noLeaveDetails">
                     <div class="border-bottom d-block p-3" *ngFor="let leaves of leaveDetails?.leaveDetails">

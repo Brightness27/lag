@@ -40,7 +40,7 @@ export class EmployeesService {
   }
 
   searchEmployees(searchKey: string, status: string): Observable<Employees[]> {
-    return this.http.get<Employees[]>(`${this.employee_url}/search/${searchKey}_${status}`, this.httpOptions);
+    return this.http.get<Employees[]>(`${this.employee_url}/search/${searchKey}/${status}`, this.httpOptions);
   }
 
 }

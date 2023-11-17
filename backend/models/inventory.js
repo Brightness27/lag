@@ -43,5 +43,18 @@ module.exports = class Inventory {
         )
     }
 
+    static searchInventories(searchKey) {
+        return db.execute(
+            'SELECT i.item_code AS item_code, i.name AS name, c.name AS category_name, i.stock AS stock, i.last_stock_date AS last_stock_date FROM inventory i INNER JOIN inventory_category c ON i.category = c.id WHERE i.item_code LIKE ? OR i.name LIKE ? OR c.name LIKE ? OR i.stock LIKE ? OR i.last_stock_date LIKE ? ORDER BY i.category ASC, i.item_code ASC',
+            [searchKey, searchKey, searchKey, searchKey, searchKey]
+        )
+    }
+
+    static updateStocks(stock, item_code) {
+        return db.execute(
+            'UPDATE inventory SET stock = ? WHERE item_code = ?',
+            [stock, item_code]
+        )
+    }
 
 }

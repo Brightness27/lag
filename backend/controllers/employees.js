@@ -237,15 +237,11 @@ exports.getEmployeeByEmail = async (req, res, next) => {
 
 exports.searchEmployees = async (req, res, next) => {
 
-    const sKey = req.params.searchKey;
+    const searchKey = `%${req.params.searchKey}%`;
 
-    const keys = sKey.split('_');
+    const status = req.params.status;
 
     try {
-
-        const searchKey = `%${keys[0]}%`;
-
-        const status = keys[1];
 
         const [employees] = await Employee.searchEmployees(searchKey, status);
 

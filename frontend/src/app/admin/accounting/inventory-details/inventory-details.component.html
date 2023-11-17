@@ -24,7 +24,7 @@
 <button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="open-modal">open modal</button>
 
 <section class="body border p-5" [ngClass]="getBodyClass()">
-    <h1 class="fw-bolder fs-1 text-center w-100">Admin Details</h1>
+    <h1 class="fw-bolder fs-1 text-center w-100">Item Details</h1>
 
     <div class="container border border-dark mt-5 h-75 rounded">
         <form class="p-4" [formGroup]="editForm">
@@ -32,7 +32,7 @@
                 <div class="col-5"></div>
                 <div class="col-5"></div>
                 <div class="col-2 justify-content-end">
-                    <button class="btn btn-secondary align" (click)="generateNewBarcode()">Download Barcode</button>
+                    <button class="btn btn-light border border-secondary align" (click)="generateNewBarcode()">Download Barcode</button>
                 </div>
             </div>
             <div class="mb-3">
