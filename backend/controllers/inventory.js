@@ -13,17 +13,29 @@ exports.addInventory = async (req, res, next) => {
 
     const name = req.body.name;
     const category  = req.body.category ;
-    const stock = req.body.stock;
+    const quantity = req.body.quantity;
+    const unit = req.body.unit;
+    const last_purchase_date = req.body.last_purchase_date;
     const status = "On Stock";
 
     const today = new Date();
     const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
 
     const last_stock_date = `${year}-${month}-${day}`;
 
     try {
+
+        const itemExist = await Inventory.getItemByName(name);
+
+        if(itemExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'Item already on the list.'
+            });
+        }
+
         let categoryId = 0;
 
         const existingCategory = await Category.selectCategoryByName(category);
@@ -38,7 +50,9 @@ exports.addInventory = async (req, res, next) => {
         const inventoryDetails = {
             name: name,
             category: categoryId,
-            stock: stock,
+            quantity: quantity,
+            unit: unit,
+            last_purchase_date: last_purchase_date,
             last_stock_date: last_stock_date,
             status: status
         }
@@ -94,6 +108,7 @@ exports.getInventories = async (req, res, next) => {
 
         const formattedInventories = inventories.map(inventory => ({
             ...inventory,
+            last_purchase_date: new Date(inventory.last_purchase_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
             last_stock_date: new Date(inventory.last_stock_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
         }));
         
@@ -149,6 +164,7 @@ exports.searchInventories = async (req, res, next) => {
 
         const formattedInventories = inventories.map(inventory => ({
             ...inventory,
+            last_purchase_date: new Date(inventory.last_purchase_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
             last_stock_date: new Date(inventory.last_stock_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
         }));
 
@@ -169,19 +185,25 @@ exports.processInventories = async (req, res, next) => {
 
     const stockCount = req.body.stockCount;
     const details = req.body.details;
+    const last_purchase_date = req.body.last_purchase_date;
 
     try {
 
         const inventory = await Inventory.getItemByCode(id);
 
-        const current_stock = inventory[0][0].stock;
+        const current_stock = inventory[0][0].quantity;
 
-        if(current_stock < stockCount) {
+        if(type === 'OUT' && current_stock < stockCount) {
             return res.json({
                 error: true,
                 message: "not enough stock to release."
             });
         }
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
 
         let afterProcessStock = 0;
 
@@ -193,12 +215,12 @@ exports.processInventories = async (req, res, next) => {
             afterProcessStock = Number(current_stock) - Number(stockCount);
         }
 
-        const date_process = new Date().toISOString().slice(0,10);
+        const date_process = `${year}-${month}-${day}`;
 
         const processDetails = {
             item_code: id,
             process_count: stockCount,
-            count_date: date_process,
+            process_date: date_process,
             process_type: type,
             details: details
         };
@@ -206,6 +228,11 @@ exports.processInventories = async (req, res, next) => {
         const updateProcess = await InventoryProcesses.updateProcess(processDetails);
 
         const updateStocks = await Inventory.updateStocks(afterProcessStock, id);
+
+        if(type === 'IN') {
+            const updateStockDate = await Inventory.updateStockDate(date_process, last_purchase_date, id);
+        }
+        
 
         res.json({
             error: false,

@@ -22,15 +22,15 @@ module.exports = class Employee {
 
     static addEmployee(employee) {
         return db.execute(
-            'INSERT INTO employee(id, fname, mname, lname, contact_number, email_address, address, tin, sss, philhealth, pagibig, emergency_contact_name, emergency_contact_number, beneficiary, position, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [employee.id, employee.fname, employee.mname, employee.lname, employee.contact_number, employee.email_address, employee.address, employee.tin, employee.sss, employee.philhealth, employee.pagibig, employee.emergency_contact_name, employee.emergency_contact_number, employee.beneficiary, employee.position, employee.status]
+            'INSERT INTO employee(id, fname, mname, lname, contact_number, email_address, address, tin, sss, philhealth, pagibig, emergency_contact_name, emergency_contact_number, beneficiary, position, sin_number, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [employee.id, employee.fname, employee.mname, employee.lname, employee.contact_number, employee.email_address, employee.address, employee.tin, employee.sss, employee.philhealth, employee.pagibig, employee.emergency_contact_name, employee.emergency_contact_number, employee.beneficiary, employee.position, employee.sin_number, employee.status]
         );
     }
 
     static updateEmployee(employee, id) {
         return db.execute(
-            'UPDATE employee SET fname = ?, mname = ?, lname = ?, contact_number = ?, email_address = ?, address = ?, tin = ?, sss = ?, philhealth = ?, pagibig = ?, emergency_contact_name = ?, emergency_contact_number = ?, beneficiary = ?, position = ? WHERE id = ?',
-            [employee.fname, employee.mname, employee.lname, employee.contact_number, employee.email_address, employee.address, employee.tin, employee.sss, employee.philhealth, employee.pagibig, employee.emergency_contact_name, employee.emergency_contact_number, employee.beneficiary, employee.position, id]
+            'UPDATE employee SET fname = ?, mname = ?, lname = ?, contact_number = ?, email_address = ?, address = ?, tin = ?, sss = ?, philhealth = ?, pagibig = ?, emergency_contact_name = ?, emergency_contact_number = ?, beneficiary = ?, position = ?, sin_number = ? WHERE id = ?',
+            [employee.fname, employee.mname, employee.lname, employee.contact_number, employee.email_address, employee.address, employee.tin, employee.sss, employee.philhealth, employee.pagibig, employee.emergency_contact_name, employee.emergency_contact_number, employee.beneficiary, employee.position, employee.sin_number, id]
         );
     }
 
@@ -45,6 +45,13 @@ module.exports = class Employee {
         return db.execute(
             'SELECT * FROM employee WHERE email_address = ?',
             [email_address]
+        );
+    }
+
+    static checkEmailExceptEmployee(email_address, id) {
+        return db.execute(
+            'SELECT * FROM employee WHERE email_address = ? AND NOT id = ?',
+            [email_address, id]
         );
     }
 

@@ -19,9 +19,29 @@ module.exports = class Leave {
         );
     }
 
+    static getLeaveCount(leaveType, employeeId) {
+        return db.execute(
+            'SELECT COALESCE(SUM(TIMESTAMPDIFF(DAY, from_date, to_date) + 1), 0) AS leave_count FROM leavetbl WHERE leave_type = ? AND employeeId = ?',
+            [leaveType, employeeId]
+        );
+    }
+
+    static getMaxLeaveAllowed(leaveType) {
+        return db.execute(
+            'SELECT num_days_allowed FROM leave_type WHERE id = ?',
+            [leaveType]
+        );
+    }
+
     static getAllLeaves() {
         return db.execute(
-            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COUNT(CASE WHEN l.leave_type = "Sick Leave" THEN 1 END) AS SickLeaveCount, COUNT(CASE WHEN l.leave_type = "Vacation Leave" THEN 1 END) AS VacationLeaveCount, COUNT(CASE WHEN l.leave_type = "Emergency Leave" THEN 1 END) AS EmergencyLeaveCount From leavetbl l Inner JOIN employee e ON l.employeeId = e.id GROUP BY e.id'
+            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id GROUP BY e.id;'
+        );
+    }
+
+    static getAllLeaveTypes() {
+        return db.execute(
+            'SELECT * FROM leave_type'
         );
     }
 
@@ -34,8 +54,8 @@ module.exports = class Leave {
 
     static searchLeave(searchKey) {
         return db.execute(
-            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COUNT(CASE WHEN l.leave_type = "Sick Leave" THEN 1 END) AS SickLeaveCount, COUNT(CASE WHEN l.leave_type = "Vacation Leave" THEN 1 END) AS VacationLeaveCount, COUNT(CASE WHEN l.leave_type = "Emergency Leave" THEN 1 END) AS EmergencyLeaveCount From leavetbl l Inner JOIN employee e ON l.employeeId = e.id WHERE e.fname LIKE ? OR e.mname LIKE ? OR e.lname LIKE ? GROUP BY e.id',
-            [searchKey, searchKey, searchKey]
+            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id WHERE CONCAT(e.fname, " ", e.mname, " ", e.lname) LIKE ? GROUP BY e.id',
+            [searchKey]
         );
     }
 }

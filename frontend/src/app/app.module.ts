@@ -34,6 +34,8 @@ import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-d
 import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inventory.component';
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
+import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pdf.component';
+import { FlowOfWorkComponent } from './admin/engineering/flow-of-work/flow-of-work.component';
 
 
 @NgModule({
@@ -64,7 +66,9 @@ import { InventoryProcessComponent } from './admin/accounting/inventory-process/
     AdminDetailsComponent,
     AddInventoryComponent,
     InventoryDetailsComponent,
-    InventoryProcessComponent
+    InventoryProcessComponent,
+    PrintToPdfComponent,
+    FlowOfWorkComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +77,7 @@ import { InventoryProcessComponent } from './admin/accounting/inventory-process/
     ReactiveFormsModule,
     FontAwesomeModule,
     CarouselModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

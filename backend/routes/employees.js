@@ -9,7 +9,6 @@ router.post(
     [
         body('id').trim().not().isEmpty().withMessage('invalid id'),
         body('fname').trim().not().isEmpty().withMessage('invalid first name'),
-        body('mname').trim().not().isEmpty().withMessage('invalid middle name'),
         body('lname').trim().not().isEmpty().withMessage('invalid last name'),
         body('contact_number').trim().not().isEmpty().withMessage('invalid contact_number'),
         body('email_address').trim().not().isEmpty().withMessage('invalid email address'),
@@ -22,7 +21,7 @@ router.post(
         body('emergency_contact_number').trim().not().isEmpty().withMessage('invalid emergency contact number'),
         body('beneficiary').trim().not().isEmpty().withMessage('invalid beneficiary'),
         body('position').trim().not().isEmpty().withMessage('invalid position'),
-        body('status').trim().not().isEmpty().withMessage('invalid status')
+        body('sin_number').trim().not().isEmpty().withMessage('invalid sin number')
     ],
     employeeController.addEmployee
 );
@@ -31,7 +30,6 @@ router.put(
     '/update/:id',
     [
         body('fname').trim().not().isEmpty().withMessage('invalid first name'),
-        body('mname').trim().not().isEmpty().withMessage('invalid middle name'),
         body('lname').trim().not().isEmpty().withMessage('invalid last name'),
         body('contact_number').trim().not().isEmpty().withMessage('invalid contact_number'),
         body('email_address').trim().not().isEmpty().withMessage('invalid email address'),
@@ -44,7 +42,7 @@ router.put(
         body('emergency_contact_number').trim().not().isEmpty().withMessage('invalid emergency contact number'),
         body('beneficiary').trim().not().isEmpty().withMessage('invalid beneficiary'),
         body('position').trim().not().isEmpty().withMessage('invalid position'),
-        body('status').trim().not().isEmpty().withMessage('invalid status')
+        body('sin_number').trim().not().isEmpty().withMessage('invalid sin number')
     ],
     employeeController.updateEmployee
 );

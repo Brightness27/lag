@@ -1,0 +1,47 @@
+<table class="print employee" id="employees">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Employee Name</th>
+            <th>Contact Number</th>
+            <th>Email Adrress</th>
+            <th>Address</th>
+            <th>SIN Number</th>
+            <th>Position</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let employee of activeEmployees">
+            <td>{{ employee.num }}</td>
+            <td>{{ employee.full_name }}</td>
+            <td>{{ employee.contact_number }}</td>
+            <td>{{ employee.email_address }}</td>
+            <td>{{ employee.address }}</td>
+            <td>{{ employee.sin_number }}</td>
+            <td>{{ employee.position }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="print inventory" id="inventory">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center">Item Code</th>
+            <th scope="col" class="text-center">Item Name</th>
+            <th scope="col" class="text-center">Category</th>
+            <th scope="col" class="text-center">Remaining Stock</th>
+            <th scope="col" class="text-center">Last Purchase Date</th>
+            <th scope="col" class="text-center">Last Stock Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let inventory of inventories" [routerLink]="inventory.link">
+            <td>{{ inventory.item_code }}</td>
+            <td>{{ inventory.name }}</td>
+            <td>{{ inventory.category_name }}</td>
+            <td>{{ inventory.quantity }}</td>
+            <td>{{ inventory.last_purchase_date }}</td>
+            <td>{{ inventory.last_stock_date }}</td>
+        </tr>
+    </tbody>
+</table>

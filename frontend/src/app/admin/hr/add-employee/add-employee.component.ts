@@ -69,7 +69,7 @@ export class AddEmployeeComponent implements OnInit {
       emergency_contact_number: new FormControl(''),
       beneficiary: new FormControl(''),
       position: new FormControl(''),
-      status: new FormControl('')
+      sin_number: new FormControl('')
     });
   }
 

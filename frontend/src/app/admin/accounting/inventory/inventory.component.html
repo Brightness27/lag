@@ -6,10 +6,17 @@
     <h1 class="fw-bolder fs-1 text-center w-100">Inventory List</h1>
 
     <div class="mx-2 w-100 d-flex justify-content-between">
-        <button class="btn btn-light border border-dark p-2" [routerLink]="['/admin/inventory/add']">
-            <fa-icon [icon]="addInventory"></fa-icon>
-            <span class="ms-2" *ngIf="hideAddText">Add New Item</span>
-        </button>
+        <div>
+            <button class="btn btn-light border border-dark p-2" [routerLink]="['/admin/inventory/add']">
+                <fa-icon [icon]="addInventory"></fa-icon>
+                <span class="ms-2" *ngIf="hideAddText">Add New Item</span>
+            </button>
+    
+            <button type="button" class="btn btn-light border border-dark p-2 ms-4" [routerLink]="['/admin/print/inventory']">
+                <fa-icon [icon]="printList"></fa-icon>
+                <span class="ms-2" *ngIf="hideAddText">Generate Inventory List</span>
+            </button>
+        </div>
 
         <div class="border w-25 p-0 rounded">
             <input type="text" class="border-0 h-100 px-3 rounded search-input" [value]="searchKey" (input)="updateSearchKey($event)">
@@ -26,6 +33,7 @@
                 <th scope="col" class="text-center">Item Name</th>
                 <th scope="col" class="text-center">Category</th>
                 <th scope="col" class="text-center">Remaining Stock</th>
+                <th scope="col" class="text-center">Last Purchase Date</th>
                 <th scope="col" class="text-center">Last Stock Date</th>
             </tr>
         </thead>
@@ -34,7 +42,8 @@
                 <td>{{ inventory.item_code }}</td>
                 <td>{{ inventory.name }}</td>
                 <td>{{ inventory.category_name }}</td>
-                <td>{{ inventory.stock }}</td>
+                <td>{{ inventory.quantity }}</td>
+                <td>{{ inventory.last_purchase_date }}</td>
                 <td>{{ inventory.last_stock_date }}</td>
             </tr>
         </tbody>

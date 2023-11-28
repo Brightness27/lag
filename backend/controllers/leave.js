@@ -17,9 +17,44 @@ exports.addLeave = async (req, res, next) => {
     const from_date = req.body.from_date;
     const to_date = req.body.to_date;
     const modified_by = req.body.modified_by;
-    const date_modified = new Date().toISOString().slice(0,10);
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    
+    const date_modified = `${year}-${month}-${day}`;
+
+    const start_date = new Date(from_date);
+    const end_date = new Date(to_date);
+
+    const dateDifferenceInMil = end_date - start_date;
+
+    const diffInDays = (dateDifferenceInMil / (1000 * 60 * 60 * 24)) + 1;
 
     try {
+
+        const leave_count = await Leave.getLeaveCount(leave_type, employeeId);
+
+        const max_leave_allowed = await Leave.getMaxLeaveAllowed(leave_type);
+
+        const used_leaves = leave_count[0][0].leave_count;
+        const max_allowed = max_leave_allowed[0][0].num_days_allowed;
+        const unused_leaves = max_allowed - used_leaves;
+
+        if( unused_leaves === 0) {
+            return res.json({
+                error: true,
+                message: 'Already used all leave.'
+            })
+        }
+
+        if(diffInDays > unused_leaves) {
+            return res.json({
+                error: true,
+                message: 'Not enough unused leaves.'
+            })
+        }
 
         const leaveDetails = {
             employeeId: employeeId,
@@ -52,7 +87,32 @@ exports.getAllLeaves = async (req, res, next) => {
 
         const [leaves] = await Leave.getAllLeaves();
 
-        return res.json(leaves);
+        const [leaveTypes] = await Leave.getAllLeaveTypes();
+
+        const formattedLeaves = leaves.map(leave => ({
+            ... leave,
+            maxSickLeave:  leaveTypes[0].num_days_allowed,
+            maxVacationLeave:  leaveTypes[1].num_days_allowed,
+            maxEmergencyLeave:  leaveTypes[2].num_days_allowed
+        }));
+
+        return res.json(formattedLeaves);
+
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
+exports.getAllLeaveTypes = async (req, res, next) => {
+
+    try {
+
+        const [leaveTypes] = await Leave.getAllLeaveTypes();
+
+        return res.json(leaveTypes);
 
     } catch (error) {
         return res.json({
@@ -108,9 +168,18 @@ exports.searchLeave = async (req, res, next) => {
         const searchKey = `%${sKey}%`;
 
 
-        const [leave] = await Leave.searchLeave(searchKey);
+        const [leaves] = await Leave.searchLeave(searchKey);
 
-        return res.json(leave);
+        const [leaveTypes] = await Leave.getAllLeaveTypes();
+
+        const formattedLeaves = leaves.map(leave => ({
+            ... leave,
+            maxSickLeave:  leaveTypes[0].num_days_allowed,
+            maxVacationLeave:  leaveTypes[1].num_days_allowed,
+            maxEmergencyLeave:  leaveTypes[1].num_days_allowed
+        }));
+
+        return res.json(formattedLeaves);
 
     } catch (error) {
         res.json({

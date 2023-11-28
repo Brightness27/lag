@@ -9,7 +9,9 @@ router.post(
     [
         body('name').trim().not().isEmpty().withMessage('invalid name'),
         body('category').trim().not().isEmpty().withMessage('invalid category'),
-        body('stock').trim().not().isEmpty().withMessage('invalid stock')
+        body('quantity').trim().not().isEmpty().withMessage('invalid quantity'),
+        body('unit').trim().not().isEmpty().withMessage('invalid unit'),
+        body('last_purchase_date').trim().not().isEmpty().withMessage('invalid last purchase date')
     ],
     inventoryController.addInventory
 );

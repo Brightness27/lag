@@ -259,6 +259,15 @@ exports.updateAdminProfile = async (req, res, next) => {
             position: position
         }
 
+        const emailExist = await Employee.findEmployeeByEmail(email_address);
+
+        if(emailExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'Email already in use.'
+            });
+        }
+
         const updateAdmin = await Admin.updateAdminProfile(department, username, adminId);
 
         const updateAdminProfileDetails = await Employee.updateAdminProfile(adminProfileDetails, employeeId);

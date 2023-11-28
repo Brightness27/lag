@@ -24,12 +24,16 @@ export class LeaveService {
     return this.http.get<any[]>(`${this.leave_url}`, this.httpOptions);
   }
 
-  getSpecificLeavesByEmployee(leave_type: string, employeeId: any): Observable<any[]> {
+  getAllLeaveTypes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.leave_url}/types`, this.httpOptions);
+  }
+
+  getSpecificLeavesByEmployee(leave_type: number, employeeId: any): Observable<any[]> {
     return this.http.get<any[]>(`${this.leave_url}/leave-details/${employeeId}/${leave_type}`, this.httpOptions);
   }
 
-  addLeave(leavDetails: any): Observable<any> {
-    return this.http.post(`${this.leave_url}/add`, leavDetails, this.httpOptions);
+  addLeave(leaveDetails: any): Observable<any> {
+    return this.http.post(`${this.leave_url}/add`, leaveDetails, this.httpOptions);
   }
 
   searchLeave(searchKey: string): Observable<any[]> {

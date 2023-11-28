@@ -64,7 +64,9 @@ export class AddInventoryComponent {
     return new FormGroup({
       name: new FormControl(''),
       category: new FormControl(''),
-      stock: new FormControl('')
+      quantity: new FormControl(''),
+      unit: new FormControl(''),
+      last_purchase_date: new FormControl('')
     });
   }
 
@@ -138,6 +140,9 @@ export class AddInventoryComponent {
         }
       )
     }
+
+    console.log(this.addForm.value);
+    
 
     this.inventoryService.addInventory(this.addForm.value).subscribe((msg) => {
       this.alertTitle = 'Add Admin';

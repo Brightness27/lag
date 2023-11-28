@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 import { InventoryService } from 'src/app/services/inventory-services/inventory.service';
 
-import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSearch, faPrint } from '@fortawesome/free-solid-svg-icons';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -26,6 +26,7 @@ export class InventoryComponent implements OnInit {
   name: string =  '';
 
   addInventory = faPlus;
+  printList = faPrint;
 
   hideAddText = true;
 

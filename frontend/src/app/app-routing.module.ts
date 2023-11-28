@@ -19,6 +19,7 @@ import { AdminDetailsComponent } from './admin/admin-pages/admin-details/admin-d
 import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inventory.component';
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
+import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pdf.component';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path: 'admin/employees/leave', component: SickLeaveComponent},
   {path: 'admin/inventory', redirectTo: '/admin/inventory/list', pathMatch: 'full'},
   {path: 'admin/inventory/list', canActivate: [authGuardGuard], component: InventoryComponent},
+  {path: 'admin/print/:type', canActivate: [authGuardGuard], component: PrintToPdfComponent},
   {path: 'admin/inventory/details/:id', canActivate: [authGuardGuard], component: InventoryDetailsComponent},
   {path: 'admin/inventory/add', canActivate: [authGuardGuard], component: AddInventoryComponent},
   {path: 'admin/inventory/process', canActivate: [authGuardGuard], component: InventoryProcessComponent},

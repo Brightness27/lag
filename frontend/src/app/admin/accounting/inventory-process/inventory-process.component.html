@@ -13,9 +13,11 @@
             <div class="modal-body">
                 <div class="w-50 mx-auto">
                     <Span class="d-block mb-2">Item: {{ inventory.name }}</Span>
-                    <Span class="d-block mb-2">Current Stock: {{ inventory.stock }}</Span>
+                    <Span class="d-block mb-2">Current Stock: {{ inventory.quantity }}</Span>
                     <label for="stock-process-add" class=" me-3">Add: </label>
                     <input type="number" name="stock-process-add" class="form-control" id="stock-process-add" [value]="addStocks" min="0" (input)="updateAddStocks($event)">
+                    <label for="new-purchase-date" class="me-3 mt-2">Date Purchased: </label>
+                    <input type="date" name="new-purchase-date" class="form-control" id="new-purchase-date" [value]="purchaseDate" (input)="updatePurchaseDate($event)">
                 </div>
             </div>
 
@@ -38,9 +40,9 @@
             <div class="modal-body">
                 <div class="w-50 mx-auto">
                     <Span class="d-block mb-2">Item: {{ inventory.name }}</Span>
-                    <Span class="d-block mb-2">Current Stock: {{ inventory.stock }}</Span>
+                    <Span class="d-block mb-2">Current Stock: {{ inventory.quantity }}</Span>
                     <label for="stock-process-get" class="me-3">Get: </label>
-                    <input type="number" name="stock-process-get" class="form-control mb-3" id="stock-process-get" min="0" max="{{inventory.stock}}" [value]="getItem" (input)="updateGetItem($event)">
+                    <input type="number" name="stock-process-get" class="form-control mb-3" id="stock-process-get" min="0" max="{{inventory.quantity}}" [value]="getItem" (input)="updateGetItem($event)">
                     <textarea name="details" id="details" rows="3" [value]="details" class="form-control  text-justified" (input)="updateDetails($event)"></textarea>
                 </div>
             </div>
@@ -105,7 +107,7 @@
             <tr *ngFor="let inventory of inventories">
                 <td>{{ inventory.item_code }}</td>
                 <td>{{ inventory.name }}</td>
-                <td>{{ inventory.stock }}</td>
+                <td>{{ inventory.quantity }}</td>
                 <td>
                     <span class="tbl-link"  data-bs-toggle="modal" data-bs-target="#item-process-add-modal" (click)="process(inventory)">Add Stock</span>
                 </td>

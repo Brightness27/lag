@@ -88,6 +88,7 @@ export class EmployeeDetailsComponent implements OnInit {
       emergency_contact_number: new FormControl({ value: '', disabled: true }),
       beneficiary: new FormControl({ value: '', disabled: true }),
       position: new FormControl({ value: '', disabled: true }),
+      sin_number: new FormControl({ value: '', disabled: true }),
       status: new FormControl({ value: '', disabled: true })
     });
   }
@@ -109,6 +110,7 @@ export class EmployeeDetailsComponent implements OnInit {
       emergency_contact_number: new FormControl(''),
       beneficiary: new FormControl(''),
       position: new FormControl(''),
+      sin_number: new FormControl(''),
       status: new FormControl('')
     });
   }
@@ -166,6 +168,7 @@ export class EmployeeDetailsComponent implements OnInit {
       this.alertMessage = msg.message;
 
       document.getElementById('open-modal')?.click();
+      this.getEmployee();
     });
     this.editForm.disable();
     this.disabled = true;
@@ -206,6 +209,7 @@ export class EmployeeDetailsComponent implements OnInit {
         emergency_contact_number: this.staff.emergency_contact_number,
         beneficiary: this.staff.beneficiary,
         position: this.staff.position,
+        sin_number: this.staff.sin_number,
         status: this.staff.status
       });
     });

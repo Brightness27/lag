@@ -19,6 +19,8 @@ router.post(
 
 router.get('/', leaveController.getAllLeaves);
 
+router.get('/types', leaveController.getAllLeaveTypes);
+
 router.get('/leave-details/:id/:type', leaveController.getSpecificLeavebyEmployee);
 
 router.get('/search/:searchKey', leaveController.searchLeave);

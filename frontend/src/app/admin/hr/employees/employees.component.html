@@ -25,7 +25,14 @@
     </div>
 
     <div id="Active" class="tabcontent" [ngClass]="active_class">
-        <table class="table table-striped table-hover table-bordered border-dark my-4">
+        <div class="mx-2 mt-3 w-100 d-flex justify-content-end pe-3">
+            <button type="button" class="btn btn-light border border-dark p-2" [routerLink]="['/admin/print/employees']">
+                <fa-icon [icon]="printList"></fa-icon>
+                <span class="ms-2" *ngIf="hideAddText">Generate Employee List</span>
+            </button>
+        </div>
+
+        <table class="table table-striped table-hover table-bordered border-dark my-4" id="printtable">
             <thead class="text-center">
                 <tr>
                     <th scope="col" class="text-start">#</th>

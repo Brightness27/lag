@@ -37,9 +37,7 @@
                         <label for="leaveType" class="form-label fs-5">leave Type</label>
                         <select type="text" class="form-select" id="leaveType" formControlName="leave_type">
                             <option value="" selected hidden  class="text-dark"> -- Choose Leave Type --</option>
-                            <option value="Sick Leave">Sick Leave</option>
-                            <option value="Vacation Leave">Vacation Leave</option>
-                            <option value="Emergency Leave">Emergency Leave</option>
+                            <option *ngFor="let leaveType of leaveTypes" value="{{leaveType.id}}">{{ leaveType.leave_type }}</option>
                         </select>
                     </div>
 
@@ -166,12 +164,12 @@
                 <td>{{ leave.fname }}</td>
                 <td>{{ leave.mname }}</td>
                 <td>{{ leave.lname }}</td>
-                <td class="clickable" (click)="showLeaveDetails('Sick-Leave', leave.employeeId)">{{ leave.SickLeaveCount }}</td>
-                <td>{{ getRemainingLeave(leave.SickLeaveCount) }}</td>
-                <td class="clickable" (click)="showLeaveDetails('Vacation-Leave', leave.employeeId)">{{ leave.VacationLeaveCount }}</td>
-                <td>{{ getRemainingLeave(leave.VacationLeaveCount) }}</td>
-                <td class="clickable" (click)="showLeaveDetails('Emergency-Leave', leave.employeeId)">{{ leave.EmergencyLeaveCount }}</td>
-                <td>{{ getRemainingLeave(leave.EmergencyLeaveCount) }}</td>
+                <td class="clickable" (click)="showLeaveDetails(1, leave.employeeId)">{{ leave.SickLeaveCount }}</td>
+                <td>{{ leave.maxSickLeave - leave.SickLeaveCount }}</td>
+                <td class="clickable" (click)="showLeaveDetails(2, leave.employeeId)">{{ leave.VacationLeaveCount }}</td>
+                <td>{{ leave.maxVacationLeave - leave.VacationLeaveCount }}</td>
+                <td class="clickable" (click)="showLeaveDetails(3, leave.employeeId)">{{ leave.EmergencyLeaveCount }}</td>
+                <td>{{ leave.maxEmergencyLeave - leave.EmergencyLeaveCount }}</td>
             </tr>
         </tbody>
     </table>

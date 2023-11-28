@@ -1,8 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { faUserPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faSearch, faPrint } from '@fortawesome/free-solid-svg-icons';
 
 import { EmployeesService } from 'src/app/services/employee-service/employees.service';
-import { Employees } from 'src/app/models/employee';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 
 interface SideNavToggle {
@@ -26,6 +25,7 @@ export class EmployeesComponent implements OnInit {
   resignedEmployees: any[] = [];
 
   addEmployee = faUserPlus;
+  printList = faPrint;
 
   search = faSearch;
   searchKey: string = "";

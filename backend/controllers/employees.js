@@ -23,7 +23,8 @@ exports.addEmployee = async (req, res, next) => {
     const emergency_contact_number = req.body.emergency_contact_number;
     const beneficiary = req.body.beneficiary;
     const position = req.body.position;
-    const status = req.body.status;
+    const sin_number = req.body.sin_number;
+    const status = 'Active';
 
     try {
         const employeeDetails = {
@@ -42,15 +43,34 @@ exports.addEmployee = async (req, res, next) => {
             emergency_contact_number: emergency_contact_number,
             beneficiary: beneficiary,
             position: position,
+            sin_number: sin_number,
             status: status
+        }
+
+        const idExist = await Employee.findEmployeeById(id);
+
+        if(idExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: "id already in use."
+            });
+        }
+
+        const emailExist = await Employee.findEmployeeByEmail(email_address);
+
+        if(emailExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'Email already in use.'
+            });
         }
 
         const result = await Employee.addEmployee(employeeDetails);
 
-        res.json({
-            error: 'false',
+        return res.json({
+            error: false,
             message: 'Employee has been added.'
-        })
+        });
 
     } catch (error) {
         res.json({
@@ -83,6 +103,7 @@ exports.updateEmployee = async (req, res, next) => {
     const emergency_contact_number = req.body.emergency_contact_number;
     const beneficiary = req.body.beneficiary;
     const position = req.body.position;
+    const sin_number = req.body.sin_number;
 
     try {
         const employeeDetails = {
@@ -99,7 +120,17 @@ exports.updateEmployee = async (req, res, next) => {
             emergency_contact_name: emergency_contact_name,
             emergency_contact_number: emergency_contact_number,
             beneficiary: beneficiary,
-            position: position
+            position: position,
+            sin_number: sin_number
+        }
+
+        const emailExist = await Employee.checkEmailExceptEmployee(email_address, id);
+
+        if(emailExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'Email already in use.'
+            });
         }
 
         const result = await Employee.updateEmployee(employeeDetails, id);

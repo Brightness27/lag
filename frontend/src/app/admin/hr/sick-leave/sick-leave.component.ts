@@ -40,12 +40,12 @@ export class SickLeaveComponent {
 
   employees: any[] = [];
 
+  leaveTypes: any[] = [];
+
   leaves: any[] = [];
   leaveDetails: any = null;
 
   noLeaveDetails = true;
-
-  unusedLeave = 5;
 
   alertTitle: string = '';
   alertMessage: string = '';
@@ -89,6 +89,7 @@ export class SickLeaveComponent {
 
     this.getAllEmployees();
     this.getAllLeaves();
+    this.getAllLeaveTypes();
   }
 
   createForm(): FormGroup {
@@ -153,22 +154,34 @@ export class SickLeaveComponent {
     });
   }
 
-  getRemainingLeave(usedLeave: number): number {
-    return this.unusedLeave - usedLeave;
+  getAllLeaveTypes() {
+    this.leaveService.getAllLeaveTypes().subscribe(leaveTypes => {
+      this.leaveTypes = leaveTypes;
+    });
   }
 
   addLeave() {
     this.leaveService.addLeave(this.leaveForm.value).subscribe((msg) => {
-      this.alertTitle = 'Leave Recorded';
+      this.alertTitle = 'Leave Record';
       this.alertMessage = msg.message;
 
       document.getElementById('open-modal')?.click();
 
       this.getAllLeaves();
+      this.leaveForm.patchValue(
+        {
+          employeeId: '',
+          leave_type: '',
+          reason: '',
+          from_date: '',
+          to_date: '',
+          modified_by: this.adminId
+        }
+      )
     });
   }
 
-  showLeaveDetails(leave_type: string, employeeId: any) {
+  showLeaveDetails(leave_type: number, employeeId: any) {
     this.leaveService.getSpecificLeavesByEmployee(leave_type, employeeId).subscribe(leaves => {
       this.leaveDetails = leaves;
 

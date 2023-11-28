@@ -36,8 +36,9 @@ export class InventoryProcessComponent implements OnInit {
   token: any;
 
   getItem = 0;
-  addStocks = 0;
   details = '';
+  addStocks = 0;
+  purchaseDate = '';
 
   alertTitle = '';
   alertMessage = '';
@@ -95,7 +96,7 @@ export class InventoryProcessComponent implements OnInit {
 
   process(inventory: any) {
     this.inventory = inventory;
-    this.getItem = inventory.stock;
+    this.getItem = inventory.quantity;
     
   }
 
@@ -114,6 +115,10 @@ export class InventoryProcessComponent implements OnInit {
     this.addStocks = event.target.value;
   }
 
+  updatePurchaseDate(event: any) {
+    this.purchaseDate = event.target.value;
+  }
+
   updateGetItem(event: any) {
     this.getItem = event.target.value;
   }
@@ -125,15 +130,17 @@ export class InventoryProcessComponent implements OnInit {
   addStockCounts() {
     const processDetails = {
       stockCount: this.addStocks,
+      last_purchase_date: this.purchaseDate,
       details: "Refreshing Supplies"
     };
-
+    
     this.inventoryService.processInventories(processDetails, "IN", this.inventory.item_code).subscribe(msg => {
       this.alertTitle = 'Stocks Updated';
       this.alertMessage = msg.message;
 
       document.getElementById('open-modal')?.click();
       this.addStocks = 0;
+      this.purchaseDate = '';
       this.getAllInventories();
     });
   }
