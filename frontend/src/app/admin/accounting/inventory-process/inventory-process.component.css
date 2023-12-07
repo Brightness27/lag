@@ -34,6 +34,10 @@
     min-height: 42px;
 }
 
+.search-box {
+    width: 25%;
+}
+
 .search-input {
     width: 90%;
 }
@@ -53,4 +57,19 @@
     resize: none;
     text-align: justify;
     padding: 10px;
+}
+
+@media screen and (max-width: 767px) {
+
+    .search-box {
+      width: 50% !important;
+    }
+  
+    .search-btn {
+      width: 40px;
+    }
+  
+    .search-input {
+      width: calc(100% - 40px);
+    }
 }

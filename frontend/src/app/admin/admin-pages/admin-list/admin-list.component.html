@@ -11,7 +11,7 @@
             <span class="ms-2" *ngIf="hideAddText">Add new Admin</span>
         </button>
 
-        <div class="border w-25 p-0 rounded align-self-right">
+        <div class="search-container border p-0 rounded align-self-right">
             <input type="text" class="border-0 h-100 px-3 rounded search-input" [value]="searchKey" (input)="updateSearchKey($event)">
             <button class="search-btn border-0 rounded-end" (click)="searchEmployees()">
                 <fa-icon [icon]="search"></fa-icon>

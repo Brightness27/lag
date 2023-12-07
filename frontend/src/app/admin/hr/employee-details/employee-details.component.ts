@@ -163,11 +163,14 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   updateDetails() {
+
+    console.log(this.editForm.value);
+    
     this.employeeService.updateEmployee(this.editForm.value, this.id).subscribe((msg) => {
       this.alertTitle = 'Update Admin';
       this.alertMessage = msg.message;
 
-      document.getElementById('open-modal')?.click();
+      document.getElementById('emp-open-modal')?.click();
       this.getEmployee();
     });
     this.editForm.disable();

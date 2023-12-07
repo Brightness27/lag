@@ -1,80 +1,99 @@
 .body {
-    width: calc(100% - 5rem);
-    margin-left: 5rem;
-    z-index: 0;
-    position: relative;
-    top: 94px;
-    transition: all .3s ease;
+  width: calc(100% - 5rem);
+  margin-left: 5rem;
+  z-index: 0;
+  position: relative;
+  top: 94px;
+  transition: all .3s ease;
 }
 
 .body-trimmed {
-    width: calc(100% - 16.5625rem);
-    margin-left: 16.5625rem;
+  width: calc(100% - 16.5625rem);
+  margin-left: 16.5625rem;
 }
 
 .body-md-screen {
-    width: calc(100% - 5rem);
-    margin-left: 5rem;
+  width: calc(100% - 5rem);
+  margin-left: 5rem;
 }
 
 table tbody tr {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+.search-container {
+  width: 25%;
 }
 
 .search-input {
-    width: 90%;
+  width: 90%;
 }
 
 .search-input:focus {
-    outline: none;
+  outline: none;
 }
 
 .search-btn {
-    width: 10%;
-    height: 100%;
-    margin-top: -2px;
-    line-height: 0;
+  width: 10%;
+  height: 100%;
+  margin-top: -2px;
+  line-height: 0;
 }
 
 /*tab section start here */
 .tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-  }
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
   
   /* Style the buttons that are used to open the tab content */
-  .tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-  }
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
   
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-    background-color: #ddd;
-  }
-  
-  /* Create an active/current tablink class */
-  .tab button.active {
-    background-color: #ccc;
-  }
-  
-  /* Style the tab content */
-  .tabcontent {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tabcontent.hide {
+  display: none;
+}
+
+.tabcontent.show {
+  display: block;
+}
+
+@media screen and (max-width: 767px) {
+
+  .search-container {
+    width: 50%;
   }
 
-  .tabcontent.hide {
-    display: none;
+  .search-btn {
+    width: 40px;
   }
 
-  .tabcontent.show {
-    display: block;
+  .search-input {
+    width: calc(100% - 40px);
   }
+}

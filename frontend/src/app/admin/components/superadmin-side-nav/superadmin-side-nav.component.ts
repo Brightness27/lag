@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { navbarData, staffNavbarData, inventoryNavbarData } from './nav-data';
+import { navbarData, staffNavbarData, inventoryNavbarData, engineeringNavbarData } from './nav-data';
 import { faArrowLeft, faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 
@@ -35,6 +35,7 @@ export class SuperadminSideNavComponent implements OnInit{
   title = "Admin";
   staffTitle = "Employees";
   inventoryTitle = "Inventory";
+  engineeringTitle = "Engineering";
 
   // fullName = '';
   profileIcon = faUserCog;
@@ -51,6 +52,7 @@ export class SuperadminSideNavComponent implements OnInit{
   navData = navbarData;
   staffNavData = staffNavbarData;
   inventoryNavData = inventoryNavbarData;
+  engineeringNavData = engineeringNavbarData;
 
   @Input() department: String = '';
   

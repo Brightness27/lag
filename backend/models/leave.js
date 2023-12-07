@@ -47,7 +47,7 @@ module.exports = class Leave {
 
     static getSpecificLeaveOfemployee(leaveType, employeeId) {
         return db.execute(
-            'SELECT l.from_date, l.to_date, l.reason, CONCAT(e.fname, " ", e.mname, " ", e.lname) AS modified_by, l.date_modified FROM leavetbl l INNER JOIN admin a ON l.modified_by = a.id INNER JOIN employee e ON a.employeeId = e.id where l.employeeId = ? AND leave_type = ?',
+            'SELECT l.from_date, l.to_date, l.reason, CONCAT(e.fname, " ", e.mname, " ", e.lname) AS modified_by, l.date_modified FROM leavetbl l INNER JOIN admin a ON l.modified_by = a.id INNER JOIN employee e ON a.employeeId = e.id INNER JOIN leave_type lt ON l.leave_type = lt.id WHERE l.employeeId = ? AND lt.leave_type = ?',
             [employeeId, leaveType]
         );
     }

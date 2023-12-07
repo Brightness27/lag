@@ -66,5 +66,20 @@
                 </li>
             </ul>
         </div>
+
+        <div class="w-100" *ngIf="superadmin || engineering">
+            <div class="title-container mt-2 border-bottom border-top py-3">
+                <span class="title text-white">{{ engineeringTitle }}</span>
+            </div>
+        
+            <ul class="sidenav-nav">
+                <li class="sidenav-nav-item" *ngFor="let data of engineeringNavData">
+                    <a class="sidenav-nav-link" [routerLink]="data.routeLink"  routerLinkActive="active">
+                        <fa-icon class="sidenav-link-icon" [icon]="data.icon"></fa-icon>
+                        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ data.label }} </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

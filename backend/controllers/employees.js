@@ -5,7 +5,12 @@ exports.addEmployee = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const id = req.body.id;
@@ -74,7 +79,7 @@ exports.addEmployee = async (req, res, next) => {
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -84,7 +89,12 @@ exports.updateEmployee = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const id = req.params.id;
@@ -136,13 +146,13 @@ exports.updateEmployee = async (req, res, next) => {
         const result = await Employee.updateEmployee(employeeDetails, id);
 
         res.json({
-            error: 'false',
+            error: false,
             message: 'Employee has been updated.'
         })
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -157,13 +167,13 @@ exports.resignEmployee = async (req, res, next) => {
         const result = await Employee.updateStatus(status, id);
 
         res.json({
-            error: 'false',
+            error: false,
             message: 'Employee has been marked as resigned.'
         })
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -174,7 +184,12 @@ exports.updateEmployeeStatus = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const employeeId = req.params.id;
@@ -211,7 +226,7 @@ exports.getAllEmployees = async (req, res, next) => {
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -236,7 +251,7 @@ exports.getEmployeeById = async (req, res, next) => {
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -260,7 +275,7 @@ exports.getEmployeeByEmail = async (req, res, next) => {
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }
@@ -280,7 +295,7 @@ exports.searchEmployees = async (req, res, next) => {
 
     } catch (error) {
         res.json({
-            error: 'true',
+            error: true,
             message: error.message
         })
     }

@@ -9,7 +9,12 @@ exports.addAdmin = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const employeeId = req.body.employeeId;
@@ -224,7 +229,12 @@ exports.updateAdminProfile = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const adminId = req.params.id;
@@ -259,12 +269,21 @@ exports.updateAdminProfile = async (req, res, next) => {
             position: position
         }
 
-        const emailExist = await Employee.findEmployeeByEmail(email_address);
+        const emailExist = await Employee.checkEmailExceptEmployee(email_address, employeeId);
 
         if(emailExist[0].length > 0) {
             return res.json({
                 error: true,
                 message: 'Email already in use.'
+            });
+        }
+
+        const usernameExist = await Admin.checkUsernameExceptAdmin(username, adminId);
+
+        if(usernameExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'username already in use.'
             });
         }
 
@@ -290,7 +309,12 @@ exports.updateAdminPosDep = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const employeeId = req.params.id;
@@ -358,7 +382,12 @@ exports.updateAdminStatus = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const employeeId = req.params.id;

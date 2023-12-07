@@ -114,16 +114,6 @@ export class EmployeesComponent implements OnInit {
     return styleClass;
   }
 
-  hideButton(): string {
-    let hideClass = '';
-
-    if(this.superadmin) {
-      hideClass = 'hideButton';
-    }
-
-    return hideClass;
-  }
-
   getAllEmployees(): void {
     this.employeeService.getAllEmployees(this.status).subscribe((employees) => {
       

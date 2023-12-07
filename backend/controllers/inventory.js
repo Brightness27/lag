@@ -8,7 +8,12 @@ exports.addInventory = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
     }
 
     const name = req.body.name;

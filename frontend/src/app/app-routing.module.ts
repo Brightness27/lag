@@ -20,6 +20,9 @@ import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inve
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
 import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pdf.component';
+import { WorkflowListComponent } from './admin/engineering/workflow-list/workflow-list.component';
+import { AddWorkflowComponent } from './admin/engineering/add-workflow/add-workflow.component';
+import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/workflow-details.component';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -44,6 +47,10 @@ const routes: Routes = [
   {path: 'admin/inventory/details/:id', canActivate: [authGuardGuard], component: InventoryDetailsComponent},
   {path: 'admin/inventory/add', canActivate: [authGuardGuard], component: AddInventoryComponent},
   {path: 'admin/inventory/process', canActivate: [authGuardGuard], component: InventoryProcessComponent},
+  {path: 'admin/engineering', redirectTo: '/admin/engineering/work-flow/list', pathMatch: 'full'},
+  {path: 'admin/engineering/work-flow/list', canActivate: [authGuardGuard], component: WorkflowListComponent},
+  {path: 'admin/engineering/work-flow/details/:id', canActivate: [authGuardGuard], component: WorkflowDetailsComponent},
+  {path: 'admin/engineering/work-flow/add', canActivate: [authGuardGuard], component: AddWorkflowComponent},
   {path: '**', component: NotFoundComponent},
 ];
 

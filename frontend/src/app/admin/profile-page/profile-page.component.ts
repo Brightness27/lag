@@ -35,7 +35,7 @@ export class ProfilePageComponent implements OnInit {
 
   token: any;
 
-  error_message = 'asdasdasd';
+  error_message = '';
   error: boolean = false;
 
   name: string = '';
@@ -169,11 +169,11 @@ export class ProfilePageComponent implements OnInit {
       
       if(!msg.error) {
         this.getAdmin();
+        this.profileForm.disable();
+        this.disabled = true;
       }
     });
 
-    this.profileForm.disable();
-    this.disabled = true;
   }
 
   cancelUpdate() {

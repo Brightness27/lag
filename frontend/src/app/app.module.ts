@@ -35,7 +35,16 @@ import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inve
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
 import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pdf.component';
-import { FlowOfWorkComponent } from './admin/engineering/flow-of-work/flow-of-work.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { WorkflowListComponent } from './admin/engineering/workflow-list/workflow-list.component';
+import { AddWorkflowComponent } from './admin/engineering/add-workflow/add-workflow.component';
+import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/workflow-details.component';
 
 
 @NgModule({
@@ -68,7 +77,10 @@ import { FlowOfWorkComponent } from './admin/engineering/flow-of-work/flow-of-wo
     InventoryDetailsComponent,
     InventoryProcessComponent,
     PrintToPdfComponent,
-    FlowOfWorkComponent,
+    WorkflowListComponent,
+    AddWorkflowComponent,
+    WorkflowDetailsComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -78,6 +90,13 @@ import { FlowOfWorkComponent } from './admin/engineering/flow-of-work/flow-of-wo
     FontAwesomeModule,
     CarouselModule,
     HttpClientModule,
+    MatStepperModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

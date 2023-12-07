@@ -8,8 +8,13 @@ exports.addLeave = async (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {
-        return res.json(errors);
-    }
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
+    } 
 
     const employeeId = req.body.employeeId;
     const leave_type = req.body.leave_type;

@@ -141,9 +141,6 @@ export class AddInventoryComponent {
       )
     }
 
-    console.log(this.addForm.value);
-    
-
     this.inventoryService.addInventory(this.addForm.value).subscribe((msg) => {
       this.alertTitle = 'Add Admin';
       this.alertMessage = msg.message;

@@ -11,7 +11,7 @@ export class InventoryService {
 
   private inventory_url = this.root_url + '/inventory';
 
-  oken: any;
+  token: any;
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({ "Content-Type": "application/json" })

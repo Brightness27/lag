@@ -30,6 +30,13 @@ module.exports = class Admin {
         );
     }
 
+    static checkUsernameExceptAdmin(username, adminId) {
+        return db.execute(
+            'SELECT * FROM admin WHERE username = ? AND NOT id = ?',
+            [username, adminId]
+        );
+    }
+
     static getAdminByEmployeeId(employeeId) {
         return db.execute(
             'SELECT e.id as id, e.fname, e.mname, e.lname, e.position, a.department, a.status FROM admin a INNER  JOIN employee e ON a.employeeId = e.id WHERE employeeId = ?',

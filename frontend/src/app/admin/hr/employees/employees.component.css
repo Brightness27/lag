@@ -21,6 +21,10 @@ table tbody tr {
     cursor: pointer;
 }
 
+.search-container {
+  width: 25%;
+}
+
 .search-input {
     width: 90%;
 }
@@ -34,10 +38,6 @@ table tbody tr {
     height: 100%;
     margin-top: -2px;
     line-height: 0;
-}
-
-.hideButton {
-    visibility: hidden !important;
 }
 
 /*tab section start here */
@@ -81,4 +81,23 @@ table tbody tr {
 
   .tabcontent.show {
     display: block;
+  }
+
+  @media screen and (max-width: 767px) {
+
+    .search-container {
+      width: 50%;
+    }
+  
+    .search-btn {
+      width: 40px;
+    }
+  
+    .search-input {
+      width: calc(100% - 40px);
+    }
+
+    .scroll-horizontal {
+      overflow-x: auto;
+    }
   }

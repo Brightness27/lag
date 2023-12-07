@@ -21,6 +21,10 @@ table tbody tr td.clickable {
     cursor: pointer;
 }
 
+.search-container {
+    width: 25%;
+}
+
 .search-input {
     width: 90%;
 }
@@ -45,3 +49,22 @@ table tbody tr td.clickable {
 #reason::-webkit-scrollbar {
     display: none;
 }
+
+@media screen and (max-width: 767px) {
+
+    .search-container {
+      width: 50% !important;
+    }
+  
+    .search-btn {
+      width: 40px;
+    }
+  
+    .search-input {
+      width: calc(100% - 40px);
+    }
+
+    .scroll-horizontal {
+        overflow-x: auto;
+      }
+  }

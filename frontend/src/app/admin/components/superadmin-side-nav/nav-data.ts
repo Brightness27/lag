@@ -1,6 +1,7 @@
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { faFolder, faFolderPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarTimes, faUsersCog, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faFileContract } from '@fortawesome/free-solid-svg-icons';
 
 export const navbarData = [
 
@@ -56,6 +57,21 @@ export const inventoryNavbarData = [
         routeLink: '/admin/inventory/add',
         icon: faFolderPlus,
         label: 'Add Item'
+    }
+
+];
+
+export const engineeringNavbarData = [
+
+    {
+        routeLink: '/admin/engineering/work-flow/list',
+        icon: faFileAlt,
+        label: 'Work Flow'
+    },
+    {
+        routeLink: '/admin/engineering/work-flow/add',
+        icon: faFileContract,
+        label: 'New Work Flow'
     }
 
 ];

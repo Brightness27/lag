@@ -19,6 +19,10 @@
                             <a class="nav-link fs-5 fw-bold" [ngClass]="nonAccountingClass()" [routerLink]="['/admin/inventory/']" [routerLinkActive]="'text-dark'">Inventory</a>
                         </li>
 
+                        <li class="nav-item rounded-pill px-2" [routerLinkActive]="'bg-white'" >
+                            <a class="nav-link fs-5 fw-bold" [ngClass]="nonEngineeringClass()" [routerLink]="['/admin/engineering/']" [routerLinkActive]="'text-dark'">Work Flow</a>
+                        </li>
+
                         <li class="nav-item rounded-pill px-2">
                             <a class="nav-link fs-5 fw-bold" (click)="logout()">Logout</a>
                         </li>
