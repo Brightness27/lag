@@ -88,8 +88,8 @@ module.exports = class Workflow {
 
     static saveClientDetails(client_details) {
         return db.execute(
-            'INSERT INTO work_flow (client_name, client_address, client_contact_no, date_received, initial_communicator) VALUES(?, ?, ?, ?, ?)',
-            [client_details.name, client_details.address, client_details.contact_no, client_details.date_received, client_details.initial_communicator]
+            'INSERT INTO work_flow (client_name, client_address, client_contact_no, date_received) VALUES(?, ?, ?, ?)',
+            [client_details.name, client_details.address, client_details.contact_no, client_details.date_received]
         )
         .then(result => {
             // After inserting, get the ID of the last inserted row
