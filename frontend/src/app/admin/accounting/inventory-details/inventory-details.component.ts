@@ -42,6 +42,11 @@ export class InventoryDetailsComponent {
 
   name: string =  '';
 
+  newCategory = false;
+  newCategoryname = '';
+
+  categories: any[] = [];
+
   adminName: string = '';
 
   alertTitle: string = '';
@@ -69,6 +74,7 @@ export class InventoryDetailsComponent {
 
     this.tempDetails =  this.createTempForm();
 
+    this.getAllCategories();
     this.getInventoryItem();
   }
 
@@ -124,6 +130,25 @@ export class InventoryDetailsComponent {
     return styleClass;
   }
 
+  categoryChanged() {
+    const category = this.editForm.get('category')?.value;
+
+    if(category === 'other') {
+      this.newCategory = true;
+    }
+    else {
+      this.newCategory = false;
+    }
+  }
+
+  getAllCategories(): void {
+    this.inventoryService.getAllCategories().subscribe((categories) => {
+      
+      this.categories = categories
+
+    });
+  }
+
   getInventoryItem(): void {
     this.inventoryService.getItemByCode(this.id).subscribe(item => {
       this.item = item;
@@ -133,30 +158,44 @@ export class InventoryDetailsComponent {
       this.editForm.patchValue({
         name: this.item.name,
         category: this.item.category_name,
-        stock: this.item.stock,
+        stock: this.item.quantity,
         last_stock_date: this.item.last_stock_date
       });
     });
   }
 
+  updateCategoryName(event: any) {
+    this.newCategoryname = event.target.value;
+  }
+
   update() {
     this.tempDetails.patchValue(this.editForm.value);
-
-    this.editForm.get('position')?.enable();
-    this.editForm.get('department')?.enable();
+    
+    this.editForm.get('name')?.enable();
+    this.editForm.get('category')?.enable();
     
     this.disabled = !this.disabled;
   }
 
   updateDetails() {
-    this.adminService.updateAdminPosDep(this.editForm.value, this.id).subscribe((msg) => {
-      this.alertTitle = 'Update Admin';
+    if(this.newCategory) {
+      this.editForm.patchValue(
+        {
+          category: this.newCategoryname
+        }
+      )
+    }
+    
+    this.inventoryService.updateInventory(this.editForm.value, this.id).subscribe((msg) => {
+      this.alertTitle = 'Update Item';
       this.alertMessage = msg.message;
 
       document.getElementById('open-modal')?.click();
     });
     this.editForm.disable();
     this.disabled = true;
+
+    this.getInventoryItem();
   }
 
   cancelUpdate() {

@@ -39,10 +39,23 @@
                 <label for="name" class="form-label fs-5">Item Name</label>
                 <input type="text" class="form-control border-secondary" id="name" formControlName="name">
             </div>
-
+<!-- 
             <div class="mb-3">
                 <label for="category" class="form-label fs-5">Category</label>
                 <input type="text" class="form-control border-secondary" id="category" formControlName="category">
+            </div> -->
+
+            <div class="mb-3">
+                <label for="category" class="form-label fs-5">Category</label>
+                <select type="text" class="form-select border-secondary" id="category" (change)="categoryChanged()" formControlName="category">
+                    <option class="form-option" *ngFor="let category of categories" value="{{ category.name }}">{{ category.name }}</option>
+                    <option class="form-option" value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="mb-3" *ngIf="newCategory">
+                <label for="category_name" class="form-label fs-5">Category Name</label>
+                <input type="text" class="form-control" id="category_name" (input)="updateCategoryName($event)">
             </div>
 
             <div class="mb-3">
@@ -55,21 +68,9 @@
                 <input type="text" class="form-control border-secondary" id="last_stock_date" formControlName="last_stock_date">
             </div>
 
-            <!-- <div class="row mb-3" *ngIf="disabled">
-                <div class="col">
-                    <button type="button" class="btn btn-primary form-control" (click)="update()" [disabled]="resigned">Update</button>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#resign-admin-modal" *ngIf="!resigned">Resign</button>
-                    <button type="button" class="btn btn-danger form-control" data-bs-toggle="modal" data-bs-target="#active-admin-modal" *ngIf="resigned">Activate</button>
-                </div>
-                
-            </div> -->
-
-            <div class="mb-3">
-                <button type="button" class="btn btn-primary form-control mb-3" (click)="updateDetails()" *ngIf="!disabled">Update Admin</button>
-                <button type="button" class="btn btn-secondary form-control mb-3" (click)="cancelUpdate()" *ngIf="!disabled">Cancel Update</button>
-            </div>
+            <button type="button" class="btn btn-primary form-control" (click)="update()" *ngIf="disabled">Update</button>
+            <button type="button" class="btn btn-primary form-control mb-3" (click)="updateDetails()" *ngIf="!disabled">Update</button>
+            <button type="button" class="btn btn-secondary form-control mb-3" (click)="cancelUpdate()" *ngIf="!disabled">Cancel</button>
         </form>
     </div>
 

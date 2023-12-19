@@ -45,6 +45,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { WorkflowListComponent } from './admin/engineering/workflow-list/workflow-list.component';
 import { AddWorkflowComponent } from './admin/engineering/add-workflow/add-workflow.component';
 import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/workflow-details.component';
+import { LoadingComponent } from './admin/components/loading/loading.component';
+import { UpdateWorkflowComponent } from './admin/engineering/update-workflow/update-workflow.component';
+import { ViewImagesComponent } from './admin/components/view-images/view-images.component';
 
 
 @NgModule({
@@ -80,6 +83,9 @@ import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/w
     WorkflowListComponent,
     AddWorkflowComponent,
     WorkflowDetailsComponent,
+    LoadingComponent,
+    UpdateWorkflowComponent,
+    ViewImagesComponent,
     
   ],
   imports: [

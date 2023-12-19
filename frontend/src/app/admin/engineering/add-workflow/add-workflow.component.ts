@@ -4,6 +4,8 @@ import { AdminServicesService } from 'src/app/services/admin-services/admin-serv
 import { WorkflowService } from 'src/app/services/workflow-services/workflow.service';
 import { MatStepper } from '@angular/material/stepper';
 import { DatePipe } from '@angular/common';
+import { LoadingService } from 'src/app/services/loading-service/loading.service';
+import { Router } from '@angular/router';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -36,8 +38,23 @@ export class AddWorkflowComponent implements OnInit {
 
   alertTitle: string = '';
   alertMessage: string = '';
+  alertError: boolean = false;
 
-  constructor(private adminService: AdminServicesService, private builder: FormBuilder, private workflowService: WorkflowService, private datePipe: DatePipe) {}
+  link = '';
+
+  selectedFilePreSurvey: any = null;
+  fileNamesPreSurvey = '';
+
+  selectedFileDocuments: any = null;
+  fileNamesDocuments = '';
+
+  selectedFileJobOrder: any = null;
+  fileNamesJobOrder = '';
+
+  selectedFileLoadSide: any = null;
+  fileNamesLoadSide = '';
+
+  constructor(private router: Router, private adminService: AdminServicesService, private builder: FormBuilder, private workflowService: WorkflowService, private datePipe: DatePipe, private loadingService: LoadingService) {}
   
   work_flow = this.builder.group({
     client_details: this.builder.group({
@@ -48,38 +65,42 @@ export class AddWorkflowComponent implements OnInit {
     }),
 
     pre_survey: this.builder.group({
-      facility: this.builder.control('', Validators.required),
-      structural_classification: this.builder.control('', Validators.required),
-      service_data: this.builder.control('', Validators.required),
-      private_pole: this.builder.control('', Validators.required),
-      number_of_units: this.builder.control('', Validators.required),
-      feasibility: this.builder.control('', Validators.required),
-      plus_code: this.builder.control('', Validators.required),
-      remarks: this.builder.control('')
+      facility: this.builder.control(''),
+      structural_classification: this.builder.control(''),
+      service_data: this.builder.control(''),
+      private_pole: this.builder.control(''),
+      number_of_units: this.builder.control(''),
+      feasibility: this.builder.control(''),
+      plus_code: this.builder.control(''),
+      remarks: this.builder.control(''),
+      pre_survey: ['']
     }),
 
     documents: this.builder.group({
-      complete_mark: this.builder.control('', Validators.required),
-      remarks: this.builder.control('')
+      complete_mark: this.builder.control(''),
+      remarks: this.builder.control(''),
+      documents: ['']
     }),
 
     payment: this.builder.group({
-      payment_mark: this.builder.control('', Validators.required),
-      ar_or_number: this.builder.control('', Validators.required),
+      payment_mark: this.builder.control(''),
+      ar_or_number: this.builder.control(''),
       remarks: this.builder.control('')
     }),
 
     job_order: this.builder.group({
-      remarks: this.builder.control('')
+      remarks: this.builder.control(''),
+      job_order: ['']
     }),
 
     load_side: this.builder.group({
-      load_side_mark: this.builder.control('', Validators.required),
-      remarks: this.builder.control('')
+      load_side_mark: this.builder.control(''),
+      remarks: this.builder.control(''),
+      load_side: ['']
     }),
 
     final_processing: this.builder.group({
-      coordinator: this.builder.control('', Validators.required)
+      coordinator: this.builder.control('')
     })
   });
 
@@ -137,6 +158,86 @@ export class AddWorkflowComponent implements OnInit {
     return styleClass;
   }
 
+  onFileSelectedPreSurvey(event: any): void {
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFilePreSurvey = fileInput.files;
+
+      const length = this.selectedFilePreSurvey.length;
+      this.fileNamesPreSurvey = '';
+
+      this.selectedFilePreSurvey.forEach((currentValue: any, index: any) => {
+        if((index + 1) < length) {
+          this.fileNamesPreSurvey = this.fileNamesPreSurvey + currentValue.name + "\n";
+        }
+        else{
+          this.fileNamesPreSurvey = this.fileNamesPreSurvey + currentValue.name;
+        }
+      });
+    }
+  }
+
+  onFileSelectedDocuments(event: any): void {
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFileDocuments = fileInput.files;
+
+      const length = this.selectedFileDocuments.length;
+      this.fileNamesDocuments = '';
+
+      this.selectedFileDocuments.forEach((currentValue: any, index: any) => {
+        if((index + 1) < length) {
+          this.fileNamesDocuments = this.fileNamesDocuments + currentValue.name + "\n";
+        }
+        else{
+          this.fileNamesDocuments = this.fileNamesDocuments + currentValue.name;
+        }
+      });
+    }
+  }
+  
+  onFileSelectedJobOrder(event: any): void {
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFileJobOrder = fileInput.files;
+
+      const length = this.selectedFileJobOrder.length;
+      this.fileNamesJobOrder = '';
+
+      this.selectedFileJobOrder.forEach((currentValue: any, index: any) => {
+        if((index + 1) < length) {
+          this.fileNamesJobOrder = this.fileNamesJobOrder + currentValue.name + "\n";
+        }
+        else{
+          this.fileNamesJobOrder = this.fileNamesJobOrder + currentValue.name;
+        }
+      });
+    }
+  }
+
+  onFileSelectedLoadSide(event: any): void {
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.selectedFileLoadSide = fileInput.files;
+
+      const length = this.selectedFileLoadSide.length;
+      this.fileNamesLoadSide = '';
+
+      this.selectedFileLoadSide.forEach((currentValue: any, index: any) => {
+        if((index + 1) < length) {
+          this.fileNamesLoadSide = this.fileNamesLoadSide + currentValue.name + "\n";
+        }
+        else{
+          this.fileNamesLoadSide = this.fileNamesLoadSide + currentValue.name;
+        }
+      });
+    }
+  }
+
   updateStructuralClassification(event: any) {
     this.other_structural_classification = event.target.value;
   }
@@ -157,18 +258,17 @@ export class AddWorkflowComponent implements OnInit {
   }
 
   submitForm() {
+
+    this.loadingService.showLoader();
+
     const selectedDate = this.work_flow.get('client_details.date_received')?.value;
     const formattedDate = this.datePipe.transform(selectedDate, 'yyyy-MM-dd');
 
     const workflow_value = {
-      client_details: {
         name: this.work_flow.get('client_details.name')?.value || null,
         address: this.work_flow.get('client_details.address')?.value || null,
         contact_no: this.work_flow.get('client_details.contact_no')?.value || null,
-        date_received: formattedDate
-      },
-  
-      pre_survey: {
+        date_received: formattedDate,
         facility: this.work_flow.get('pre_survey.facility')?.value || null,
         structural_classification: this.other_structural_classification,
         service_data: this.work_flow.get('pre_survey.service_data')?.value || null,
@@ -176,65 +276,42 @@ export class AddWorkflowComponent implements OnInit {
         number_of_units: this.work_flow.get('pre_survey.number_of_units')?.value || null,
         feasibility: this.work_flow.get('pre_survey.feasibility')?.value || null,
         plus_code: this.work_flow.get('pre_survey.plus_code')?.value || null,
-        remarks: this.work_flow.get('pre_survey.remarks')?.value || null
-      },
-  
-      documents: {
+        pre_survey_remarks: this.work_flow.get('pre_survey.remarks')?.value || null,
+        pre_survey: this.selectedFilePreSurvey,
         complete_mark: this.work_flow.get('documents.complete_mark')?.value || null,
-        remarks: this.work_flow.get('documents.remarks')?.value || null
-      },
-  
-      payment: {
+        documents_remarks: this.work_flow.get('documents.remarks')?.value || null,
+        documents: this.selectedFileDocuments,
         payment_mark: this.work_flow.get('payment.payment_mark')?.value || null,
         ar_or_number: this.work_flow.get('payment.ar_or_number')?.value || null,
-        remarks: this.work_flow.get('payment.remarks')?.value || null
-      },
-  
-      job_order: {
-        remarks: this.work_flow.get('job_order.remarks')?.value || null
-      },
-  
-      load_side: {
+        payment_remarks: this.work_flow.get('payment.remarks')?.value || null,
+        job_order_remarks: this.work_flow.get('job_order.remarks')?.value || null,
+        job_order: this.selectedFileJobOrder,
         load_side_mark: this.work_flow.get('load_side.load_side_mark')?.value || null,
-        remarks: this.work_flow.get('load_side.remarks')?.value || null
-      },
-  
-      final_processing: {
+        load_side_remarks: this.work_flow.get('load_side.remarks')?.value || null,
+        load_side: this.selectedFileLoadSide,
         coordinator: this.work_flow.get('final_processing.coordinator')?.value || null
-      }
     };
+
     
     this.workflowService.addWorkflow(workflow_value).subscribe(msg => {
       this.alertTitle = 'Add Work Flow';
       this.alertMessage = msg.message;
+      this.alertError = msg.error;
+      this.link = '/admin/engineering/work-flow/details/' + msg.id;
 
       document.getElementById('open-modal')?.click();
 
-      if(!msg.error) {
-        document.getElementById('reset-stepper')?.click();
-      }
+      this.loadingService.hideLoader();
     });
+  }
+
+  dismissModal() {
+    if(!this.alertError) {
+      this.router.navigate([this.link]);
+    }
   }
 
   get clientDetails() {
     return this.work_flow.get('client_details') as FormGroup;
-  }
-
-  resetForm() {
-    const client_details = this.work_flow.get('client_details') as FormGroup;
-    const pre_survey = this.work_flow.get('pre_survey') as FormGroup;
-    const documents = this.work_flow.get('documents') as FormGroup;
-    const payment = this.work_flow.get('payment') as FormGroup;
-    const job_order = this.work_flow.get('job_order') as FormGroup;
-    const load_side = this.work_flow.get('load_side') as FormGroup;
-    const final_processing = this.work_flow.get('final_processing') as FormGroup;
-
-    client_details.reset();
-    pre_survey.reset();
-    documents.reset();
-    payment.reset();
-    job_order.reset();
-    load_side.reset();
-    final_processing.reset();
   }
 }

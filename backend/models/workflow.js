@@ -65,6 +65,20 @@ module.exports = class Workflow {
         );
     }
 
+    static getFilesByWorkflowId(id) {
+        return db.execute(
+            'SELECT * FROM workflow_images WHERE workflow_id = ?',
+            [id]
+        );
+    }
+
+    static getSpecificImageById(id) {
+        return db.execute(
+            'SELECT * FROM workflow_images WHERE id = ?',
+            [id]
+        );
+    }
+
     static getStatusUpdateByWorkflowId(id) {
         return db.execute(
             'SELECT * FROM work_flow_status_update WHERE work_flow_id = ?',
@@ -74,8 +88,8 @@ module.exports = class Workflow {
 
     static saveClientDetails(client_details) {
         return db.execute(
-            'INSERT INTO work_flow (client_name, client_address, client_contact_no, date_received) VALUES(?, ?, ?, ?)',
-            [client_details.name, client_details.address, client_details.contact_no, client_details.date_received]
+            'INSERT INTO work_flow (client_name, client_address, client_contact_no, date_received, initial_communicator) VALUES(?, ?, ?, ?, ?)',
+            [client_details.name, client_details.address, client_details.contact_no, client_details.date_received, client_details.initial_communicator]
         )
         .then(result => {
             // After inserting, get the ID of the last inserted row
@@ -123,6 +137,13 @@ module.exports = class Workflow {
         return db.execute(
             'INSERT INTO work_flow_final_process (work_flow_id, coordinator) VALUES(?, ?)',
             [workflow_id, final_processing.coordinator]
+        );
+    }
+
+    static saveWorkflowImages(workflow_id, workflow_process_step, image_path) {
+        return db.execute(
+            'INSERT INTO workflow_images (workflow_id, workflow_process_step, image_path) VALUES(?, ?, ?)',
+            [workflow_id, workflow_process_step, image_path]
         );
     }
 
@@ -179,6 +200,13 @@ module.exports = class Workflow {
         return db.execute(
             'UPDATE work_flow_final_process SET coordinator = ? WHERE id = ?',
             [final_processing.coordinator, final_processing.id]
+        );
+    }
+
+    static deleteFile(id){
+        return db.execute(
+            'DELETE FROM workflow_images WHERE id = ?',
+            [id]
         );
     }
 

@@ -23,6 +23,8 @@ import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pd
 import { WorkflowListComponent } from './admin/engineering/workflow-list/workflow-list.component';
 import { AddWorkflowComponent } from './admin/engineering/add-workflow/add-workflow.component';
 import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/workflow-details.component';
+import { UpdateWorkflowComponent } from './admin/engineering/update-workflow/update-workflow.component';
+import { ViewImagesComponent } from './admin/components/view-images/view-images.component';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -50,7 +52,9 @@ const routes: Routes = [
   {path: 'admin/engineering', redirectTo: '/admin/engineering/work-flow/list', pathMatch: 'full'},
   {path: 'admin/engineering/work-flow/list', canActivate: [authGuardGuard], component: WorkflowListComponent},
   {path: 'admin/engineering/work-flow/details/:id', canActivate: [authGuardGuard], component: WorkflowDetailsComponent},
+  {path: 'admin/engineering/work-flow/update/:id', canActivate: [authGuardGuard], component: UpdateWorkflowComponent},
   {path: 'admin/engineering/work-flow/add', canActivate: [authGuardGuard], component: AddWorkflowComponent},
+  {path: 'admin/engineering/work-flow/images/:id', canActivate: [authGuardGuard], component: ViewImagesComponent},
   {path: '**', component: NotFoundComponent},
 ];
 

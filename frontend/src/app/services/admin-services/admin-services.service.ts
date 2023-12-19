@@ -6,22 +6,22 @@ import { Admin } from '../../models/admin';
 
 import { Observable } from 'rxjs';
 import { Employees } from 'src/app/models/employee';
+import { ConstantsService } from '../constants/constants.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminServicesService {
-  private root_url = 'http://localhost:3000';
+  
+  constructor(private http: HttpClient, private constants: ConstantsService) { }
 
-  private admin_url = this.root_url + '/admin';
+  private admin_url = this.constants.root_url + '/admin';
 
   token: any;
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({ "Content-Type": "application/json" })
   };
-  constructor(private http: HttpClient) { }
-
 
   login(username: Pick<Admin, 'username'>, password: Pick<Admin, 'password'>): Observable<{
     error: boolean; message: string; token: string; adminId: Pick<Admin, 'id'>; department: Pick<Admin, 'department'>

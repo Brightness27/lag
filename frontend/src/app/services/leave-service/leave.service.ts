@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { ConstantsService } from '../constants/constants.service';
 
 
 @Injectable({
@@ -9,16 +10,14 @@ import { Observable } from 'rxjs';
 })
 export class LeaveService {
 
-  private root_url = 'http://localhost:3000';
-
-  private leave_url = this.root_url + '/leave';
+  private leave_url = this.constants.root_url + '/leave';
 
   token: any;
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({ "Content-Type": "application/json" })
   };
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private constants: ConstantsService) { }
 
   getAllLeaves(): Observable<any[]> {
     return this.http.get<any[]>(`${this.leave_url}`, this.httpOptions);

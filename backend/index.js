@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path')
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 
@@ -30,13 +31,20 @@ app.use('/leave', leaveRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/workflow', workflowRoutes);
   
-app.listen(3000, () => {
+app.use(express.static(path.join(__dirname, 'lag_website')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'lag_website/index.html'));
+});
+
+app.listen(ports, '192.168.68.107', () => {
     console.log(`listening to port ${ports}`);
 });
 
 // const express = require('express');
 // const bodyParser = require('body-parser');
 // const mysql = require('mysql2');
+// const path = require('path');
 
 // const cors = require('cors');
 
@@ -59,6 +67,8 @@ app.listen(3000, () => {
 //     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 //     next();
 // });
+
+// app.use(express.static(path.join(__dirname, 'files')));
 
 // app.use('/employees', employeeRoutes);
 // app.use('/admin', adminRoutes);

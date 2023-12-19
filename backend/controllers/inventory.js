@@ -183,6 +183,66 @@ exports.searchInventories = async (req, res, next) => {
     }
 }
 
+exports.updateInventory = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        const errorMessages = errors.array().map(error => error.msg);
+
+        return res.json({
+            error: true,
+            message: errorMessages
+        });
+    }
+
+    const name = req.body.name;
+    const category = req.body.category ;
+
+    const item_id = req.params.itemid;
+
+    try {
+
+        const itemExist = await Inventory.getItemByNameExcept(name, item_id);
+
+        if(itemExist[0].length > 0) {
+            return res.json({
+                error: true,
+                message: 'Name already in use.'
+            });
+        }
+
+        let categoryId = 0;
+
+        const existingCategory = await Category.selectCategoryByName(category);
+
+        if(existingCategory[0].length === 0) {
+            categoryId = await Category.addcategory(category);
+        }
+        else {
+            categoryId = existingCategory[0][0].id;
+        }
+
+        const item_details = {
+            name: name,
+            category: categoryId
+        }
+
+        const updateItem = await Inventory.updateItem(item_details, item_id);
+
+        return res.json({
+            error: false,
+            message: 'Item Updated'
+        });
+
+
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
 exports.processInventories = async (req, res, next) => {
 
     const type = req.params.type;

@@ -3,21 +3,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Employees } from '../../models/employee';
 import { Observable } from 'rxjs';
+import { ConstantsService } from '../constants/constants.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeesService {
 
-  private root_url = 'http://localhost:3000';
-
-  private employee_url = this.root_url + '/employees';
+  private employee_url = this.constants.root_url + '/employees';
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({ "Content-Type": "application/json" })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private constants: ConstantsService) { }
 
   getAllEmployees(status: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.employee_url}/status/${status}`, this.httpOptions);

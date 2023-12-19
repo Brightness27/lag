@@ -32,6 +32,13 @@ module.exports = class Inventory {
         );
     }
 
+    static getItemByNameExcept(name, id) {
+        return db.execute(
+            'SELECT * FROM inventory WHERE name = ? AND NOT item_code = ?',
+            [name, id]
+        );
+    }
+
     static updateItemCode(item_code, id) {
         return db.execute(
             'UPDATE inventory SET item_code = ? WHERE id = ?',
@@ -56,6 +63,13 @@ module.exports = class Inventory {
         return db.execute(
             'SELECT i.item_code AS item_code, i.name AS name, c.name AS category_name, i.quantity AS quantity, i.last_purchase_date AS last_purchase_date, i.last_stock_date AS last_stock_date FROM inventory i INNER JOIN inventory_category c ON i.category = c.id WHERE i.item_code LIKE ? OR i.name LIKE ? OR c.name LIKE ? OR i.quantity LIKE ? OR i.last_purchase_date LIKE ?  OR i.last_stock_date LIKE ? ORDER BY i.category ASC, i.item_code ASC',
             [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey]
+        )
+    }
+
+    static updateItem(item_details, item_code) {
+        return db.execute(
+            'UPDATE inventory SET name = ?, category = ? WHERE item_code = ?',
+            [item_details.name, item_details.category, item_code]
         )
     }
 

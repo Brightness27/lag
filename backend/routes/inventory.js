@@ -16,6 +16,15 @@ router.post(
     inventoryController.addInventory
 );
 
+router.post(
+    '/update/:itemid',
+    [
+        body('name').trim().not().isEmpty().withMessage('invalid name'),
+        body('category').trim().not().isEmpty().withMessage('invalid category')
+    ],
+    inventoryController.updateInventory
+);
+
 router.get(
     '/all-categories',
     inventoryController.getCategories
