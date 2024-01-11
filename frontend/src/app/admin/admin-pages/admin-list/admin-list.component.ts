@@ -19,6 +19,8 @@ export class AdminListComponent implements OnInit {
 
   hideAddText = true;
 
+  admin_id: any;
+
   activeAdmins: any[] = [];
   resignedAdmins: any[] = [];
   addAdmin = faUserPlus;
@@ -61,8 +63,8 @@ export class AdminListComponent implements OnInit {
 
     //set the details of the admin if retrieved
     if(this.token) {
-      const id = this.token.adminId;
-      this.adminService.getAdminById(id).subscribe(admin => {
+      this.admin_id = this.token.adminId;
+      this.adminService.getAdminById(this.admin_id).subscribe(admin => {
         this.department = admin.department;
         this.name = 'Hello, ' + admin.fname;
         this.setActiveDepartment();
@@ -118,26 +120,29 @@ export class AdminListComponent implements OnInit {
   }
 
   getAllAdmins(): void {
-    this.adminService.getAllAdmins(this.status).subscribe((admins) => {
+    this.adminService.getAllAdmins(this.status, this.admin_id).subscribe((admins) => {
       
-      if(this.status == 'Active') {
-        this.activeAdmins = admins.map(admin => {
-          return {
-            ...admin,
-            fullName: admin.fname + " " + admin.mname + " " + admin.lname,
-            link: '/admin/list/details/' + admin.id
-          };
-        });
+      if(Array.isArray(admins)) {
+        if(this.status == 'Active') {
+          this.activeAdmins = admins.map(admin => {
+            return {
+              ...admin,
+              fullName: admin.fname + " " + admin.mname + " " + admin.lname,
+              link: '/admin/list/details/' + admin.id
+            };
+          });
+        }
+        else if (this.status == 'Resigned') {
+          this.resignedAdmins = admins.map(admin => {
+            return {
+              ...admin,
+              fullName: admin.fname + " " + admin.mname + " " + admin.lname,
+              link: '/admin/list/details/' + admin.id
+            };
+          });
+        }
       }
-      else if (this.status == 'Resigned') {
-        this.resignedAdmins = admins.map(admin => {
-          return {
-            ...admin,
-            fullName: admin.fname + " " + admin.mname + " " + admin.lname,
-            link: '/admin/list/details/' + admin.id
-          };
-        });
-      }
+      
     });
   }
 
@@ -150,7 +155,7 @@ export class AdminListComponent implements OnInit {
       this.getAllAdmins();
     }
     else {
-      this.adminService.searchAdmins(this.searchKey, this.status).subscribe((admins) => {
+      this.adminService.searchAdmins(this.searchKey, this.status, this.admin_id).subscribe((admins) => {
       
         if(this.status == 'Active') {
           this.activeAdmins = admins.map(admin => {

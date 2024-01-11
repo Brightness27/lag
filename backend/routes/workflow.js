@@ -23,12 +23,11 @@ var upload = multer({storage: storage});
 
 router.post(
     '/add',
-    upload.fields([{name: 'pre_survey', maxCount: 20}, {name: 'documents', maxCount: 20}, {name: 'job_order', maxCount: 20}, {name: 'load_side', maxCount: 20}]),
     workflowController.addWorkflow
 );
 
 router.post(
-    '/update',
+    '/update/:id/:step',
     upload.fields([{name: 'pre_survey', maxCount: 20}, {name: 'documents', maxCount: 20}, {name: 'job_order', maxCount: 20}, {name: 'load_side', maxCount: 20}]),
     workflowController.updateWorkflow
 );
@@ -46,7 +45,7 @@ router.get(
 );
 
 router.get(
-    '/details/:id', workflowController.getWorkflowById
+    '/details/:ctrlno', workflowController.getWorkflowByCtrlno
 );
 
 router.get(
@@ -59,6 +58,30 @@ router.get(
 
 router.get(
     '/search/:searchKey', workflowController.searchWorkflow
+);
+
+router.get(
+    '/options/:step/:selector', workflowController.getOptions
+);
+
+router.get(
+    '/filter/date/:order/:specificdate', workflowController.filterWorkflowByDay
+);
+
+router.get(
+    '/filter/month/:order/:date', workflowController.filterWorkflowByMonth
+);
+
+router.get(
+    '/filter/range/:order/:start/:end', workflowController.filterWorkflowByRange
+);
+
+router.get(
+    '/filter/site/:order/:site', workflowController.filterWorkflowBySite
+);
+
+router.get(
+    '/locations/', workflowController.getAllLocations
 );
 
 module.exports = router;

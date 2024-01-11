@@ -13,7 +13,12 @@ module.exports = class Admin {
         return db.execute(
             'INSERT INTO admin(employeeId, department, username, password) VALUES(?, ?, ?, ?)',
             [admin.employeeId , admin.department, admin.username, admin.password]
-        );
+        )
+        .then(result => {
+            // After inserting, get the ID of the last inserted row
+            const lastInsertId = result[0].insertId;
+            return lastInsertId;
+        });
     }
 
     static getAdminById(id) {
@@ -39,22 +44,22 @@ module.exports = class Admin {
 
     static getAdminByEmployeeId(employeeId) {
         return db.execute(
-            'SELECT e.id as id, e.fname, e.mname, e.lname, e.position, a.department, a.status FROM admin a INNER  JOIN employee e ON a.employeeId = e.id WHERE employeeId = ?',
+            'SELECT a.id as admin_id, e.id as id, e.fname, e.mname, e.lname, e.position, a.department, a.status FROM admin a INNER  JOIN employee e ON a.employeeId = e.id WHERE employeeId = ?',
             [employeeId]
         );
     }
 
-    static getAllAdmins(status) {
+    static getAllAdmins(status, admin_id) {
         return db.execute(
-            'SELECT a.id as adminId, e.id as id, e.fname, e.mname, e.lname, e.position, a.department FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE a.status = ? ORDER BY e.id ASC',
-            [status]
+            'SELECT a.id as adminId, e.id as id, e.fname, e.mname, e.lname, e.position, a.department FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE a.status = ? AND NOT a.id = ? ORDER BY e.id ASC',
+            [status, admin_id]
         );
     }
 
-    static searchAdmin(searchKey, status) {
+    static searchAdmin(searchKey, status, admin_id) {
         return db.execute(
-            'SELECT * FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE (e.id LIKE ? OR e.fname LIKE ? OR e.mname LIKE ? OR e.lname LIKE ? OR position LIKE ? OR department LIKE ? OR username LIKE ?) AND a.status = ?',
-            [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, status]
+            'SELECT * FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE (e.id LIKE ? OR e.fname LIKE ? OR e.mname LIKE ? OR e.lname LIKE ? OR position LIKE ? OR department LIKE ? OR username LIKE ?) AND (a.status = ?) AND NOT id = ?',
+            [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, status, admin_id]
         );
     }
 

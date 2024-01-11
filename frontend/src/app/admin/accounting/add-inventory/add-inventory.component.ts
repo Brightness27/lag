@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 import { InventoryService } from 'src/app/services/inventory-services/inventory.service';
@@ -37,6 +37,13 @@ export class AddInventoryComponent {
   alertTitle: string = '';
   alertMessage: string = '';
 
+  screen_width!: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screen_width = window.innerWidth;
+  }
+
   constructor(private adminService: AdminServicesService, private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
@@ -57,7 +64,10 @@ export class AddInventoryComponent {
      }
 
     this.getAllCategories();
+
+    this.screen_width = window.innerWidth;
   }
+
 
   //create formGroup
   createFormGroup(): FormGroup {
@@ -102,6 +112,18 @@ export class AddInventoryComponent {
     }
     else if(this.isSideNavCollapsed && this.screenWidth <= 768 && this.screenWidth > 0) {
       styleClass = 'body-md-screen';
+    }
+
+    return styleClass;
+  }
+
+  getLabelClass(): string {
+    let styleClass = '';
+    if(this.screen_width > 670) {
+      styleClass = 'fs-5';
+    }
+    else {
+      styleClass = 'fs-6';
     }
 
     return styleClass;

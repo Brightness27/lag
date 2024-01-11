@@ -1,24 +1,19 @@
-<div class="container h-75">
-    <div class="container-fluid h-100">
-        <div class="row h-100 mt-5">
-            <div class="col-8 design-area">
-    
+<div class="containers h-100 d-flex justify-content-center align-items-center">
+        <form [formGroup]="loginForm" (submit)="login()">
+            <span class="text-danger">{{ errorMessage }}</span>
+            <div class="mb-3">
+                <label for="username" class="form-label fs-5">username</label>
+                <input type="username" class="form-control border border-dark bg-transparent" id="username" formControlName="username" (keyup.enter)="login()">
             </div>
-            <div class="col login-area d-flex flex-column justify-content-around px-5">
-                <form [formGroup]="loginForm" (submit)="login()">
-                    <span class="text-danger">{{ errorMessage }}</span>
-                    <div class="mb-3">
-                        <label for="username" class="form-label fs-5">username</label>
-                        <input type="username" class="form-control" id="username" formControlName="username" (keyup.enter)="login()">
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label fs-5">Password</label>
-                        <input type="password" class="form-control" id="password" formControlName="password" (keyup.enter)="login()">
-                    </div>
-                    
-                    <button type="button" class="btn btn-primary form-control mb-3" (click)="login()">login</button>
-                </form>
+            <div class="mb-4">
+                <label for="password" class="form-label fs-5">Password</label>
+                <input type="password" class="form-control border border-dark bg-transparent" id="password" formControlName="password" (keyup.enter)="login()">
             </div>
-        </div>
-    </div>
+
+            <div class="mb-4">
+                <button type="button" class="btn btn-primary form-control mb-3 border border-dark" (click)="login()">login</button>
+            </div>
+            
+            
+        </form>
 </div>

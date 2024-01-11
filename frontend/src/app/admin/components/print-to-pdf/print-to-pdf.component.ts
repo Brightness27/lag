@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import html2pdf from 'html2pdf.js';
 import { EmployeesService } from 'src/app/services/employee-service/employees.service';
 import { InventoryService } from 'src/app/services/inventory-services/inventory.service';
+import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
+import { ConstantsService } from 'src/app/services/constants/constants.service';
 
 @Component({
   selector: 'app-print-to-pdf',
@@ -19,18 +21,39 @@ export class PrintToPdfComponent implements OnInit{
   activeEmployees: any[] = [];
   inventories: any[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private employeeService: EmployeesService, private inventoryService: InventoryService, private location: Location){
+  tableData: any[] = [];
+
+  token: any;
+  admin_id: any;
+  employee_id: any;
+
+  constructor(private activatedRoute: ActivatedRoute, private adminService: AdminServicesService , private employeeService: EmployeesService, private inventoryService: InventoryService, private location: Location, private shareData: ConstantsService){
     this.type = this.activatedRoute.snapshot.params['type'];
   }
   
   ngOnInit(): void {
     this.fileName = this.type + '.pdf';
 
+    //get the details of the admin
+    this.token = this.adminService.getTokenDetails();
+
+    //set the details of the admin if retrieved
+    if(this.token) {
+      this.admin_id = this.token.adminId;
+      this.adminService.getAdminById(this.admin_id).subscribe(admin => {
+        this.employee_id = admin.employee_id;
+      });
+    }
+
     if(this.type === 'employees') {
       this.getAllEmployees();
     }
     else if(this.type === 'inventory') {
       this.getAllInventories();
+    }
+
+    else if (this.type === 'workflow') {
+      this.getWorkflows();
     }
     
     
@@ -82,6 +105,24 @@ export class PrintToPdfComponent implements OnInit{
       this.downloadPDF();
       this.location.back();
     });
+  }
+
+  getWorkflows() {
+    this.shareData.tableData$.subscribe(data => {
+      this.tableData = data;
+
+      this.downloadPDF();
+      this.location.back();
+    });
+
+    
+  }
+
+  getTextColor(bgColor: string | null) {
+    if(bgColor === 'bg-light')
+      return 'text-dark';
+    else
+      return 'text-white';
   }
 
 

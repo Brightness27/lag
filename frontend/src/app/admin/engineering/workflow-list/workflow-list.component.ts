@@ -1,7 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
+import { faPlus, faSearch, faPrint } from '@fortawesome/free-solid-svg-icons';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
+import { ConstantsService } from 'src/app/services/constants/constants.service';
 import { WorkflowService } from 'src/app/services/workflow-services/workflow.service';
 
 interface SideNavToggle {
@@ -20,6 +22,9 @@ export class WorkflowListComponent implements OnInit {
   screenWidth = 0;
 
   workflows: any[] = [];
+
+  sortColumn: string = '';
+  sortDirection: string = 'asc';
 
   department!: any;
   superadmin = false;
@@ -45,6 +50,21 @@ export class WorkflowListComponent implements OnInit {
   alertTitle = '';
   alertMessage = '';
 
+  filter: string = 'NONE';
+
+  date_date: any = '';
+
+  month_date: any = '';
+
+  range_from: any = '';
+  range_to: any = '';
+
+  site: any = '';
+
+  locations: any[] = [];
+
+  printList = faPrint;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if(window.innerWidth > 768) {
@@ -55,7 +75,7 @@ export class WorkflowListComponent implements OnInit {
     }
   }
 
-  constructor(private adminService: AdminServicesService, private workflowService: WorkflowService) {}
+  constructor(private adminService: AdminServicesService, private workflowService: WorkflowService, private router: Router, private shareData: ConstantsService) {}
 
   ngOnInit(): void {
     //get the details of the admin
@@ -80,6 +100,7 @@ export class WorkflowListComponent implements OnInit {
 
     this.getAllWorkflows();
 
+    this.getLocations();
     this.updateStatusForm = this.createForm();
   }
 
@@ -130,25 +151,38 @@ export class WorkflowListComponent implements OnInit {
 
   updateSearchKey(event: any) {
     this.searchKey = event.target.value;
+
+    if(this.searchKey === '') {
+      this.getAllWorkflows();
+    }
   }
 
   searchItem() {
+    var counter = 1;
     if(this.searchKey === "") {
       this.getAllWorkflows();
     }
     else {
-      var counter = 1;
       this.workflowService.searchWorkflows(this.searchKey).subscribe(workflows => {
       
         this.workflows = workflows.map(workflow => {
           return {
             ...workflow,
-            link: '/admin/engineering/work-flow/details/' + workflow.id,
+            client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+            link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
             num: counter++,
+            bg: this.getBackgroundColor(workflow.tracker_status),
+            status: this.getStatus(workflow.tracker_status)
           };
         });
       });
     }
+  }
+
+  getLocations() {
+    this.workflowService.getAllLocations().subscribe(locations => {
+      this.locations = locations;
+    });
   }
 
   getAllWorkflows() {
@@ -157,11 +191,91 @@ export class WorkflowListComponent implements OnInit {
       this.workflows = workflows.map(workflow => {
         return {
           ...workflow,
-          link: '/admin/engineering/work-flow/details/' + workflow.id,
+          client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+          link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
           num: counter++,
+          bg: this.getBackgroundColor(workflow.tracker_status),
+          status: this.getStatus(workflow.tracker_status)
         };
       });
     });
+  }
+
+  getStatus(trackerStatus: string | null): string {
+    return trackerStatus ?? 'ON PROCESS';
+  }
+
+  getBackgroundColor(trackerStatus: string | null): string {
+    switch (trackerStatus) {
+      case 'ENERGIZED':
+        return 'bg-energized';
+
+      case 'WITH CONTRACT':
+        return 'bg-primary';
+
+      case 'FOR CONTRACT FINALIZE':
+        return 'bg-primary';
+
+      case 'CANCELLED':
+        return 'bg-danger';
+
+      case 'AWAITING CUSTOMER COMPLIANCE / RETURN ORDER':
+        return 'bg-success';
+
+      default:
+        return 'bg-light';
+    }
+  }
+
+  changeFilterType(event: any) {
+    const type = event.target.value;
+    this.filter = type;
+
+    if (this.filter === 'NONE') {
+      this.getAllWorkflows();
+    }
+  }
+
+  // Function to update sorting parameters
+  updateSort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortWorkflows();
+  }
+
+  // Function to sort workflows based on the selected column
+  sortWorkflows() {
+    // Sort the workflows array based on the selected column and direction
+    this.workflows.sort((a, b) => {
+      const valueA = a[this.sortColumn];
+      const valueB = b[this.sortColumn];
+
+      // Check if the column is 'date_received'
+      if (this.sortColumn === 'date_received') {
+        const dateA = new Date(valueA).getTime();
+        const dateB = new Date(valueB).getTime();
+
+        return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+      }
+
+      // Handle sorting for different data types (you may need to enhance this based on your data)
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return this.sortDirection === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      } else {
+        return this.sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+    });
+  }
+
+  getTextColor(bgColor: string | null) {
+    if(bgColor === 'bg-light')
+      return 'text-dark';
+    else
+      return 'text-white';
   }
 
   updateWorkflowId(id: any) {
@@ -179,8 +293,6 @@ export class WorkflowListComponent implements OnInit {
   }
 
   addUpdate() {
-    console.log(this.updateStatusForm.value);
-    
     const workflow_id = this.workflow.id;
     this.workflowService.addWorkflowstatus(workflow_id, this.updateStatusForm.value).subscribe((msg) => {
       this.alertTitle = 'Leave Record';
@@ -203,5 +315,84 @@ export class WorkflowListComponent implements OnInit {
 
       document.getElementById('open-modal')?.click();
     });
+  }
+
+  filterWorkflow() {
+    var counter = 1;
+
+    switch (this.filter) {
+      case 'BY DATE':
+        counter = 1;
+        this.workflowService.filterWorkflowByDay(this.date_date, 'ASC').subscribe(workflows => {
+          this.workflows = workflows.map(workflow => {
+            return {
+              ...workflow,
+              client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+              link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              num: counter++,
+              bg: this.getBackgroundColor(workflow.tracker_status),
+              status: this.getStatus(workflow.tracker_status)
+            };
+          });
+        });
+
+        break;
+      
+      case 'BY MONTH':
+        counter = 1;
+        this.workflowService.filterWorkflowByMonth(this.month_date, 'ASC').subscribe(workflows => {
+          this.workflows = workflows.map(workflow => {
+            return {
+              ...workflow,
+              client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+              link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              num: counter++,
+              bg: this.getBackgroundColor(workflow.tracker_status),
+              status: this.getStatus(workflow.tracker_status)
+            };
+          });
+        });
+
+        break;
+
+      case 'BY RANGE':
+        counter = 1;
+        this.workflowService.filterWorkflowByRange(this.range_from, this.range_to, 'ASC').subscribe(workflows => {
+          this.workflows = workflows.map(workflow => {
+            return {
+              ...workflow,
+              client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+              link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              num: counter++,
+              bg: this.getBackgroundColor(workflow.tracker_status),
+              status: this.getStatus(workflow.tracker_status)
+            };
+          });
+        });
+
+        break;
+
+        case 'BY SITE':
+        counter = 1;
+        this.workflowService.filterWorkflowBySite(this.site, 'ASC').subscribe(workflows => {
+          this.workflows = workflows.map(workflow => {
+            return {
+              ...workflow,
+              client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+              link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              num: counter++,
+              bg: this.getBackgroundColor(workflow.tracker_status),
+              status: this.getStatus(workflow.tracker_status)
+            };
+          });
+        });
+
+        break;
+    }
+  }
+
+  printPDF() {
+    this.shareData.setTableData(this.workflows);
+    this.router.navigate(['/admin/print/workflow']);
   }
 }

@@ -72,4 +72,8 @@
     .search-input {
       width: calc(100% - 40px);
     }
+
+    .scroll-horizontal {
+        overflow-x: auto;
+    }
 }

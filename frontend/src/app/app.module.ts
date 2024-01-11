@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,19 +35,13 @@ import { AddInventoryComponent } from './admin/accounting/add-inventory/add-inve
 import { InventoryDetailsComponent } from './admin/accounting/inventory-details/inventory-details.component';
 import { InventoryProcessComponent } from './admin/accounting/inventory-process/inventory-process.component';
 import { PrintToPdfComponent } from './admin/components/print-to-pdf/print-to-pdf.component';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { WorkflowListComponent } from './admin/engineering/workflow-list/workflow-list.component';
 import { AddWorkflowComponent } from './admin/engineering/add-workflow/add-workflow.component';
 import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/workflow-details.component';
 import { LoadingComponent } from './admin/components/loading/loading.component';
 import { UpdateWorkflowComponent } from './admin/engineering/update-workflow/update-workflow.component';
 import { ViewImagesComponent } from './admin/components/view-images/view-images.component';
+import { PermissionsComponent } from './admin/admin-pages/permissions/permissions.component';
 
 
 @NgModule({
@@ -86,6 +80,7 @@ import { ViewImagesComponent } from './admin/components/view-images/view-images.
     LoadingComponent,
     UpdateWorkflowComponent,
     ViewImagesComponent,
+    PermissionsComponent,
     
   ],
   imports: [
@@ -96,13 +91,7 @@ import { ViewImagesComponent } from './admin/components/view-images/view-images.
     FontAwesomeModule,
     CarouselModule,
     HttpClientModule,
-    MatStepperModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

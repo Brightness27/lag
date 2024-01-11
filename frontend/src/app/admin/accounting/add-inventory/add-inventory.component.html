@@ -30,7 +30,7 @@
         <form [formGroup]="addForm" class="p-4">
 
             <div class="mb-3">
-                <label for="category" class="form-label fs-5">Category</label>
+                <label for="category" class="form-label" [ngClass]="getLabelClass()">Category</label>
                 <select type="text" class="form-select" id="category" (change)="categoryChanged()" formControlName="category">
                     <option value="" selected hidden class="text-dark"> -- Choose Category --</option>
                     <option class="form-option" *ngFor="let category of categories" value="{{ category.name }}">{{ category.name }}</option>
@@ -39,23 +39,23 @@
             </div>
 
             <div class="mb-3" *ngIf="newCategory">
-                <label for="category_name" class="form-label fs-5">Category Name</label>
+                <label for="category_name" class="form-label" [ngClass]="getLabelClass()">Category Name</label>
                 <input type="text" class="form-control" id="category_name" (input)="updateCategoryName($event)">
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label fs-5">Item Name</label>
+                <label for="name" class="form-label" [ngClass]="getLabelClass()">Item Name</label>
                 <input type="text" class="form-control" id="name" formControlName="name">
             </div>
 
             <div class="row mb-3">
                 <div class="col">
-                    <label for="quantity" class="form-label fs-5">quantity</label>
+                    <label for="quantity" class="form-label" [ngClass]="getLabelClass()">quantity</label>
                     <input type="number" class="form-control" id="quantity" formControlName="quantity">
                 </div>
 
                 <div class="col">
-                    <label for="unit" class="form-label fs-5">unit</label>
+                    <label for="unit" class="form-label" [ngClass]="getLabelClass()">unit</label>
                     <input type="text" class="form-control" id="unit" formControlName="unit">
                 </div>
             </div>
@@ -63,7 +63,7 @@
             
 
             <div class="mb-3">
-                <label for="last_purchase_date" class="form-label fs-5">Date Purchased</label>
+                <label for="last_purchase_date" class="form-label" [ngClass]="getLabelClass()">Date Purchased</label>
                 <input type="date" class="form-control" id="last_purchase_date" formControlName="last_purchase_date">
             </div>
 

@@ -25,446 +25,298 @@
 <button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="update-open-modal">open modal</button>
 
 <section class="body contents border p-5" [ngClass]="getBodyClass()">
-    <h1 class="fw-bolder fs-1 text-center w-100">Workflow Details</h1>
 
-    <div class="mx-5 w-100 d-flex justify-content-start">
-        <button mat-raised-button color="primary" class="me-3" (click)="updateWorkflow()">Update Details</button>
-        <button mat-raised-button color="primary" [routerLink]="link">Cancel</button>
+    <div class="container d-flex justify-content-center align-items-center h-100" *ngIf="!permissionGranted">
+        <div>
+            <h1 class="font-monospace lh-lg fs-1 fw-bold">ERROR 401: Unauthorized</h1>
+            <h4 class="font-monospace lh-lg fs-5">You are trying to change something you are not permitted to.</h4>
+        </div>
     </div>
 
-    <mat-stepper [linear]="isLinear" labelPosition="bottom" #stepper>
-        <form [formGroup]="work_flow" enctype="multipart/form-data">
-            <mat-step>
-                <div formGroupName="client_details">
-                    <ng-template matStepLabel>Client Details</ng-template>
+    <h1 class="fw-bolder fs-1 text-center w-100"  *ngIf="permissionGranted">Workflow Details</h1>
 
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Name: </label>
-                        </div>
+    <div class="container border border-dark mt-5 rounded"  *ngIf="permissionGranted">
+        <div class="p-4">
+            <div class="mb-1 mt-5 mb-3 border-bottom border-dark text-center">
+                <label class="form-label fs-3 fw-bold">{{ title }}</label>
+            </div>
 
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Name</mat-label>
-                                <input matInput formControlName="name">
-                            </mat-form-field>
-                        </div>
-                    </div>
+            <form [formGroup]="clientDetailsForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'client_details'">
 
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Address: </label>
+                <div class="mb-3">
+                    <label for="name" class="form-label"  [ngClass]="getLabelClass()">Name</label>
+                    <div class="" [ngClass]="getNameClass()">
+                        <div class="" [ngClass]="getColClass()">
+                            <input type="text" class="form-control" id="fname" formControlName="fname" placeholder="First Name" oninput="this.value = this.value.toUpperCase()">
                         </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Address</mat-label>
-                                <input matInput formControlName="address">
-                            </mat-form-field>
+                        <div class="" [ngClass]="getColClass()">
+                            <input type="text" class="form-control" id="mname" formControlName="mname" placeholder="Middle Name" oninput="this.value = this.value.toUpperCase()">
                         </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Contact No.: </label>
+                        <div class="" [ngClass]="getColClass()">
+                            <input type="text" class="form-control" id="lname" formControlName="lname" placeholder="Last Name" oninput="this.value = this.value.toUpperCase()">
                         </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Contact No.</mat-label>
-                                <input matInput formControlName="contact_no">
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Date Received: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Date Received</mat-label>
-                                <input matInput [matDatepicker]="picker" formControlName="date_received">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    
-                    <div class="w-50 mx-auto mt-3 d-flex flex-row-reverse">
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
                     </div>
                 </div>
-            </mat-step>
-
-            <mat-step>
-                <div formGroupName="pre_survey">
-                    <ng-template matStepLabel>Pre-Survey</ng-template>
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Facility: </label>
-                        </div>
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Facility</mat-label>
-                                <mat-select formControlName="facility">
-                                    <mat-option value="With Facility">With Facility</mat-option>
-                                    <mat-option value="No Facility">No Facility</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Structural Classification: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Structural Classification</mat-label>
-                                <mat-select formControlName="structural_classification" (selectionChange)="select_other()">
-                                    <mat-option value="RES">RES</mat-option>
-                                    <mat-option value="COM">COM</mat-option>
-                                    <mat-option value="TEMP">TEMP</mat-option>
-                                    <mat-option value="NC">NC</mat-option>
-                                    <mat-option value="T/S">T/S</mat-option>
-                                    <mat-option value="DOCS PROCESSING ONLY">DOCS PROCESSING ONLY</mat-option>
-                                    <mat-option value="NET METERING">NET METERING</mat-option>
-                                    <mat-option value="OTHERS">OTHERS</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="mt-3" *ngIf="other_selected">
-                            <mat-form-field class="w-100">
-                                <mat-label>Specify other structural classification</mat-label>
-                                <input matInput [value]="other_structural_classification" (input)="updateStructuralClassification($event)">
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Service Data: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Service Data</mat-label>
-                                <mat-select formControlName="service_data">
-                                    <mat-option value="LAND METERED">LAND METERED</mat-option>
-                                    <mat-option value="EMC">EMC</mat-option>
-                                    <mat-option value="ICP">ICP</mat-option>
-                                    <mat-option value="EMX">EMX</mat-option>
-                                    <mat-option value="CT-RATED">CT-RATED</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Private Pole: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Private Pole</mat-label>
-                                <mat-select formControlName="private_pole">
-                                    <mat-option value="With Private Pole">With Private Pole</mat-option>
-                                    <mat-option value="No Private Pole">No Private Pole</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Number of Units: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Number of Units</mat-label>
-                                <input matInput formControlName="number_of_units">
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Feasibility: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Feasibility</mat-label>
-                                <mat-select formControlName="feasibility">
-                                    <mat-option value="Feasible">Feasible</mat-option>
-                                    <mat-option value="Not Feasible">Not Feasible</mat-option>
-                                    <mat-option value="For Verification">For Verification</mat-option>
-                                    <mat-option value="For Project">For Project</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Plus Code: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Plus Code</mat-label>
-                                <textarea matInput formControlName="plus_code"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Remarks: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput formControlName="remarks"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label class="me-4">Image Proof: </label>
-                            <button mat-raised-button color="primary" (click)="fileInputpresurvey.click()">Upload images</button>
-                        </div>
-
-                        <div class="mt-3">
-                            <input type="file" hidden (change)="onFileSelectedPreSurvey($event)" accept="image/*" #fileInputpresurvey formControlName="pre_survey" multiple>
-                            <span class="nameSpan">{{fileNamesPreSurvey}}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="w-50 mx-auto mt-3 d-flex justify-content-between">
-                        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
-                    </div>
+        
+                <div class="mb-3">
+                    <label for="address" class="form-label fs-5">Address</label>
+                    <input type="text" class="form-control" id="address" formControlName="address" oninput="this.value = this.value.toUpperCase()">
                 </div>
-            </mat-step>
-
-            <mat-step>
-                <ng-template matStepLabel>Documents</ng-template>
-                <div formGroupName="documents">
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Documents: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Documents</mat-label>
-                                <mat-select formControlName="complete_mark">
-                                    <mat-option value="Complete">Complete</mat-option>
-                                    <mat-option value="Incomplete">Incomplete</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Remarks: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput formControlName="remarks"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label class="me-4">Documents: </label>
-                            <button mat-raised-button color="primary" (click)="fileInputdocuments.click()">Upload Documents</button>
-                        </div>
-
-                        <div class="mt-3">
-                            <input type="file" hidden (change)="onFileSelectedDocuments($event)" #fileInputdocuments formControlName="documents" multiple>
-                            <span class="nameSpan">{{fileNamesDocuments}}</span>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto mt-3 d-flex justify-content-between">
-                        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
-                    </div>
+        
+                <div class="mb-3">
+                    <label for="contact_no" class="form-label fs-5">Contact No.</label>
+                    <input type="text" class="form-control" id="contact_no" formControlName="contact_no" oninput="this.value = this.value.toUpperCase()">
                 </div>
-            </mat-step>
-
-            <mat-step>
-                <ng-template matStepLabel>Payment</ng-template>
-                <div formGroupName="payment">
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Payment: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Payment</mat-label>
-                                <mat-select formControlName="payment_mark">
-                                    <mat-option value="Full Payment">Full Payment</mat-option>
-                                    <mat-option value="With Balance">With Balance</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>A.R./O.R. No.: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>A.R./O.R. No.</mat-label>
-                                <input matInput formControlName="ar_or_number">
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Remarks: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput formControlName="remarks"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto mt-3 d-flex justify-content-between">
-                        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
-                    </div>
+        
+                <div class="mb-3">
+                    <label for="date_received" class="form-label fs-5">Date Received</label>
+                    <input type="date" class="form-control" id="date_received" formControlName="date_received" oninput="this.value = this.value.toUpperCase()">
                 </div>
-            </mat-step>
-
-            <mat-step>
-                <ng-template matStepLabel>For Job Order</ng-template>
-                <div formGroupName="job_order">
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Remarks: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput formControlName="remarks"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label class="me-4">Image Proof: </label>
-                            <button mat-raised-button color="primary" (click)="fileInputjoborder.click()">Upload images</button>
-                        </div>
-
-                        <div class="mt-3">
-                            <input type="file" hidden (change)="onFileSelectedJobOrder($event)" accept="image/*"  #fileInputjoborder formControlName="job_order" multiple>
-                            <span class="nameSpan">{{fileNamesJobOrder}}</span>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto mt-3 d-flex justify-content-between">
-                        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
-                    </div>
+        
+                <div class="mb-3">
+                    <label for="initial_communicator" class="form-label fs-5">Initial Communicator</label>
+                    <input type="text" class="form-control" id="initial_communicator" formControlName="initial_communicator" oninput="this.value = this.value.toUpperCase()">
                 </div>
-            </mat-step>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
 
-            <mat-step>
-                <ng-template matStepLabel>Load Side</ng-template>
-                <div formGroupName="load_side">
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Load Side: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Load Side</mat-label>
-                                <mat-select formControlName="load_side_mark">
-                                    <mat-option value="With Load Side">With Load Side</mat-option>
-                                    <mat-option value="No Load Side">No Load Side</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Remarks: </label>
-                        </div>
-
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Remarks</mat-label>
-                                <textarea matInput formControlName="remarks"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label class="me-4">Image Proof: </label>
-                            <button mat-raised-button color="primary" (click)="fileInputloadside.click()">Upload images</button>
-                        </div>
-
-                        <div class="mt-3">
-                            <input type="file" hidden (change)="onFileSelectedLoadSide($event)" accept="image/*"  #fileInputloadside formControlName="load_side" multiple>
-                            <span class="nameSpan">{{fileNamesLoadSide}}</span>
-                        </div>
-                    </div>
-
-                    <div class="w-50 mx-auto mt-3 d-flex justify-content-between">
-                        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
-                        <button mat-raised-button color="primary" matStepperNext>Next</button>
-                    </div>
+            <form [formGroup]="preSurveyForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'pre_survey'">
+                <div class="mb-3">
+                    <label for="facility" class="form-label fs-5">Facility</label>
+                    <select  class="form-select" id="facility" formControlName="facility">
+                        <option value="With Facility">With Facility</option>
+                        <option value="No Facility">No Facility</option>
+                    </select>
                 </div>
-            </mat-step>
+        
+                <div class="mb-3">
+                    <label for="structural_classification" class="form-label fs-5">Structural Classification</label>
+                    <select formControlName="structural_classification" (change)="select_other()" class="form-select">
+                        <option *ngFor="let classification of structural_classifications" [value]="classification.workflow_options">{{ classification.workflow_options }}</option>
+                        <option value="OTHERS">OTHERS</option>
+                    </select>
+                </div>
 
-            <mat-step>
-                <ng-template matStepLabel>Final Processing</ng-template>
-                <div formGroupName="final_processing">
-                    <div class="w-50 mx-auto">
-                        <div class="mt-3">
-                            <label>Coordinator: </label>
-                        </div>
-                        <div class="mt-3">
-                            <mat-form-field class="w-100">
-                                <mat-label>Coordinator</mat-label>
-                                <mat-select formControlName="coordinator">
-                                    <mat-option value="KATHERINE E. BUFFE">KATHERINE E. BUFFE</mat-option>
-                                    <mat-option value="LORAINE S. SEXIONA">LORAINE S. SEXIONA</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
+                <div class="mt-3 mb-3" *ngIf="other_selected">
+                    <label for="other_structural_classification" class="form-label fs-5">Specify other structural classification</label>
+                    <input type="text" class="form-control" id="other_structural_classification" [value]="other_structural_classification" (input)="updateStructuralClassification($event)" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="service_data" class="form-label fs-5">Service Data</label>
+                    <select class="form-select" id="service_data" formControlName="service_data" (change)="select_other_service_data()">
+                        <option *ngFor="let data of service_data" [value]="data.workflow_options">{{ data.workflow_options }}</option>
+                        <option value="OTHERS">OTHERS</option>
+                    </select>
+                </div>
+
+                <div class="mt-3 mb-3" *ngIf="other_service_data_selected">
+                    <label for="other_structural_classification" class="form-label fs-5">Specify other service data</label>
+                    <input type="text" class="form-control" id="structural_classification" [value]="other_service_data" (input)="updateServiceData($event)" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="private_pole" class="form-label fs-5">Private Pole</label>
+                    <select class="form-select" id="private_pole" formControlName="private_pole">
+                        <option value="With Private Pole">With Private Pole</option>
+                        <option value="No Private Pole">No Private Pole</option>
+                    </select>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="number_of_units" class="form-label fs-5">Number of Units</label>
+                    <input type="number" class="form-control" id="number_of_units" formControlName="number_of_units" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="feasibility" class="form-label fs-5">Feasibility</label>
+                    <select class="form-select" id="feasibility" formControlName="feasibility">
+                        <option value="Feasible">Feasible</option>
+                        <option value="Not Feasible">Not Feasible</option>
+                        <option value="For Verification">For Verification</option>
+                        <option value="For Project">For Project</option>
+                    </select>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="plus_code" class="form-label fs-5">Plus Code</label>
+                    <textarea type="text" class="form-control" rows="5" id="plus_code" formControlName="plus_code" oninput="this.value = this.value.toUpperCase()"></textarea>
                 </div>
                 
-            </mat-step>
-        </form>
-    </mat-stepper>
+                <div class="mb-3">
+                    <label for="remarks" class="form-label fs-5">Remarks</label>
+                    <textarea type="text" class="form-control" rows="5" id="remarks" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image_proofs_pre_survey" class="form-label fs-5 me-4">Image Proofs</label>
+                    <button mat-raised-button color="primary" (click)="fileInputpresurvey.click()">Upload images</button>
+                    <input type="file" hidden (change)="onFileSelectedPreSurvey($event)" accept="image/*" #fileInputpresurvey multiple>
+                    <div class="mt-3">
+                        <span class="nameSpan fs-6 mt-2">{{fileNamesPreSurvey}}</span>
+                    </div>
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <form [formGroup]="documentsForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'documents'">
+                <div class="mb-3">
+                    <label for="complete_mark" class="form-label fs-5">Completion</label>
+                    <select class="form-select" id="complete_mark" formControlName="complete_mark">
+                        <option value="Complete">Complete</option>
+                        <option value="Incomplete">Incomplete</option>
+                    </select>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="remarks_doc" class="form-label fs-5">Remarks</label>
+                    <textarea type="text" class="form-control" rows="5" id="remarks_doc" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="image_proofs_documents" class="form-label fs-5 me-4">Available Documents</label>
+                    <button mat-raised-button color="primary" (click)="fileInputdocuments.click()">Upload Documents</button>
+                    <input type="file" hidden (change)="onFileSelectedDocuments($event)" #fileInputdocuments formControlName="documents" multiple>
+                    <div class="mt-3">
+                        <span class="nameSpan fs-6 mt-2">{{fileNamesDocuments}}</span>
+                    </div>
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <form [formGroup]="paymentForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'payment'">
+                <div class="mb-3">
+                    <label for="payment_mark" class="form-label fs-5">Payment</label>
+                    <select class="form-select" id="payment_mark" formControlName="payment_mark" (change)="changePaymentMark()">
+                        <option value="Full Payment">Full Payment</option>
+                        <option value="With Balance">With Balance</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" *ngIf="full_payment">
+                    <label for="amount" class="form-label fs-5">Amount</label>
+                    <input type="number" class="form-control" id="amount" formControlName="amount" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mb-3" *ngIf="!full_payment">
+                    <label for="down_payment" class="form-label fs-5">Down Payment</label>
+                    <input type="number" class="form-control" id="down_payment" formControlName="down_payment" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mb-3" *ngIf="!full_payment">
+                    <label for="balance" class="form-label fs-5">Balance</label>
+                    <input type="number" class="form-control" id="balance" formControlName="balance" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="ar_or_number" class="form-label fs-5">A.R. / O.R. No.</label>
+                    <input type="text" class="form-control" id="ar_or_number" formControlName="ar_or_number" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <div class="mb-3">
+                    <label for="remarks_payment" class="form-label fs-5">Remarks</label>
+                    <textarea type="text" class="form-control" rows="5" id="remarks" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <form [formGroup]="jobOrderForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'job_order'">
+                <div class="mb-3">
+                    <label for="remarks_job_order" class="form-label fs-5">Remarks</label>
+                    <textarea type="text" class="form-control" rows="5" id="remarks" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image_proofs_job-order" class="form-label fs-5 me-4">Image Proofs</label>
+                    <button mat-raised-button color="primary" (click)="fileInputjoborder.click()">Upload images</button>
+                    <input type="file" hidden (change)="onFileSelectedJobOrder($event)" accept="image/*" #fileInputjoborder formControlName="job_order" multiple>
+                    <div class="mt-3">
+                        <span class="nameSpan fs-6 mt-2">{{fileNamesJobOrder}}</span>
+                    </div>
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <form [formGroup]="loadSideForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'load_side'">
+                <div class="mb-3">
+                    <label for="remarks_job_order" class="form-label fs-5">Load Side</label>
+                    <select class="form-select" id="remarks" formControlName="load_side_mark" (change)="select_other_load_side()">
+                        <option *ngFor="let load of load_side" [value]="load.workflow_options">{{ load.workflow_options }}</option>
+                        <option value="OTHERS">OTHERS</option>
+                    </select>
+                </div>
+
+                <div class="mt-3 mb-3" *ngIf="other_load_side_selected">
+                    <label for="other_load_side" class="form-label fs-5">Specify other load side</label>
+                    <input type="text" class="form-control" id="other_load_side" [value]="other_load_side" (input)="updateLoadSide($event)" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mb-3">
+                    <label for="remarks_load_side" class="form-label fs-5">Remarks</label>
+                    <textarea type="text" class="form-control" rows="5" id="remarks" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image_proofs_job-order" class="form-label fs-5 me-4">Image Proofs</label>
+                    <button mat-raised-button color="primary" (click)="fileInputloadside.click()">Upload images</button>
+                    <input type="file" hidden (change)="onFileSelectedLoadSide($event)" accept="image/*" #fileInputloadside formControlName="load_side" multiple>
+                    <div class="mt-3">
+                        <span class="nameSpan fs-6 mt-2">{{fileNamesLoadSide}}</span>
+                    </div>
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <form [formGroup]="finalProcessForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'final_process'">
+                <div class="mb-3">
+                    <label for="coordinator" class="form-label fs-5">Coordinator</label>
+                    <select class="form-select" id="coordinator" formControlName="coordinator">
+                        <option value="KATHERINE E. BUFFE">KATHERINE E. BUFFE</option>
+                        <option value="LORAINE S. SEXIONA">LORAINE S. SEXIONA</option>
+                    </select>
+                </div>
+
+                <div class="mt-3 mb-3">
+                    <label for="cbm_no" class="form-label fs-5">CBM REFERENCE NO.</label>
+                    <input type="text" class="form-control" id="cbm_no" formControlName="cbm_no" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mt-3 mb-3">
+                    <label for="case_no" class="form-label fs-5">CASE NUMBER</label>
+                    <input type="text" class="form-control" id="case_no" formControlName="case_no" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mt-3 mb-3">
+                    <label for="sin_no" class="form-label fs-5">SERVICE ID NO.</label>
+                    <input type="text" class="form-control" id="sin_no" formControlName="sin_no" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
+                <div class="mb-3">
+                    <label for="tracker_status" class="form-label fs-5">Tracker Status</label>
+                    <select class="form-select" id="tracker_status" formControlName="tracker_status" (change)="select_trackerStatus()">
+                        <option value="FOR CONTRACT FINALIZE">FOR CONTRACT FINALIZE</option>
+                        <option value="WITH CONTRACT">WITH CONTRACT</option>
+                        <option value="ENERGIZED">ENERGIZED</option>
+                        <option value="AWAITING CUSTOMER COMPLIANCE / RETURN ORDER">AWAITING CUSTOMER COMPLIANCE / RETURN ORDER</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                </div>
+
+                <div class="mt-3 mb-3" *ngIf="return_order">
+                    <label for="other_structural_classification" class="form-label fs-5">Reason: </label>
+                    <input type="text" class="form-control" id="reason" formControlName="reason" oninput="this.value = this.value.toUpperCase()">
+                </div>
+        
+                <button type="button" class="btn btn-primary form-control" (click)="submitForm()">Submit</button>
+            </form>
+
+            <button type="button" class="btn btn-danger form-control" [routerLink]="link">Cancel</button>
+        </div>
+    </div>
 </section>

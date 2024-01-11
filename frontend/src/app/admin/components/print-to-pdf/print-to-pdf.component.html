@@ -45,3 +45,29 @@
         </tr>
     </tbody>
 </table>
+
+<table class="print workflow" id="workflow">
+    <thead>
+        <tr>
+            <th scope="col" class="header text-center">#</th>
+            <th scope="col" class="header text-center">Control No.</th>
+            <th scope="col" class="header text-center">Customer Name</th>
+            <th scope="col" class="header text-center">Address</th>
+            <th scope="col" class="header text-center">Contact Number</th>
+            <th scope="col" class="header text-center">Date Received</th>
+            <th scope="col" class="header text-center">Initial Communicator</th>
+            <th scope="col" class="header text-center">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let workflow of tableData" class="{{workflow.bg}}">
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.num }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.ctrl_no }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_name }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_address }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_contact_no }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.date_received }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.initial_communicator }}</td>
+            <td  [ngClass]="getTextColor(workflow.bg)">{{ workflow.status }}</td>
+    </tbody>
+</table>

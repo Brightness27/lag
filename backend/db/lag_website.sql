@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 19, 2023 at 08:39 AM
+-- Generation Time: Jan 04, 2024 at 01:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,10 +41,25 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `employeeId`, `department`, `username`, `password`, `status`) VALUES
-(1, 5, 'general admin', 'admin', '$2a$12$RrTqhO6yECt2VcqsmH75x.tILH6mlzI8XGiOs3UkzxDjwotmdqdo6', 'Active'),
-(2, 1, 'accounting', 'accounting', '$2a$12$1VMTCvGfgry2/q5CHuV5bOQ5BEG4Eo1eIt1FIOAEQvCpOsP6UOSg.', 'Active'),
-(3, 2, 'hr', 'hr', '$2a$12$1VMTCvGfgry2/q5CHuV5bOQ5BEG4Eo1eIt1FIOAEQvCpOsP6UOSg.', 'Active'),
-(6, 41, 'engineering', 'engineering', '$2a$12$8z2QzsSa8eljLrUsZxV60OL/fZ7jGS7co99rl0EBWyhM6o2icLRjy', 'Active');
+(1, 1, 'general admin', 'admin', '$2a$12$RrTqhO6yECt2VcqsmH75x.tILH6mlzI8XGiOs3UkzxDjwotmdqdo6', 'Active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_workflow_permissions`
+--
+
+CREATE TABLE `admin_workflow_permissions` (
+  `id` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `client_details` tinyint(1) NOT NULL,
+  `pre_survey` tinyint(1) NOT NULL,
+  `documents` tinyint(1) NOT NULL,
+  `payment` tinyint(1) NOT NULL,
+  `job_order` tinyint(1) NOT NULL,
+  `load_side` tinyint(1) NOT NULL,
+  `final_process` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -77,11 +92,7 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `fname`, `mname`, `lname`, `contact_number`, `email_address`, `address`, `tin`, `sss`, `philhealth`, `pagibig`, `emergency_contact_name`, `emergency_contact_number`, `beneficiary`, `position`, `sin_number`, `status`) VALUES
-(1, 'Leonardo', '', 'Garcia', '09123456789', 'lag@gmail.com', 'Tejeros', '000', '111', '222', '333', 'Leonardo Garcia', '09123456789', 'Someone Beneficial', 'C.E.O', '', 'Active'),
-(2, 'Maria Fe', '', 'Garcia', '09876543210', 'lag@gmail.com', 'Tejeros', '000', '111', '222', '333', 'Leonardo Garcia', '09123456789', 'Someone Beneficial', 'General Manager', '', 'Active'),
-(5, 'Ivan', 'Mendoza', 'Caliwanagan', '09090909099', 'ivan@gmail.com', 'naic', '000-0000-tin', '000-000-sss', '000-000-phi', '000-000-pag', 'ernie', '090909090', 'joy', 'IT', '000-000-sin-I', 'Active'),
-(9, 'Karlo', '', 'Garcia', '09321654987', 'lag@gmail.com', 'tejeros', '000-tin-k', '000-sss-k', '000-phi-k', '000-pag-k', 'Leonardo Garcia', '09090909099', 'Someone Beneficial', 'Field Representative', '000-000-sin-k', 'Active'),
-(41, 'Allen Claine', '', 'Reyes', '09090909099', 'lag@gmail.com', 'Tejeros Convention', '000', '111', '222', '333', 'Leonardo Garcia', '09123456789', 'Someone Beneficial', 'Electrical Engineer', '000-000-sin-A', 'Active');
+(1, 'Ivan', 'Mendoza', 'Caliwanagan', '09090909099', 'ivan@gmail.com', 'naic', '000-0000-tin', '000-000-sss', '000-000-phi', '000-000-pag', 'ernie', '090909090', 'joy', 'IT', '000-000-sin-I', 'Active');
 
 -- --------------------------------------------------------
 
@@ -171,13 +182,6 @@ CREATE TABLE `leavetbl` (
   `date_modified` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `leavetbl`
---
-
-INSERT INTO `leavetbl` (`id`, `employeeId`, `leave_type`, `reason`, `from_date`, `to_date`, `modified_by`, `date_modified`) VALUES
-(1, 5, 1, 'fever', '2023-11-29', '2023-11-29', 1, '2023-11-28');
-
 -- --------------------------------------------------------
 
 --
@@ -212,17 +216,6 @@ CREATE TABLE `workflow_images` (
   `image_path` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `workflow_images`
---
-
-INSERT INTO `workflow_images` (`id`, `workflow_id`, `workflow_process_step`, `image_path`) VALUES
-(4, 2, 'pre_survey', 'assets/workflow_images/1702966414288-POLO SHIRT ELECTRICAL CONTRACTOR (1).png'),
-(6, 2, 'documents', 'assets/workflow_images/1702966414294-SAMPLE.pdf'),
-(8, 2, 'job_order', 'assets/workflow_images/1702966414299-Blue and Red Graduation Class 2022 Greetings Banner.png'),
-(9, 2, 'job_order', 'assets/workflow_images/1702966414324-IMG_20230831_092430_335.jpg'),
-(10, 2, 'load_side', 'assets/workflow_images/1702966414326-Copy of L.A.G updated.png');
-
 -- --------------------------------------------------------
 
 --
@@ -235,16 +228,9 @@ CREATE TABLE `work_flow` (
   `client_name` varchar(500) NOT NULL,
   `client_address` varchar(500) NOT NULL,
   `client_contact_no` varchar(50) NOT NULL,
-  `date_received` date NOT NULL
+  `date_received` date NOT NULL,
+  `initial_communicator` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `work_flow`
---
-
-INSERT INTO `work_flow` (`id`, `reference_code`, `client_name`, `client_address`, `client_contact_no`, `date_received`) VALUES
-(1, '', 'Ivan Mendoza Caliwanagan', 'Naic, Cavite', '09090909099', '2023-12-15'),
-(2, '', 'Ivan Mendoza Caliwanagan', 'Naic, Cavite', '09090909099', '2023-12-05');
 
 -- --------------------------------------------------------
 
@@ -259,14 +245,6 @@ CREATE TABLE `work_flow_documents` (
   `remarks` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `work_flow_documents`
---
-
-INSERT INTO `work_flow_documents` (`id`, `work_flow_id`, `complete_mark`, `remarks`) VALUES
-(1, 1, 'Complete', 'document remarks'),
-(2, 2, 'Complete', 'doc remark');
-
 -- --------------------------------------------------------
 
 --
@@ -276,16 +254,10 @@ INSERT INTO `work_flow_documents` (`id`, `work_flow_id`, `complete_mark`, `remar
 CREATE TABLE `work_flow_final_process` (
   `id` int(11) NOT NULL,
   `work_flow_id` int(11) NOT NULL,
-  `coordinator` varchar(500) NOT NULL
+  `coordinator` varchar(500) NOT NULL,
+  `tracker_status` varchar(500) NOT NULL,
+  `reason` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `work_flow_final_process`
---
-
-INSERT INTO `work_flow_final_process` (`id`, `work_flow_id`, `coordinator`) VALUES
-(1, 1, 'KATHERINE E. BUFFE'),
-(2, 2, 'LORAINE S. SEXIONA');
 
 -- --------------------------------------------------------
 
@@ -298,14 +270,6 @@ CREATE TABLE `work_flow_job_order` (
   `work_flow_id` int(11) NOT NULL,
   `remarks` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `work_flow_job_order`
---
-
-INSERT INTO `work_flow_job_order` (`id`, `work_flow_id`, `remarks`) VALUES
-(1, 1, 'job order remark'),
-(2, 2, 'job remark');
 
 -- --------------------------------------------------------
 
@@ -320,14 +284,6 @@ CREATE TABLE `work_flow_load_side` (
   `remarks` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `work_flow_load_side`
---
-
-INSERT INTO `work_flow_load_side` (`id`, `work_flow_id`, `load_side_mark`, `remarks`) VALUES
-(1, 1, 'With Load Side', 'load side remark'),
-(2, 2, 'With Load Side', 'load remark');
-
 -- --------------------------------------------------------
 
 --
@@ -341,14 +297,6 @@ CREATE TABLE `work_flow_payment` (
   `ar_or_number` varchar(50) NOT NULL,
   `remarks` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `work_flow_payment`
---
-
-INSERT INTO `work_flow_payment` (`id`, `work_flow_id`, `payment_mark`, `ar_or_number`, `remarks`) VALUES
-(1, 1, 'Full Payment', 'qwerty', 'payment remark'),
-(2, 2, 'Full Payment', 'wdf ', 'pay remark');
 
 -- --------------------------------------------------------
 
@@ -369,14 +317,6 @@ CREATE TABLE `work_flow_pre_survey` (
   `remarks` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `work_flow_pre_survey`
---
-
-INSERT INTO `work_flow_pre_survey` (`id`, `work_flow_id`, `facility`, `structural_classification`, `service_data`, `private_pole`, `number_of_units`, `feasibility`, `plus_code`, `remarks`) VALUES
-(1, 1, 'With Facility', '', 'LAND METERED', 'With Private Pole', '1', 'Feasible', 'this is plus code', 'pre-survey remarks'),
-(2, 2, 'With Facility', '', 'LAND METERED', 'With Private Pole', '123', 'Feasible', 'plus', 'pre remark');
-
 -- --------------------------------------------------------
 
 --
@@ -393,14 +333,6 @@ CREATE TABLE `work_flow_status_update` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `work_flow_status_update`
---
-
-INSERT INTO `work_flow_status_update` (`id`, `work_flow_id`, `action_date`, `actions_taken`, `customers_feedback`, `action_taken_by`) VALUES
-(1, 2, '2023-12-19', 'ewan', 'ewan', 'ako'),
-(2, 2, '2023-12-21', 'ewan ko', 'ewanasdw', 'akodwadw');
-
---
 -- Indexes for dumped tables
 --
 
@@ -410,6 +342,13 @@ INSERT INTO `work_flow_status_update` (`id`, `work_flow_id`, `action_date`, `act
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`),
   ADD KEY `employeeId` (`employeeId`);
+
+--
+-- Indexes for table `admin_workflow_permissions`
+--
+ALTER TABLE `admin_workflow_permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `admin_id` (`admin_id`);
 
 --
 -- Indexes for table `employee`
@@ -524,7 +463,19 @@ ALTER TABLE `work_flow_status_update`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `admin_workflow_permissions`
+--
+ALTER TABLE `admin_workflow_permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employee`
+--
+ALTER TABLE `employee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `inventory`
@@ -560,55 +511,55 @@ ALTER TABLE `leave_type`
 -- AUTO_INCREMENT for table `workflow_images`
 --
 ALTER TABLE `workflow_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow`
 --
 ALTER TABLE `work_flow`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_documents`
 --
 ALTER TABLE `work_flow_documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_final_process`
 --
 ALTER TABLE `work_flow_final_process`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_job_order`
 --
 ALTER TABLE `work_flow_job_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_load_side`
 --
 ALTER TABLE `work_flow_load_side`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_payment`
 --
 ALTER TABLE `work_flow_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_pre_survey`
 --
 ALTER TABLE `work_flow_pre_survey`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_flow_status_update`
 --
 ALTER TABLE `work_flow_status_update`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -619,6 +570,12 @@ ALTER TABLE `work_flow_status_update`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`employeeId`) REFERENCES `employee` (`id`);
+
+--
+-- Constraints for table `admin_workflow_permissions`
+--
+ALTER TABLE `admin_workflow_permissions`
+  ADD CONSTRAINT `admin_workflow_permissions_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`);
 
 --
 -- Constraints for table `inventory`

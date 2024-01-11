@@ -53,18 +53,18 @@ table tbody tr td.clickable {
 @media screen and (max-width: 767px) {
 
     .search-container {
-      width: 50% !important;
+        width: 50% !important;
     }
   
     .search-btn {
-      width: 40px;
+        width: 40px;
     }
   
     .search-input {
-      width: calc(100% - 40px);
+        width: calc(100% - 40px);
     }
 
     .scroll-horizontal {
         overflow-x: auto;
-      }
+    }
   }

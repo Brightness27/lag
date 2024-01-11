@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Admin = require('../models/admin');
+const Permissions = require('../models/admin_workflow_permissions');
 const Employee = require('../models/employees');
 
 exports.addAdmin = async (req, res, next) => {
@@ -52,6 +53,19 @@ exports.addAdmin = async (req, res, next) => {
         }
 
         const result = await Admin.addAdmin(adminDetails);
+
+        const permissions = {
+            client_details: false ,
+            pre_survey: false,
+            documents: false,
+            payment: false,
+            job_order: false,
+            load_side: false,
+            final_process: false
+        }
+
+
+        const addPermission = await Permissions.addPermission(permissions, result);
 
         return res.json({
             error: false,
@@ -189,10 +203,11 @@ exports.getAdminByEmployeeId = async (req, res, next) => {
 exports.getAllAdmins = async (req, res, next) => {
 
     const status = req.params.status;
+    const admin_id = req.params.id;
 
     try {
 
-        const [Admins] = await Admin.getAllAdmins(status);
+        const [Admins] = await Admin.getAllAdmins(status, admin_id);
 
         return res.json(Admins);
 
@@ -209,10 +224,11 @@ exports.searchAdmins = async (req, res, next) => {
     const searchKey = `%${req.params.searchKey}%`;
 
     const status = req.params.status;
+    const admin_id = req.params.id;
 
     try {
 
-        const [admins] = await Admin.searchAdmin(searchKey, status);
+        const [admins] = await Admin.searchAdmin(searchKey, status, admin_id);
 
         return res.json(admins);
 
@@ -411,5 +427,50 @@ exports.updateAdminStatus = async (req, res, next) => {
             error: true,
             message: error.message
         });
+    }
+}
+
+exports.adminVerification = async (req, res, next) => {
+
+    const id = req.body.id;
+    const pass = req.body.password;
+
+    try {
+
+        const admin = await Admin.getAdminById(id);
+
+        if (admin[0].length !== 1) {
+            return res.json({
+                error: true,
+                message: 'Verification Failed.',
+                verified: false
+            })
+        }
+
+        const storeduser = admin[0][0];
+        
+
+        const isEqual = await bcrypt.compare(pass, storeduser.password);
+
+        if(!isEqual) {
+            return res.json({
+                error: true,
+                message: 'Verification Failed.',
+                verified: false
+            })
+        }
+
+        return res.json({
+            error: false,
+            message: 'credentials correct.',
+            verified: true
+        });
+
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: error.message,
+            verified: false
+        })
     }
 }

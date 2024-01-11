@@ -30,6 +30,7 @@ export class AddAdminComponent implements OnInit {
   addForm!: FormGroup;
 
   token: any;
+  admin_id: any;
 
   name: string = '';
 
@@ -47,8 +48,8 @@ export class AddAdminComponent implements OnInit {
 
      //set the details of the admin if retrieved
      if(this.token) {
-       const id = this.token.adminId;
-       this.adminService.getAdminById(id).subscribe(admin => {
+       this.admin_id = this.token.adminId;
+       this.adminService.getAdminById(this.admin_id).subscribe(admin => {
          this.department = admin.department;
          this.name = 'Hello, ' + admin.fname;
          this.setActiveDepartment();

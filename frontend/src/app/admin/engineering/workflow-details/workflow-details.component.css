@@ -47,10 +47,18 @@
     color: black;
 }
 
-.doc_names:hover {
+.doc_names:hover, .edit-btn:hover {
     color: rgb(53, 53, 228);
 }
 
-.doc_names:active {
+.doc_names:active, .edit-btn:active {
+    color: red;
+}
+
+.edit-btn {
+    cursor: pointer;
+}
+
+.error-message {
     color: red;
 }

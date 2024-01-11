@@ -44,25 +44,67 @@
     </div>
 </div>
 
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#delete-modal" id="delete-open-modal">open modal</button>
+
+<div class="modal fade" tabindex="-1" id="confirm-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Admin Verification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="confirm-btn"></button>
+            </div>
+
+            <div class="modal-body d-flex justify-content-center">
+                <div class="w-75">
+                    <span class="error-message" *ngIf="!verificationConfirmed">{{ verificationMessage }}</span>
+
+                    <div class="mb-2">
+                        <label for="adminid" class="form-label fs-6">Admin Id</label>
+                        <input type="text" name="adminid" class="form-control" [value]="confirm_admin_id" (input)="updateAdminId($event)">
+                    </div>
+    
+                    <div class="mb-2">
+                        <label for="password" class="form-label fs-6">Password</label>
+                        <input type="password" name="password" class="form-control" [value]="confirm_admin_password" (input)="updateAdminPassword($event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="verifyConfirmation()">Verify</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="body contents border p-5" [ngClass]="getBodyClass()">
     <h1 class="fw-bolder fs-1 text-center w-100">Workflow Details</h1>
 
-    <div class="container d-flex justify-content-start">
-        <button mat-raised-button color="primary" [routerLink]="link">Update Details</button>
-    </div>
-
     <div class="container border border-dark p-5 mt-5 rounded">
+        <div class="mb-1 mb-3 border-bottom border-dark d-flex justify-content-between">
+            <label class="form-label fs-5">Customer Details</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('client_details')" *ngIf="permissions.client_details">Edit</span>
+        </div>
+
         <div class="mb-3">
-            <div class="row">
-                <div class="col">
-                    <label class="form-label fs-5">Name</label>
-                    <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_name">
+            <label for="name" class="form-label"  [ngClass]="getLabelClass()">Name</label>
+            <div class="" [ngClass]="getNameClass()">
+                <div class="" [ngClass]="getColClass()">
+                    <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_fname">
                 </div>
-                <div class="col">
-                    <label class="form-label fs-5">Contact Number</label>
-                    <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_contact_no">
+                <div class="" [ngClass]="getColClass()">
+                    <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_mname">
+                </div>
+                <div class="" [ngClass]="getColClass()">
+                    <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_lname">
                 </div>
             </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">Contact Number</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.client_contact_no">
         </div>
 
         <div class="mb-3">
@@ -75,8 +117,19 @@
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.date_received_long">
         </div>
 
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-3">
+            <label class="form-label fs-5">Initial Communicator</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.client_details.initial_communicator">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">Site Location</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="getSiteLocation(workflow.client_details.location)">
+        </div>
+
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Pre-Survey</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('pre_survey')" *ngIf="permissions.pre_survey">Edit</span>
         </div>
         
         <div class="mb-3">
@@ -130,14 +183,15 @@
                     
                     <div class="btn-containers border-top-0 border-dark rounded">
                         <button class="btn btn-light border border-dark" routerLink="/admin/engineering/work-flow/images/{{file.id}}">View</button>
-                        <button class=" btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="delete(file.id, file.image_path)">Delete</button>
+                        <button class=" btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#confirm-modal" (click)="delete(file.id, file.image_path)">Delete</button>
                     </div>
                 </div>
             </ng-container>
         </div>
 
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Documents</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('documents')" *ngIf="permissions.documents">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -158,19 +212,35 @@
             <ng-container *ngFor="let file of files">
                 <div class="form-control d-flex bg-light justify-content-between w-100 mb-3" *ngIf="file.workflow_process_step === 'documents'">
                     <a class="d-block mb-2 doc_names"  [href]="'/' + file.image_path" target="_blank">{{file.file_name}}</a>
-                    <button class="btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="delete(file.id, file.image_path)">Delete</button>
+                    <button class="btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#confirm-modal" (click)="delete(file.id, file.image_path)">Delete</button>
                 </div>
                 
             </ng-container>
         </div>
 
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Payment</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('payment')" *ngIf="permissions.payment">Edit</span>
         </div>
 
         <div class="mb-3">
             <label class="form-label fs-5">Paid</label>
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.payment_mark">
+        </div>
+
+        <div class="mb-3" *ngIf="full_payment">
+            <label class="form-label fs-5">Amount</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.amount">
+        </div>
+
+        <div class="mb-3" *ngIf="!full_payment">
+            <label class="form-label fs-5">Down Payment</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.down_payment">
+        </div>
+
+        <div class="mb-3" *ngIf="!full_payment">
+            <label class="form-label fs-5">Balance</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.balance">
         </div>
 
         <div class="mb-3">
@@ -183,8 +253,9 @@
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.remarks">
         </div>
 
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Job Order</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('job_order')" *ngIf="permissions.job_order">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -203,14 +274,15 @@
                     
                     <div class="btn-containers border-top-0 border-dark rounded">
                         <button class="btn btn-light border border-dark" routerLink="/admin/engineering/work-flow/images/{{file.id}}">View</button>
-                        <button class="btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="delete(file.id, file.image_path)">Delete</button>
+                        <button class="btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#confirm-modal" (click)="delete(file.id, file.image_path)">Delete</button>
                     </div>
                 </div>
             </ng-container>
         </div>
     
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Load Side</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('load_side')" *ngIf="permissions.load_side">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -234,19 +306,45 @@
                     
                     <div class="btn-containers border-top-0 border-dark rounded">
                         <button class="btn btn-light border border-dark" routerLink="/admin/engineering/work-flow/images/{{file.id}}">View</button>
-                        <button class=" btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="delete(file.id, file.image_path)">Delete</button>
+                        <button class=" btn btn-light border border-dark" data-bs-toggle="modal" data-bs-target="#confirm-modal" (click)="delete(file.id, file.image_path)">Delete</button>
                     </div>
                 </div>
             </ng-container>
         </div>
     
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark">
+        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Final Processing</label>
+            <span class="fs-5 edit-btn" (click)="updateLink('final_process')" *ngIf="permissions.final_process">Edit</span>
         </div>
 
         <div class="mb-3">
             <label class="form-label fs-5">Coordinator</label>
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.coordinator">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">CBM REFERENCE NO.</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.cbm_no">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">CASE NUMBER</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.case_no">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">SERVICE ID NO.</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.sin_no">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fs-5">Tracker Status</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.tracker_status">
+        </div>
+
+        <div class="mb-3" *ngIf="return_order">
+            <label class="form-label fs-5">Reason</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.reason">
         </div>
     </div>
 

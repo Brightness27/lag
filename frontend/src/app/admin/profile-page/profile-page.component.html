@@ -67,14 +67,14 @@
 
             <div class="mb-3">
                 <label for="name" class="form-label fs-5">Name</label>
-                <div class="row">
-                    <div class="col">
+                <div class="" [ngClass]="getNameClass()">
+                    <div class="" [ngClass]="getColClass()">
                         <input type="text" class="form-control input-bg border-secondary" id="fname" formControlName="fname" placeholder="First Name">
                     </div>
-                    <div class="col">
+                    <div class="" [ngClass]="getColClass()">
                         <input type="text" class="form-control input-bg border-secondary" id="mname" formControlName="mname" placeholder="Middle Name">
                     </div>
-                    <div class="col">
+                    <div class="" [ngClass]="getColClass()">
                         <input type="text" class="form-control input-bg border-secondary" id="lname" formControlName="lname" placeholder="Last Name">
                     </div>
                 </div>

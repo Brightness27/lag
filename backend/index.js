@@ -10,6 +10,7 @@ const adminRoutes = require('./routes/admin');
 const leaveRoutes = require('./routes/leave');
 const inventoryRoutes = require('./routes/inventory');
 const workflowRoutes = require('./routes/workflow');
+const permissionRoutes = require('./routes/admin_workflow_permissions');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/admin', adminRoutes);
 app.use('/leave', leaveRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/workflow', workflowRoutes);
+app.use('/permissions', permissionRoutes);
   
 app.use(express.static(path.join(__dirname, 'lag_website')));
 
@@ -37,7 +39,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'lag_website/index.html'));
 });
 
-app.listen(ports, '192.168.68.107', () => {
+app.listen(ports, '192.168.68.105', () => {
     console.log(`listening to port ${ports}`);
 });
 

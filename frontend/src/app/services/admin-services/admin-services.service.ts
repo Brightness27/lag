@@ -16,6 +16,7 @@ export class AdminServicesService {
   constructor(private http: HttpClient, private constants: ConstantsService) { }
 
   private admin_url = this.constants.root_url + '/admin';
+  private permission_url = this.constants.root_url + '/permissions';
 
   token: any;
 
@@ -43,6 +44,18 @@ export class AdminServicesService {
     return this.http.get<any>(`${this.admin_url}/employeeid/${employeeId}`, this.httpOptions);
   }
 
+  getAdminPermissions(admin_id: any): Observable<any> {
+    return this.http.get<any>(`${this.permission_url}/${admin_id}`, this.httpOptions);
+  }
+
+  updatePersmissions(permissions: any, adminId: any): Observable<any> {
+    return this.http.post(`${this.permission_url}/update/${adminId}`, permissions, this.httpOptions);
+  }
+
+  verifyAdmin(credentials: any): Observable<any> {
+    return this.http.post(`${this.admin_url}/verifyAdmin`, credentials, this.httpOptions);
+  }
+
   getTokenDetails() {
     const getToken = localStorage.getItem('token');
 
@@ -59,12 +72,12 @@ export class AdminServicesService {
     return this.token;
   }
 
-  getAllAdmins(status: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.admin_url}/status/${status}`, this.httpOptions);
+  getAllAdmins(status: string, admin_id: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.admin_url}/status/${status}/${admin_id}`, this.httpOptions);
   }
 
-  searchAdmins(searchKey: string, status: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.admin_url}/search/${searchKey}/${status}`, this.httpOptions);
+  searchAdmins(searchKey: string, status: string, admin_id: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.admin_url}/search/${searchKey}/${status}/${admin_id}`, this.httpOptions);
   }
   
   addAdmin(adminDetails: any): Observable<any> {

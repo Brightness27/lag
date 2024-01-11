@@ -16,3 +16,17 @@
     width: calc(100% - 5rem);
     margin-left: 5rem;
 }
+
+.permission-btn {
+    color: black;
+    cursor: pointer;
+}
+
+.permission-btn:hover {
+    color: rgb(53, 53, 228);
+    text-decoration: underline;
+}
+
+.permission-btn:active {
+    color: red;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 
@@ -33,6 +33,13 @@ export class AddEmployeeComponent implements OnInit {
   alertTitle: string = '';
   alertMessage: string = '';
 
+  screen_width!: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screen_width = window.innerWidth;
+  }
+
   constructor(private employeeService: EmployeesService, private adminService: AdminServicesService) {}
 
   ngOnInit(): void {
@@ -49,6 +56,8 @@ export class AddEmployeeComponent implements OnInit {
         this.setActiveDepartment();
       });
     }
+
+    this.screen_width = window.innerWidth;
   }
 
   //create formGroup
@@ -105,6 +114,30 @@ export class AddEmployeeComponent implements OnInit {
     }
     else if(this.isSideNavCollapsed && this.screenWidth <= 768 && this.screenWidth > 0) {
       styleClass = 'body-md-screen';
+    }
+
+    return styleClass;
+  }
+
+  getNameClass(): string {
+    let styleClass = '';
+    if(this.screen_width > 670) {
+      styleClass = 'row';
+    }
+    else {
+      styleClass = '';
+    }
+
+    return styleClass;
+  }
+
+  getColClass(): string {
+    let styleClass = '';
+    if(this.screen_width > 670) {
+      styleClass = 'col';
+    }
+    else {
+      styleClass = 'mb-3';
     }
 
     return styleClass;

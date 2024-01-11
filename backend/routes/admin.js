@@ -65,6 +65,11 @@ router.post(
     adminController.updateAdminStatus
 );
 
+router.post(
+    '/verifyAdmin',
+    adminController.adminVerification
+);
+
 router.get(
     '/id/:id',
     adminController.getAdminById
@@ -75,10 +80,10 @@ router.get(
     adminController.getAdminByEmployeeId
 )
 
-router.get('/status/:status', adminController.getAllAdmins);
+router.get('/status/:status/:id', adminController.getAllAdmins);
 
 router.get(
-    '/search/:searchKey/:status',
+    '/search/:searchKey/:status/:id',
     adminController.searchAdmins
 );
 

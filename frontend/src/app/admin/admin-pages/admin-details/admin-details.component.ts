@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Admin } from 'src/app/models/admin';
@@ -14,7 +14,7 @@ interface SideNavToggle {
   templateUrl: './admin-details.component.html',
   styleUrls: ['./admin-details.component.css']
 })
-export class AdminDetailsComponent {
+export class AdminDetailsComponent implements OnInit {
   isSideNavCollapsed = false;
   screenWidth = 0;
 
@@ -42,11 +42,14 @@ export class AdminDetailsComponent {
 
   resigned: boolean = false;
 
+  link: string = '';
+
   alertTitle: string = '';
   alertMessage: string = '';
 
   constructor(private activatedRoute: ActivatedRoute, private adminService: AdminServicesService){
     this.id = this.activatedRoute.snapshot.params['id'];
+    this.link = '/admin/list/details/permissions/' + this.id;
   }
 
   ngOnInit(): void {

@@ -94,7 +94,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="department" class="form-label fs-5">department</label>
+                <div class="row">
+                    <div class="col">
+                        <label for="department" class="form-label fs-5">department</label>
+                    </div>
+
+                    <div class="col d-flex justify-content-end">
+                        <span class="form-label fs-5 permission-btn" [routerLink]="link">Edit Permissions</span>
+                    </div>
+                </div>
                 <input type="text" class="form-control border-secondary" id="department" formControlName="department">
             </div>
 

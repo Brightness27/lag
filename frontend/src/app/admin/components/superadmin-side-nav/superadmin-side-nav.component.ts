@@ -35,7 +35,7 @@ export class SuperadminSideNavComponent implements OnInit{
   title = "Admin";
   staffTitle = "Employees";
   inventoryTitle = "Inventory";
-  engineeringTitle = "Engineering";
+  engineeringTitle = "Work Flow";
 
   // fullName = '';
   profileIcon = faUserCog;

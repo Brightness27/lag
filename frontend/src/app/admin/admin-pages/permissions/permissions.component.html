@@ -1,0 +1,75 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+
+<div class="modal fade" tabindex="-1" id="permission-alert-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ alertTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ alertMessage }}</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" [routerLink]="link">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#permission-alert-modal" id="open-modal">open modal</button>
+
+<section class="body border p-5" [ngClass]="getBodyClass()">
+    <h1 class="fw-bolder fs-1 text-center w-100">Admin Permissions</h1>
+
+    <div class="container border border-dark mt-5 h-75 rounded p-4 d-flex justify-content-center">
+        <form [formGroup]="permissionForm" class="border border-dark rounded p-4">
+            <div class="mb-1 mb-3 border-bottom border-dark d-flex justify-content-between">
+                <label class="form-label fs-5">Work Flow Permissions</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="client_details" formControlName="client_details">
+                <label for="Workflow" class="form-check-label fs-5 ms-2">Client Details</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="pre_survey" formControlName="pre_survey">
+                <label for="pre_survey" class="form-check-label fs-5 ms-2">Pre-Survey</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="documents" formControlName="documents">
+                <label for="documents" class="form-check-label fs-5 ms-2">Documents</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="payment" formControlName="payment">
+                <label for="payment" class="form-check-label fs-5 ms-2">Payment</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="job_order" formControlName="job_order">
+                <label for="job_order" class="form-check-label fs-5 ms-2">Job Order</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="load_side" formControlName="load_side">
+                <label for="load_side" class="form-check-label fs-5 ms-2">Load Side</label>
+            </div>
+    
+            <div class="mb-3">
+                <input type="checkbox" class="form-check-input border-2 border-dark" name="final_process" formControlName="final_process">
+                <label for="final_process" class="form-check-label fs-5 ms-2">Final Process</label>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-primary" (click)="updatepermissions()">Update Permission</button>
+            </div>
+        </form>
+    </div>
+</section>

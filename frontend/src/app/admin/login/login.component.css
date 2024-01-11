@@ -1,17 +1,42 @@
-.container {
-    max-width: 1800px;
+.containers {
+    position: relative;
 }
 
-.container-fluid {
-    margin: auto 0;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+.containers::before {
+    content: "";
+    display: block;
+    opacity: 0.4;
+    background-color: rgba(245, 244, 208, 0.5);
+    background-image: url('/assets/LAG LOGO.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
 }
 
-.design-area {
-    background-color: #78beec;
+form{
+    width: 50%;
 }
 
-.login-area {
-    background-color: #faa06b;
+form div {
+    width: 70%;
+    min-width: 230px;
+    margin: 0 auto;
+}
+
+
+@media screen and (max-width: 470px) {
+    form {
+        width: 100%;
+        padding: 0 5%;
+    }
+
+    .containers::before {
+        background-size: cover;
+    }
 }

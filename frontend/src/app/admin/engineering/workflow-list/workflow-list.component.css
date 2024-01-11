@@ -17,6 +17,23 @@
     margin-left: 5rem;
 }
 
+.filter-type-box, .date, .month {
+    display: flex;
+    align-items: center;
+}
+
+.table {
+    --bs-table-bg: unset;
+}
+
+.header {
+    cursor: pointer;
+}
+
+.bg-energized {
+    background-color: orange !important;
+}
+
 .tbl-link {
     cursor: pointer;
 }
@@ -35,6 +52,7 @@
 }
 
 .search-input {
+    height: 38px;
     width: 90%;
 }
 
@@ -61,5 +79,9 @@
   
     .search-input {
       width: calc(100% - 40px);
+    }
+
+    .scroll-horizontal {
+        overflow-x: auto;
     }
 }
