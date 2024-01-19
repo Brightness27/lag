@@ -12,8 +12,8 @@ module.exports = class InventoryProcesses {
 
     static updateProcess(processDetails) {
         return db.execute(
-            'INSERT INTO inventory_processes(item_code, process_count, process_date, process_type, details) VALUES (?, ?, ?, ?, ?)',
-            [processDetails.item_code, processDetails.process_count, processDetails.process_date, processDetails.process_type, processDetails.details]
+            'INSERT INTO inventory_processes(item_code, quantity, process_date, process_type, details) VALUES (?, ?, ?, ?, ?)',
+            [processDetails.item_code, processDetails.quantity, processDetails.process_date, processDetails.process_type, processDetails.details]
         )
     }
 }

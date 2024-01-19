@@ -37,6 +37,10 @@ router.post(
 );
 
 router.post(
+    '/status/update', workflowController.updateStatusUpdate
+);
+
+router.post(
     '/deleteFile/:id', workflowController.deleteFile
 );
 
@@ -65,23 +69,31 @@ router.get(
 );
 
 router.get(
-    '/filter/date/:order/:specificdate', workflowController.filterWorkflowByDay
+    '/filter/date/:site/:specificdate', workflowController.filterWorkflowByDay
 );
 
 router.get(
-    '/filter/month/:order/:date', workflowController.filterWorkflowByMonth
+    '/filter/month/:site/:date', workflowController.filterWorkflowByMonth
 );
 
 router.get(
-    '/filter/range/:order/:start/:end', workflowController.filterWorkflowByRange
+    '/filter/range/:site/:start/:end', workflowController.filterWorkflowByRange
 );
 
 router.get(
-    '/filter/site/:order/:site', workflowController.filterWorkflowBySite
+    '/filter/site/:site', workflowController.filterWorkflowBySite
 );
 
 router.get(
     '/locations/', workflowController.getAllLocations
+);
+
+router.get(
+    '/payment-history/:id', workflowController.getPaymentHistory
+);
+
+router.post(
+    '/update-payment/:id', workflowController.updatePayment
 );
 
 module.exports = router;

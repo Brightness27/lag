@@ -103,7 +103,7 @@ export class InventoryProcessComponent implements OnInit {
   getAllInventories() {
     this.inventoryService.getAllInventories().subscribe(inventories => {
       this.inventories = inventories;
-      this.inventory = inventories[0];
+      this.inventory = inventories;
     });
   }
 

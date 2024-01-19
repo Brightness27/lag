@@ -40,6 +40,10 @@ table tbody tr {
     margin-top: -2px;
 }
 
+.table {
+    --bs-table-bg: unset;
+}
+
 @media screen and (max-width: 767px) {
 
     .search-container {

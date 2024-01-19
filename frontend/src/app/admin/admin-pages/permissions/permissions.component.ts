@@ -120,6 +120,8 @@ getAdmin(): void {
     this.admin = ads;
     this.admin_id = this.admin.admin_id;
 
+    console.log();
+    
     this.getPermissions();
   });
 }
@@ -132,8 +134,6 @@ getPermissions() {
 }
 
 updatepermissions() {
-  console.log(this.permissionForm.value);
-  
   this.adminService.updatePersmissions(this.permissionForm.value, this.admin_id).subscribe(permission => {
     this.alertTitle = 'Update Permission';
     this.alertMessage = permission.message;

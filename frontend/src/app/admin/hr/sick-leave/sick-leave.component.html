@@ -161,15 +161,15 @@
             </thead>
             <tbody>
                 <tr *ngFor="let leave of leaves">
-                    <td>{{ leave.employeeId }}</td>
+                    <td>{{ leave.emp_id }}</td>
                     <td>{{ leave.fname }}</td>
                     <td>{{ leave.mname }}</td>
                     <td>{{ leave.lname }}</td>
-                    <td class="clickable" (click)="showLeaveDetails('Sick-Leave', leave.employeeId)">{{ leave.SickLeaveCount }}</td>
+                    <td class="clickable" (click)="showLeaveDetails('Sick-Leave', leave.employeeId, leave.emp_id)">{{ leave.SickLeaveCount }}</td>
                     <td>{{ leave.maxSickLeave - leave.SickLeaveCount }}</td>
-                    <td class="clickable" (click)="showLeaveDetails('Vacation-Leave', leave.employeeId)">{{ leave.VacationLeaveCount }}</td>
+                    <td class="clickable" (click)="showLeaveDetails('Vacation-Leave', leave.employeeId, leave.emp_id)">{{ leave.VacationLeaveCount }}</td>
                     <td>{{ leave.maxVacationLeave - leave.VacationLeaveCount }}</td>
-                    <td class="clickable" (click)="showLeaveDetails('Emergency-Leave', leave.employeeId)">{{ leave.EmergencyLeaveCount }}</td>
+                    <td class="clickable" (click)="showLeaveDetails('Emergency-Leave', leave.employeeId, leave.emp_id)">{{ leave.EmergencyLeaveCount }}</td>
                     <td>{{ leave.maxEmergencyLeave - leave.EmergencyLeaveCount }}</td>
                 </tr>
             </tbody>

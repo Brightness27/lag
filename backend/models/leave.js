@@ -35,7 +35,7 @@ module.exports = class Leave {
 
     static getAllLeaves() {
         return db.execute(
-            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id GROUP BY e.id;'
+            'SELECT e.id AS employeeId, e.emp_id AS emp_id, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id WHERE NOT e.id = 1 GROUP BY e.id ORDER BY e.emp_id'
         );
     }
 
@@ -54,7 +54,7 @@ module.exports = class Leave {
 
     static searchLeave(searchKey) {
         return db.execute(
-            'SELECT e.id AS employeeId, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id WHERE CONCAT(e.fname, " ", e.mname, " ", e.lname) LIKE ? GROUP BY e.id',
+            'SELECT e.id AS employeeId, e.emp_id AS emp_id, e.fname AS fname, e.mname AS mname, e.lname AS lname, COALESCE(SUM(CASE WHEN l.leave_type = 1 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1  END ), 0) AS SickLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 2 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS VacationLeaveCount, COALESCE(SUM(CASE WHEN l.leave_type = 3 THEN TIMESTAMPDIFF(DAY, from_date, to_date) + 1 END ), 0) AS EmergencyLeaveCount From employee e LEFT JOIN leavetbl l ON l.employeeId = e.id LEFT JOIN leave_type t ON l.leave_type = t.id WHERE CONCAT(e.fname, " ", e.mname, " ", e.lname) LIKE ? AND NOT e.id = 1 GROUP BY e.id  ORDER BY e.emp_id',
             [searchKey]
         );
     }

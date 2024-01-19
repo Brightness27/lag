@@ -96,7 +96,9 @@
                 <tr>
                     <th scope="col" rowspan="2" class="text-center">Item Code</th>
                     <th scope="col" rowspan="2" class="text-center">Item Name</th>
+                    <th scope="col" rowspan="2" class="text-center">Size</th>
                     <th scope="col" rowspan="2" class="text-center">Remaining Stock</th>
+                    <th scope="col" rowspan="2" class="text-center">Unit</th>
                     <th scope="col" colspan="2" class="text-center">Process</th>
                 </tr>
     
@@ -109,7 +111,9 @@
                 <tr *ngFor="let inventory of inventories">
                     <td>{{ inventory.item_code }}</td>
                     <td>{{ inventory.name }}</td>
+                    <td>{{ inventory.size }}</td>
                     <td>{{ inventory.quantity }}</td>
+                    <td>{{ inventory.unit }}</td>
                     <td>
                         <span class="tbl-link"  data-bs-toggle="modal" data-bs-target="#item-process-add-modal" (click)="process(inventory)">Add Stock</span>
                     </td>

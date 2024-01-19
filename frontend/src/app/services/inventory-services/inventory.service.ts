@@ -8,7 +8,6 @@ import { ConstantsService } from '../constants/constants.service';
   providedIn: 'root'
 })
 export class InventoryService {
-  private root_url = 'http://192.168.68.107:3000';
 
   private inventory_url = this.constants.root_url + '/inventory';
 
@@ -25,6 +24,10 @@ export class InventoryService {
 
   getAllInventories(): Observable<any[]> {
     return this.http.get<any[]>(`${this.inventory_url}/all-inventories`, this.httpOptions);
+  }
+
+  getHistory(date: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.inventory_url}/records/${date}`, this.httpOptions);
   }
 
   addInventory(inventoryDetails: any): Observable<any> {

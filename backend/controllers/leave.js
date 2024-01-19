@@ -130,12 +130,13 @@ exports.getAllLeaveTypes = async (req, res, next) => {
 exports.getSpecificLeavebyEmployee = async (req, res, next) => {
         
     const employeeId = req.params.id;
+    const emp_id = req.params.empid;
     const leaveType = req.params.type;
 
     try {
         const leave_type = leaveType.replace("-", " ");
 
-        const employee = await Employee.findEmployeeById(employeeId);
+        const employee = await Employee.findEmployeeById(emp_id);
 
         const [leaves] = await Leave.getSpecificLeaveOfemployee(leave_type, employeeId);
 

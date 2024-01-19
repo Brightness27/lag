@@ -21,7 +21,7 @@ router.get('/', leaveController.getAllLeaves);
 
 router.get('/types', leaveController.getAllLeaveTypes);
 
-router.get('/leave-details/:id/:type', leaveController.getSpecificLeavebyEmployee);
+router.get('/leave-details/:id/:empid/:type', leaveController.getSpecificLeavebyEmployee);
 
 router.get('/search/:searchKey', leaveController.searchLeave);
 

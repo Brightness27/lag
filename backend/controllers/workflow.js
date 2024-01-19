@@ -108,6 +108,7 @@ exports.getWorkflowByCtrlno = async (req, res, next) => {
             payment = {
                 id: '',
                 work_flow_id: '',
+                package_price: 0,
                 payment_mark: '',
                 amount: 0,
                 down_payment: 0,
@@ -346,6 +347,8 @@ exports.addWorkflow = async (req, res, next) => {
 
 exports.addStatusUpdate = async (req, res, next) => {
 
+    const status_id = req.body.id;
+
     const action_date = req.body.action_date;
     const actions_taken = req.body.actions_taken;
     const customers_feedback = req.body.customers_feedback;
@@ -355,19 +358,53 @@ exports.addStatusUpdate = async (req, res, next) => {
 
     try {
 
+            const update_details = {
+                action_date: action_date,
+                actions_taken: actions_taken,
+                customers_feedback: customers_feedback,
+                action_taken_by: action_taken_by
+            }
+    
+            const update = Workflow.saveStatusUpdate(workflow_id, update_details);
+    
+            return res.json({
+                error: false,
+                message: "Work Flow Update has been added."
+            });
+        
+    } catch (error) {
+        return res.json({
+            error: true,
+            message: error.message
+        });
+    }
+}
+
+exports.updateStatusUpdate = async (req, res, next) => {
+
+    const status_id = req.body.id;
+
+    const action_date = req.body.action_date;
+    const actions_taken = req.body.actions_taken;
+    const customers_feedback = req.body.customers_feedback;
+    const action_taken_by = req.body.action_taken_by;
+
+    try {
         const update_details = {
+            id: status_id,
             action_date: action_date,
             actions_taken: actions_taken,
             customers_feedback: customers_feedback,
             action_taken_by: action_taken_by
         }
 
-        const update = Workflow.saveStatusUpdate(workflow_id, update_details);
+        const update = await Workflow.updateStatusUpdate(update_details);
 
         return res.json({
             error: false,
-            message: "Work Flow Update has been added."
+            message: "Work Flow Update has been updated."
         });
+
     } catch (error) {
         return res.json({
             error: true,
@@ -393,7 +430,8 @@ exports.getWorkflowStatusUpdates = async (req, res, next) => {
 
         const formattedUpdates = status_updates.map(update => ({
             ...update,
-            action_date: new Date(update.action_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+            action_date_long: new Date(update.action_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            action_date: new Date(update.action_date + 'Z').toISOString().split('T')[0]
         }));
 
         
@@ -507,6 +545,7 @@ exports.updateWorkflow = async (req, res, next) => {
     else if(step === 'payment') {
         details = {
             id: req.body.id,
+            package_price: req.body.package_price,
             payment_mark: req.body.payment_mark,
             amount: req.body.amount,
             down_payment: req.body.down_payment,
@@ -561,6 +600,7 @@ exports.updateWorkflow = async (req, res, next) => {
             case_no: req.body.case_no,
             sin_no: req.body.sin_no,
             tracker_status: req.body.tracker_status,
+            date_energized: req.body.date_energized,
             reason: req.body.reason
         };
     }
@@ -712,6 +752,76 @@ exports.updateWorkflow = async (req, res, next) => {
     }
 }
 
+exports.updatePayment = async (req, res, next) => {
+    const workflow_id = req.params.id;
+
+    const package_price = req.body.package_price;
+    const amount = req.body.amount;
+    const ar_or_number = req.body.ar_or_number;
+    const date_of_payment = req.body.date_of_payment;
+    const remarks = req.body.remarks;
+
+    try {
+        
+    
+        const workflow_payment = await Workflow.getPaymentByWorkflowId(workflow_id);
+
+        if(workflow_payment[0].length < 1) {
+            const addPackagePrice = await Workflow.addPackagePrice(workflow_id, package_price);
+        }
+        else {
+            const payment_history = await Workflow.getPaymentHistory(workflow_id);
+        
+            if(payment_history.length < 1 && package_price !== workflow_payment[0][0].package_price) {
+                const package = await Workflow.updatePackage(package_price, workflow_id);
+            }
+        }
+        
+        const payment_details = {
+            workflow_id: workflow_id,
+            amount: amount,
+            date_of_payment: date_of_payment,
+            ar_or_number: ar_or_number,
+            remarks: remarks
+        }
+        
+        const add_payment = await Workflow.addPayment(payment_details);
+
+        res.json({
+            error: false,
+            message: "Payment Added."
+        });
+
+    } catch (error) {
+        res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
+exports.getPaymentHistory = async (req, res, next) => {
+    const workflow_id = req.params.id;
+
+    try {
+        const [payment_history] = await Workflow.getPaymentHistory(workflow_id);
+    
+        const formattedHistory = payment_history.map(history => ({
+            ...history,
+            date_of_payment: new Date(history.date_of_payment).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        }));
+
+
+        res.json(formattedHistory);
+
+    } catch (error) {
+        res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
 exports.searchWorkflow = async (req, res, next) => {
 
     const sKey = req.params.searchKey;
@@ -758,7 +868,7 @@ exports.getOptions = async (req, res, next) => {
 }
 
 exports.filterWorkflowByDay = async (req, res, next) => {
-    const order = req.params.order;
+    const site = req.params.site;
 
     const date = req.params.specificdate;
 
@@ -766,17 +876,16 @@ exports.filterWorkflowByDay = async (req, res, next) => {
 
         let [filteredWorkflow] = [];
 
-        if(order === 'ASC') {
-           [filteredWorkflow] = await Workflow.filterWorkflowByDayASC(date);
+        if(site === 'ALL') {
+            [filteredWorkflow] = await Workflow.filterWorkflowByDay(date);
         }
-
         else {
-            [filteredWorkflow] = await Workflow.filterWorkflowByDayDESC(date);
+            [filteredWorkflow] = await Workflow.filterWorkflowByDayAndSite(date, site);
         }
 
         const formattedWorkflows = filteredWorkflow.map(workflow => ({
             ... workflow,
-            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase(),
         }));
 
         return res.json(formattedWorkflows);
@@ -791,7 +900,7 @@ exports.filterWorkflowByDay = async (req, res, next) => {
 
 exports.filterWorkflowByMonth = async (req, res, next) => {
 
-    const order = req.params.order;
+    const site = req.params.site;
 
     const d = req.params.date
     const date = `${d}%`;
@@ -800,17 +909,17 @@ exports.filterWorkflowByMonth = async (req, res, next) => {
 
         let [filteredWorkflow] = [];
 
-        if(order === 'ASC') {
-            [filteredWorkflow] = await Workflow.filterWorkflowByMonthASC(date);
+        if(site === 'ALL') {
+            [filteredWorkflow] = await Workflow.filterWorkflowByMonth(date);
         }
 
         else {
-            [filteredWorkflow] = await Workflow.filterWorkflowByMonthDESC(date);
+            [filteredWorkflow] = await Workflow.filterWorkflowByMonthAndSite(date, site);
         }
         
         const formattedWorkflows = filteredWorkflow.map(workflow => ({
             ... workflow,
-            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase(),
         }));
 
         return res.json(formattedWorkflows);
@@ -825,7 +934,7 @@ exports.filterWorkflowByMonth = async (req, res, next) => {
 
 exports.filterWorkflowByRange = async (req, res, next) => {
 
-    const order = req.params.order;
+    const site = req.params.site;
 
     const start_date = req.params.start;
     const end_date = req.params.end;
@@ -834,17 +943,17 @@ exports.filterWorkflowByRange = async (req, res, next) => {
 
         let [filteredWorkflow] = [];
 
-        if(order === 'ASC') {
-            [filteredWorkflow] = await Workflow.filterWorkflowByRangeASC(start_date, end_date);
+        if(site === 'ALL') {
+            [filteredWorkflow] = await Workflow.filterWorkflowByRange(start_date, end_date);
         }
 
         else {
-            [filteredWorkflow] = await Workflow.filterWorkflowByRangeDESC(start_date, end_date);
+            [filteredWorkflow] = await Workflow.filterWorkflowByRangeAndSite(start_date, end_date, site);
         }
 
         const formattedWorkflows = filteredWorkflow.map(workflow => ({
             ... workflow,
-            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase(),
         }));
 
         return res.json(formattedWorkflows);
@@ -859,25 +968,15 @@ exports.filterWorkflowByRange = async (req, res, next) => {
 
 exports.filterWorkflowBySite = async (req, res, next) => {
 
-    const order = req.params.order;
-
     const site = req.params.site
 
     try {
 
-        let [filteredWorkflow] = [];
-
-        if(order === 'ASC') {
-            [filteredWorkflow] = await Workflow.filterWorkflowBySiteASC(site);
-        }
-
-        else {
-            [filteredWorkflow] = await Workflow.filterWorkflowBySiteDESC(site);
-        }
+        const [filteredWorkflow] = await Workflow.filterWorkflowBySite(site);
         
         const formattedWorkflows = filteredWorkflow.map(workflow => ({
             ... workflow,
-            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            date_received:  new Date(workflow.date_received).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase(),
         }));
 
         return res.json(formattedWorkflows);

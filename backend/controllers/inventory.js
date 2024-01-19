@@ -18,6 +18,7 @@ exports.addInventory = async (req, res, next) => {
 
     const name = req.body.name;
     const category  = req.body.category ;
+    const size = req.body.size;
     const quantity = req.body.quantity;
     const unit = req.body.unit;
     const last_purchase_date = req.body.last_purchase_date;
@@ -31,16 +32,6 @@ exports.addInventory = async (req, res, next) => {
     const last_stock_date = `${year}-${month}-${day}`;
 
     try {
-
-        const itemExist = await Inventory.getItemByName(name);
-
-        if(itemExist[0].length > 0) {
-            return res.json({
-                error: true,
-                message: 'Item already on the list.'
-            });
-        }
-
         let categoryId = 0;
 
         const existingCategory = await Category.selectCategoryByName(category);
@@ -55,7 +46,7 @@ exports.addInventory = async (req, res, next) => {
         const inventoryDetails = {
             name: name,
             category: categoryId,
-            quantity: quantity,
+            size: size,
             unit: unit,
             last_purchase_date: last_purchase_date,
             last_stock_date: last_stock_date,
@@ -73,6 +64,16 @@ exports.addInventory = async (req, res, next) => {
         const item_code = year + paddedCategoryId + paddedInventoryId;
 
         const updateCode = await Inventory.updateItemCode(item_code, inventoryId);
+
+        const processDetails = {
+            item_code: item_code,
+            quantity: quantity,
+            process_date: last_stock_date,
+            process_type: 'IN',
+            details: 'Add Inventory'
+        };
+
+        const updateProcess = await InventoryProcesses.updateProcess(processDetails);
 
         return res.json({
             error: false,
@@ -143,7 +144,8 @@ exports.getItemByCode = async (req, res, next) => {
 
         const formattedInventory = {
             ...inventory[0][0],
-            last_stock_date: new Date(inventory[0][0].last_stock_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+            last_stock_date_long: new Date(inventory[0][0].last_stock_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            last_stock_date: new Date(inventory[0][0].last_stock_date + 'Z').toISOString().split('T')[0]
         };
         
         return res.json(formattedInventory);
@@ -197,20 +199,11 @@ exports.updateInventory = async (req, res, next) => {
 
     const name = req.body.name;
     const category = req.body.category ;
+    const size = req.body.size;
 
     const item_id = req.params.itemid;
 
     try {
-
-        const itemExist = await Inventory.getItemByNameExcept(name, item_id);
-
-        if(itemExist[0].length > 0) {
-            return res.json({
-                error: true,
-                message: 'Name already in use.'
-            });
-        }
-
         let categoryId = 0;
 
         const existingCategory = await Category.selectCategoryByName(category);
@@ -224,7 +217,8 @@ exports.updateInventory = async (req, res, next) => {
 
         const item_details = {
             name: name,
-            category: categoryId
+            category: categoryId,
+            size: size
         }
 
         const updateItem = await Inventory.updateItem(item_details, item_id);
@@ -258,10 +252,11 @@ exports.processInventories = async (req, res, next) => {
 
         const current_stock = inventory[0][0].quantity;
 
-        if(type === 'OUT' && current_stock < stockCount) {
+        if(type === 'OUT' && current_stock < Number(stockCount)) {
             return res.json({
                 error: true,
-                message: "not enough stock to release."
+                message: "not enough stock to release.",
+                inventory: inventory[0][0]
             });
         }
 
@@ -284,15 +279,13 @@ exports.processInventories = async (req, res, next) => {
 
         const processDetails = {
             item_code: id,
-            process_count: stockCount,
+            quantity: stockCount,
             process_date: date_process,
             process_type: type,
             details: details
         };
 
         const updateProcess = await InventoryProcesses.updateProcess(processDetails);
-
-        const updateStocks = await Inventory.updateStocks(afterProcessStock, id);
 
         if(type === 'IN') {
             const updateStockDate = await Inventory.updateStockDate(date_process, last_purchase_date, id);
@@ -305,7 +298,22 @@ exports.processInventories = async (req, res, next) => {
         })
 
     } catch (error) {
-        res.json({
+        return res.json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
+exports.getHistory = async (req, res, next) => {
+
+    const date = req.params.date;
+    try {
+        const [history] = await Inventory.getHistory(date);
+
+        return res.json(history);
+    } catch (error) {
+        return res.json({
             error: true,
             message: error.message
         })

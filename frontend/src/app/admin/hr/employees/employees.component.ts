@@ -121,7 +121,7 @@ export class EmployeesComponent implements OnInit {
         this.activeEmployees = employees.map(employee => {
           return {
             ...employee,
-            link: '/admin/employees/list/details/' + employee.id
+            link: '/admin/employees/list/details/' + employee.emp_id
           };
         });
       }

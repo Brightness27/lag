@@ -1,5 +1,5 @@
 import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { faFolder, faFolderPlus, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import { faWarehouse, faDollyFlatbed, faTruckLoading, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarTimes, faUsersCog, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { faFileAlt, faFileContract } from '@fortawesome/free-solid-svg-icons';
 
@@ -45,18 +45,23 @@ export const inventoryNavbarData = [
 
     {
         routeLink: '/admin/inventory/list',
-        icon: faFolder,
+        icon: faWarehouse,
         label: 'Inventory'
     },
     {
         routeLink: '/admin/inventory/process',
-        icon: faFolderOpen,
+        icon: faDollyFlatbed,
         label: 'Processes'
     },
     {
         routeLink: '/admin/inventory/add',
-        icon: faFolderPlus,
+        icon: faTruckLoading,
         label: 'Add Item'
+    },
+    {
+        routeLink: '/admin/inventory/record',
+        icon: faFolderOpen,
+        label: 'Record'
     }
 
 ];

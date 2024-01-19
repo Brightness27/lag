@@ -42,6 +42,10 @@ import { LoadingComponent } from './admin/components/loading/loading.component';
 import { UpdateWorkflowComponent } from './admin/engineering/update-workflow/update-workflow.component';
 import { ViewImagesComponent } from './admin/components/view-images/view-images.component';
 import { PermissionsComponent } from './admin/admin-pages/permissions/permissions.component';
+import { PrintWorkflowDetailsComponent } from './admin/components/print-workflow-details/print-workflow-details.component';
+import { InventoryHistoryComponent } from './admin/accounting/inventory-history/inventory-history.component';
+import { WorkflowPaymentComponent } from './admin/engineering/workflow-payment/workflow-payment.component';
+import { StatusUpdatesComponent } from './admin/engineering/status-updates/status-updates.component';
 
 
 @NgModule({
@@ -81,6 +85,10 @@ import { PermissionsComponent } from './admin/admin-pages/permissions/permission
     UpdateWorkflowComponent,
     ViewImagesComponent,
     PermissionsComponent,
+    PrintWorkflowDetailsComponent,
+    InventoryHistoryComponent,
+    WorkflowPaymentComponent,
+    StatusUpdatesComponent,
     
   ],
   imports: [

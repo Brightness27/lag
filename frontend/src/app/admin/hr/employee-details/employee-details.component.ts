@@ -73,7 +73,7 @@ export class EmployeeDetailsComponent implements OnInit {
 
   createForm(): FormGroup {
     return new FormGroup({
-      id: new FormControl({ value: '', disabled: true }),
+      emp_id: new FormControl({ value: '', disabled: true }),
       fname: new FormControl({ value: '', disabled: true }),
       mname: new FormControl({ value: '', disabled: true }),
       lname: new FormControl({ value: '', disabled: true }),
@@ -95,7 +95,7 @@ export class EmployeeDetailsComponent implements OnInit {
 
   createTempForm(): FormGroup {
     return new FormGroup({
-      id: new FormControl(''),
+      emp_id: new FormControl(''),
       fname: new FormControl(''),
       mname: new FormControl(''),
       lname: new FormControl(''),
@@ -156,25 +156,27 @@ export class EmployeeDetailsComponent implements OnInit {
         this.editForm.get(key)?.enable();
     });
 
-    this.editForm.get('id')?.disable();
     this.editForm.get('status')?.disable();
     
     this.disabled = !this.disabled;
   }
 
   updateDetails() {
-
-    console.log(this.editForm.value);
     
-    this.employeeService.updateEmployee(this.editForm.value, this.id).subscribe((msg) => {
+    this.employeeService.updateEmployee(this.editForm.value, this.staff.id).subscribe((msg) => {
       this.alertTitle = 'Update Admin';
       this.alertMessage = msg.message;
 
       document.getElementById('emp-open-modal')?.click();
+
+      if(!msg.error) {
+        this.id = this.editForm.get('emp_id')?.value;
+        this.editForm.disable();
+        this.disabled = true;
+      }
       this.getEmployee();
     });
-    this.editForm.disable();
-    this.disabled = true;
+    
   }
 
   cancelUpdate() {
@@ -197,7 +199,7 @@ export class EmployeeDetailsComponent implements OnInit {
       }
 
       this.editForm.patchValue({
-        id: this.staff.id,
+        emp_id: this.staff.emp_id,
         fname: this.staff.fname,
         mname: this.staff.mname,
         lname: this.staff.lname,
@@ -219,7 +221,7 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   resignEmployee() {
-    this.employeeService.updateEmployeeStatus('Resigned', this.id).subscribe((msg) => {
+    this.employeeService.updateEmployeeStatus('Resigned', this.staff.id).subscribe((msg) => {
       document.getElementById('emp-resign-close-btn')?.click();
 
       this.alertTitle = 'Resign Employee';
@@ -232,7 +234,7 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   activateEmployee() {
-    this.employeeService.updateEmployeeStatus('Active', this.id).subscribe((msg) => {
+    this.employeeService.updateEmployeeStatus('Active', this.staff.id).subscribe((msg) => {
       document.getElementById('emp-active-close-btn')?.click();
 
       this.alertTitle = 'Activate Employee';

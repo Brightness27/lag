@@ -39,11 +39,6 @@
                 <label for="name" class="form-label fs-5">Item Name</label>
                 <input type="text" class="form-control border-secondary" id="name" formControlName="name">
             </div>
-<!-- 
-            <div class="mb-3">
-                <label for="category" class="form-label fs-5">Category</label>
-                <input type="text" class="form-control border-secondary" id="category" formControlName="category">
-            </div> -->
 
             <div class="mb-3">
                 <label for="category" class="form-label fs-5">Category</label>
@@ -59,13 +54,18 @@
             </div>
 
             <div class="mb-3">
+                <label for="size" class="form-label fs-5">Size</label>
+                <input type="text" class="form-control border-secondary" id="size" formControlName="size">
+            </div>
+
+            <div class="mb-3">
                 <label for="stock" class="form-label fs-5">Remaining Stock</label>
                 <input type="text" class="form-control border-secondary" id="stock" formControlName="stock">
             </div>
 
             <div class="mb-4">
                 <label for="last_stock_date" class="form-label fs-5">Last Stock Update</label>
-                <input type="text" class="form-control border-secondary" id="last_stock_date" formControlName="last_stock_date">
+                <input type="date" class="form-control border-secondary" id="last_stock_date" formControlName="last_stock_date">
             </div>
 
             <button type="button" class="btn btn-primary form-control" (click)="update()" *ngIf="disabled">Update</button>

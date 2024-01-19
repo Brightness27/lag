@@ -27,8 +27,8 @@ export class LeaveService {
     return this.http.get<any[]>(`${this.leave_url}/types`, this.httpOptions);
   }
 
-  getSpecificLeavesByEmployee(leave_type: number, employeeId: any): Observable<any[]> {
-    return this.http.get<any[]>(`${this.leave_url}/leave-details/${employeeId}/${leave_type}`, this.httpOptions);
+  getSpecificLeavesByEmployee(leave_type: number, employeeId: any, emp_id: any): Observable<any[]> {
+    return this.http.get<any[]>(`${this.leave_url}/leave-details/${employeeId}/${emp_id}/${leave_type}`, this.httpOptions);
   }
 
   addLeave(leaveDetails: any): Observable<any> {

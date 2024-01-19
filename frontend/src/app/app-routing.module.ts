@@ -26,6 +26,9 @@ import { WorkflowDetailsComponent } from './admin/engineering/workflow-details/w
 import { UpdateWorkflowComponent } from './admin/engineering/update-workflow/update-workflow.component';
 import { ViewImagesComponent } from './admin/components/view-images/view-images.component';
 import { PermissionsComponent } from './admin/admin-pages/permissions/permissions.component';
+import { WorkflowPaymentComponent } from './admin/engineering/workflow-payment/workflow-payment.component';
+import { InventoryHistoryComponent } from './admin/accounting/inventory-history/inventory-history.component';
+import { StatusUpdatesComponent } from './admin/engineering/status-updates/status-updates.component';
 
 const routes: Routes = [
   {path: '', component: MainPageComponent},
@@ -47,6 +50,7 @@ const routes: Routes = [
   {path: 'admin/employees/leave', component: SickLeaveComponent},
   {path: 'admin/inventory', redirectTo: '/admin/inventory/list', pathMatch: 'full'},
   {path: 'admin/inventory/list', canActivate: [authGuardGuard], component: InventoryComponent},
+  {path: 'admin/inventory/record', canActivate: [authGuardGuard], component: InventoryHistoryComponent},
   {path: 'admin/print/:type', canActivate: [authGuardGuard], component: PrintToPdfComponent},
   {path: 'admin/inventory/details/:id', canActivate: [authGuardGuard], component: InventoryDetailsComponent},
   {path: 'admin/inventory/add', canActivate: [authGuardGuard], component: AddInventoryComponent},
@@ -54,7 +58,9 @@ const routes: Routes = [
   {path: 'admin/engineering', redirectTo: '/admin/engineering/work-flow/list', pathMatch: 'full'},
   {path: 'admin/engineering/work-flow/list', canActivate: [authGuardGuard], component: WorkflowListComponent},
   {path: 'admin/engineering/work-flow/details/:ctrlno', canActivate: [authGuardGuard], component: WorkflowDetailsComponent},
+  {path: 'admin/engineering/work-flow/status-updates/:ctrlno', canActivate: [authGuardGuard], component: StatusUpdatesComponent},
   {path: 'admin/engineering/work-flow/update/:ctrlno/:step', canActivate: [authGuardGuard], component: UpdateWorkflowComponent},
+  {path: 'admin/engineering/work-flow/update/:ctrlno/accounting/payment', canActivate: [authGuardGuard], component: WorkflowPaymentComponent},
   {path: 'admin/engineering/work-flow/add', canActivate: [authGuardGuard], component: AddWorkflowComponent},
   {path: 'admin/engineering/work-flow/images/:id', canActivate: [authGuardGuard], component: ViewImagesComponent},
   {path: '**', component: NotFoundComponent},

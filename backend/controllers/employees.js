@@ -61,15 +61,17 @@ exports.addEmployee = async (req, res, next) => {
             });
         }
 
-        const emailExist = await Employee.findEmployeeByEmail(email_address);
+        if(email_address.toUpperCase() !== 'N/A') {
+            const emailExist = await Employee.findEmployeeByEmail(email_address);
 
-        if(emailExist[0].length > 0) {
-            return res.json({
-                error: true,
-                message: 'Email already in use.'
-            });
+            if(emailExist[0].length > 0) {
+                return res.json({
+                    error: true,
+                    message: 'Email already in use.'
+                });
+            }
         }
-
+        
         const result = await Employee.addEmployee(employeeDetails);
 
         return res.json({
@@ -99,6 +101,7 @@ exports.updateEmployee = async (req, res, next) => {
 
     const id = req.params.id;
 
+    const emp_id = req.body.emp_id;
     const fname = req.body.fname;
     const mname = req.body.mname;
     const lname = req.body.lname;
@@ -117,6 +120,7 @@ exports.updateEmployee = async (req, res, next) => {
 
     try {
         const employeeDetails = {
+            emp_id: emp_id,
             fname: fname,
             mname: mname,
             lname: lname,

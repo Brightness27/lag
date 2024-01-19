@@ -12,7 +12,7 @@ module.exports = class Workflow {
 
     static getAllWorkflow() {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id ORDER BY w.date_received ASC'
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id ORDER BY w.date_received ASC'
         );
     }
 
@@ -128,8 +128,8 @@ module.exports = class Workflow {
 
     static savePayment(workflow_id, payments) {
         return db.execute(
-            'INSERT INTO work_flow_payment (work_flow_id, payment_mark, amount, down_payment, balance, ar_or_number, remarks) VALUES(?, ?, ?, ?, ?, ?, ?)',
-            [workflow_id, payments.payment_mark, payments.amount, payments.down_payment, payments.balance, payments.ar_or_number, payments.remarks]
+            'INSERT INTO work_flow_payment (work_flow_id, package_price, payment_mark, amount, down_payment, balance, ar_or_number, remarks) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
+            [workflow_id, payments.package_price, payments.payment_mark, payments.amount, payments.down_payment, payments.balance, payments.ar_or_number, payments.remarks]
         );
     }
 
@@ -149,8 +149,8 @@ module.exports = class Workflow {
 
     static saveFinalProcessing(workflow_id, final_processing) {
         return db.execute(
-            'INSERT INTO work_flow_final_process (work_flow_id, coordinator, cbm_no, case_no, sin_no, tracker_status, reason) VALUES(?, ?, ?, ?, ?, ?, ?)',
-            [workflow_id, final_processing.coordinator, final_processing.cbm_no, final_processing.case_no, final_processing.sin_no, final_processing.tracker_status, final_processing.reason]
+            'INSERT INTO work_flow_final_process (work_flow_id, coordinator, cbm_no, case_no, sin_no, tracker_status, date_energized, reason) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
+            [workflow_id, final_processing.coordinator, final_processing.cbm_no, final_processing.case_no, final_processing.sin_no, final_processing.tracker_status, final_processing.date_energized, final_processing.reason]
         );
     }
 
@@ -165,6 +165,20 @@ module.exports = class Workflow {
         return db.execute(
             'INSERT INTO work_flow_status_update (work_flow_id, action_date, actions_taken, customers_feedback, action_taken_by) VALUES(?, ?, ?, ?, ?)',
             [workflow_id, status_update.action_date, status_update.actions_taken, status_update.customers_feedback, status_update.action_taken_by]
+        );
+    }
+
+    static updateStatusUpdate(status_update) {
+        return db.execute(
+            'UPDATE work_flow_status_update SET action_date = ?, actions_taken = ?, customers_feedback = ?, action_taken_by = ? WHERE id = ? ',
+            [status_update.action_date, status_update.actions_taken, status_update.customers_feedback, status_update.action_taken_by, status_update.id]
+        );
+    }
+
+    static getStatus(status_id) {
+        return db.execute(
+            'SELECT * FROM work_flow_status_update WHERE id = ?',
+            [status_id]
         );
     }
 
@@ -191,8 +205,8 @@ module.exports = class Workflow {
 
     static updatePayment(payments) {
         return db.execute(
-            'UPDATE work_flow_payment SET payment_mark = ?, amount = ?, down_payment = ?, balance = ?, ar_or_number = ?, remarks = ? WHERE id = ?',
-            [payments.payment_mark, payments.amount, payments.down_payment, payments.balance, payments.ar_or_number, payments.remarks, payments.id]
+            'UPDATE work_flow_payment SET payment_mark = ?, package_price = ?, amount = ?, down_payment = ?, balance = ?, ar_or_number = ?, remarks = ? WHERE id = ?',
+            [payments.payment_mark, payments.package_price, payments.amount, payments.down_payment, payments.balance, payments.ar_or_number, payments.remarks, payments.id]
         );
     }
 
@@ -212,8 +226,8 @@ module.exports = class Workflow {
 
     static updateFinalProcessing(final_processing) {
         return db.execute(
-            'UPDATE work_flow_final_process SET coordinator = ?, cbm_no = ?, case_no = ?, sin_no = ?, tracker_status = ?, reason = ? WHERE id = ?',
-            [final_processing.coordinator, final_processing.cbm_no, final_processing.case_no, final_processing.sin_no, final_processing.tracker_status, final_processing.reason, final_processing.id]
+            'UPDATE work_flow_final_process SET coordinator = ?, cbm_no = ?, case_no = ?, sin_no = ?, tracker_status = ?, date_energized = ?, reason = ? WHERE id = ?',
+            [final_processing.coordinator, final_processing.cbm_no, final_processing.case_no, final_processing.sin_no, final_processing.tracker_status, final_processing.date_energized, final_processing.reason, final_processing.id]
         );
     }
 
@@ -226,7 +240,7 @@ module.exports = class Workflow {
 
     static searchWorkFlow(searchKey){
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.ctrl_no LIKE ? OR w.client_fname LIKE ? OR w.client_mname LIKE ? OR w.client_lname LIKE ? OR CONCAT(w.client_fname, " ", w.client_mname, " ", w.client_lname) LIKE ? OR w.client_address LIKE ? OR w.initial_communicator LIKE ? OR wf.tracker_status LIKE ? ORDER BY w.date_received ASC',
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.ctrl_no LIKE ? OR w.client_fname LIKE ? OR w.client_mname LIKE ? OR w.client_lname LIKE ? OR CONCAT(w.client_fname, " ", w.client_mname, " ", w.client_lname) LIKE ? OR w.client_address LIKE ? OR w.initial_communicator LIKE ? OR wf.tracker_status LIKE ? ORDER BY w.date_received ASC',
             [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey]
         );
     }
@@ -238,59 +252,80 @@ module.exports = class Workflow {
         );
     }
 
-    static filterWorkflowByDayASC(date) {
+    static filterWorkflowByDay(date) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received = ? ORDER BY w.date_received ASC',
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.date_received = ? ORDER BY w.date_received ASC',
             [date]
         );
     }
 
-    static filterWorkflowByMonthASC(date) {
+    static filterWorkflowByMonth(date) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received LIKE ? ORDER BY w.date_received ASC',
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.date_received LIKE ? ORDER BY w.date_received ASC',
             [date]
         );
     }
 
-    static filterWorkflowByRangeASC(start_date, end_date) {
+    static filterWorkflowByRange(start_date, end_date) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received BETWEEN ? AND ?  ORDER BY w.date_received ASC',
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.date_received BETWEEN ? AND ?  ORDER BY w.date_received ASC',
             [start_date, end_date]
         );
     }
 
-    static filterWorkflowBySiteASC(site) {
+    static filterWorkflowByDayAndSite(date, site) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.location = ?  ORDER BY w.date_received ASC',
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.date_received = ? AND location = ? ORDER BY w.date_received ASC',
+            [date, site]
+        );
+    }
+
+    static filterWorkflowByMonthAndSite(date, site) {
+        return db.execute(
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE w.date_received LIKE ? AND location = ? ORDER BY w.date_received ASC',
+            [date, site]
+        );
+    }
+
+    static filterWorkflowByRangeAndSite(start_date, end_date, site) {
+        return db.execute(
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE (w.date_received BETWEEN ? AND ?)  AND location = ?  ORDER BY w.date_received ASC',
+            [start_date, end_date, site]
+        );
+    }
+
+    static filterWorkflowBySite(site) {
+        return db.execute(
+            'SELECT w.*, wf.tracker_status, wp.number_of_units FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id LEFT JOIN work_flow_pre_survey wp ON w.id = wp.work_flow_id WHERE location = ?  ORDER BY w.date_received ASC',
             [site]
         );
     }
 
-    static filterWorkflowByDayDESC(date) {
+    static addPackagePrice(workflow_id, package_price) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received = ? ORDER BY w.date_received DESC',
-            [date]
+            'INSERT INTO work_flow_payment (work_flow_id, package_price) VALUES(?, ?)',
+            [workflow_id, package_price]
         );
     }
 
-    static filterWorkflowByMonthDESC(date) {
+    static getPaymentHistory(workflow_id) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received LIKE ? ORDER BY w.date_received DESC',
-            [date]
+            'SELECT wph.id, wph.workflow_id, wph.ar_or_number, wph.amount, wph.date_of_payment, wph.remarks, wp.package_price, wp.package_price - COALESCE(SUM(wph.amount) OVER (PARTITION BY wph.date_of_payment ORDER BY wph.id), 0) AS balance FROM workflow_payment_history wph LEFT JOIN work_flow_payment wp ON wph.workflow_id = wp.work_flow_id WHERE wph.workflow_id = ? ORDER BY wph.id ASC',
+            [workflow_id]
         );
     }
 
-    static filterWorkflowByRangeDESC(start_date, end_date) {
+    static updatePackage(package_price, workflow_id) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.date_received BETWEEN ? AND ?  ORDER BY w.date_received DESC',
-            [start_date, end_date]
+            'UPDATE work_flow_payment SET package_price = ? WHERE work_flow_id = ?',
+            [package_price, workflow_id]
         );
     }
 
-    static filterWorkflowBySiteDESC(site) {
+    static addPayment(payment_details) {
         return db.execute(
-            'SELECT w.*, wf.tracker_status FROM work_flow w LEFT JOIN work_flow_final_process wf ON w.id = wf.work_flow_id WHERE w.location = ?  ORDER BY w.date_received DESC',
-            [site]
+            'INSERT INTO workflow_payment_history (workflow_id, amount, date_of_payment, ar_or_number, remarks) VALUES (?, ?, ?, ?, ?)',
+            [payment_details.workflow_id, payment_details.amount, payment_details.date_of_payment, payment_details.ar_or_number, payment_details.remarks]
         );
     }
 }

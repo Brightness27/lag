@@ -39,7 +39,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'lag_website/index.html'));
 });
 
-app.listen(ports, '192.168.68.105', () => {
+app.listen(ports, '192.168.68.106', () => {
     console.log(`listening to port ${ports}`);
 });
 

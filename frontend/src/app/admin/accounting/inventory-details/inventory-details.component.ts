@@ -82,6 +82,7 @@ export class InventoryDetailsComponent {
     return new FormGroup({
       name: new FormControl({ value: '', disabled: true }),
       category: new FormControl({ value: '', disabled: true }),
+      size: new FormControl({ value: '', disabled: true }),
       stock: new FormControl({ value: '', disabled: true }),
       last_stock_date: new FormControl({ value: '', disabled: true })
     });
@@ -91,6 +92,7 @@ export class InventoryDetailsComponent {
     return new FormGroup({
       name: new FormControl(''),
       category: new FormControl(''),
+      size: new FormControl(''),
       stock: new FormControl(''),
       last_stock_date: new FormControl('')
     });
@@ -158,6 +160,7 @@ export class InventoryDetailsComponent {
       this.editForm.patchValue({
         name: this.item.name,
         category: this.item.category_name,
+        size: this.item.size,
         stock: this.item.quantity,
         last_stock_date: this.item.last_stock_date
       });
@@ -173,6 +176,8 @@ export class InventoryDetailsComponent {
     
     this.editForm.get('name')?.enable();
     this.editForm.get('category')?.enable();
+    this.editForm.get('size')?.enable();
+    this.editForm.get('last_stock_date')?.enable();
     
     this.disabled = !this.disabled;
   }
@@ -185,6 +190,9 @@ export class InventoryDetailsComponent {
         }
       )
     }
+
+    console.log(this.editForm.value);
+    
     
     this.inventoryService.updateInventory(this.editForm.value, this.id).subscribe((msg) => {
       this.alertTitle = 'Update Item';

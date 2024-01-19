@@ -48,3 +48,10 @@
 .workflow td:nth-child(2) {
     width: 15%;
 }
+
+.filter {
+    display: flex;
+    height: 20px;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}

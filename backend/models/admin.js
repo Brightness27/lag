@@ -44,22 +44,22 @@ module.exports = class Admin {
 
     static getAdminByEmployeeId(employeeId) {
         return db.execute(
-            'SELECT a.id as admin_id, e.id as id, e.fname, e.mname, e.lname, e.position, a.department, a.status FROM admin a INNER  JOIN employee e ON a.employeeId = e.id WHERE employeeId = ?',
+            'SELECT a.id as admin_id, e.id as id, e.fname, e.mname, e.lname, e.position, a.department, a.status FROM admin a INNER  JOIN employee e ON a.employeeId = e.id WHERE e.emp_id = ?',
             [employeeId]
         );
     }
 
     static getAllAdmins(status, admin_id) {
         return db.execute(
-            'SELECT a.id as adminId, e.id as id, e.fname, e.mname, e.lname, e.position, a.department FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE a.status = ? AND NOT a.id = ? ORDER BY e.id ASC',
+            'SELECT a.id as adminId, e.emp_id as id, e.fname, e.mname, e.lname, e.position, a.department FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE a.status = ? AND NOT a.id = ? AND NOT a.id = 1 ORDER BY e.id ASC',
             [status, admin_id]
         );
     }
 
     static searchAdmin(searchKey, status, admin_id) {
         return db.execute(
-            'SELECT * FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE (e.id LIKE ? OR e.fname LIKE ? OR e.mname LIKE ? OR e.lname LIKE ? OR position LIKE ? OR department LIKE ? OR username LIKE ?) AND (a.status = ?) AND NOT id = ?',
-            [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, status, admin_id]
+            'SELECT a.id as adminId, e.emp_id as id, e.fname, e.mname, e.lname, e.position, a.department FROM admin a INNER JOIN employee e ON a.employeeId = e.id WHERE (e.id LIKE ? OR e.fname LIKE ? OR e.mname LIKE ? OR e.lname LIKE ? OR CONCAT(e.fname, " ", e.mname, " ", e.fname) LIKE ? OR position LIKE ? OR department LIKE ? OR username LIKE ?) AND (a.status = ?) AND NOT a.id = ? AND NOT a.id = 1 ORDER BY e.id ASC',
+            [searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, searchKey, status, admin_id]
         );
     }
 

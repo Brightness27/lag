@@ -35,8 +35,8 @@
                 <span class="px-3 d-block">Customer Name: {{ workflow?.client_name }}</span>
                 <span class="px-3 d-block">Address: {{ workflow?.client_address }}</span>
                 
-                <div class="w-100 d-flex justify-content-end">
-                    <span type="button" class="tbl-link" data-bs-toggle="modal" data-bs-target="#add-update-status-modal">Add New Update</span>
+                <div class="w-100 d-flex justify-content-end" *ngIf="update_status !== 'CANCELLED'">
+                    <span class="tbl-link" data-bs-toggle="modal" data-bs-target="#add-update-status-modal">Add New Update</span>
                 </div>
                 <div class="border mt-3 w-100" *ngIf="!noWorkflowStatus">
                     <div class="border-bottom d-block p-3" *ngFor="let status of workflow?.status_updates">
@@ -107,67 +107,17 @@
 </div>
 
 <section class="body contents border p-5" [ngClass]="getBodyClass()">
-    <h1 class="fw-bolder fs-1 text-center w-100">Workflow List</h1>
+    <h1 class="fw-bolder fs-1 text-center w-100">Flow of Work List</h1>
 
-    <div class="mx-2 w-100 d-flex">
-        <div>
+    <div class="mx-2 w-100 row">
+        <div class="col-3">
             <button class="btn btn-light border border-dark p-2" [routerLink]="['/admin/engineering/work-flow/add']">
                 <fa-icon [icon]="addWorkflow"></fa-icon>
                 <span class="ms-2" *ngIf="hideAddText">Add New Work Flow</span>
             </button>
         </div>
-    </div>
 
-    <div class="mx-2 mt-3 w-100 row">
-        <div class="col-2">
-            <div class="filter-type-box d-flex">
-                <span class="fs-5 h-100">filter: </span>
-                <select name="category" class="form-select w-75 ms-3" id="category" (change)="changeFilterType($event)">
-                    <option value="NONE">NONE</option>
-                    <option value="BY DATE">BY DATE</option>
-                    <option value="BY MONTH">BY MONTH</option>
-                    <option value="BY RANGE">BY RANGE</option>
-                    <option value="BY SITE">BY SITE</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="col-6">
-            <div class="filter-type-box d-flex">
-                <div class="date w-100" *ngIf="filter === 'BY DATE'">
-                    <span class="fs-5 h-100 ms-3">DATE: </span>
-                    <input type="date" class="form-control w-25 ms-3" id="date_date" [(ngModel)]="date_date">
-                    <button type="button" class="btn btn-secondary border border-dark border-2 form-control w-25 ms-3" (click)="filterWorkflow()">FILTER</button>
-                </div>
-
-                <div class="month w-100" *ngIf="filter === 'BY MONTH'">
-                    <span class="fs-5 h-100 ms-3">MONTH: </span>
-                    <input type="month" class="form-control w-25 ms-3" id="month_date" [(ngModel)]="month_date">
-                    <button type="button" class="btn btn-secondary border border-dark border-2 form-control w-25 ms-3" (click)="filterWorkflow()">FILTER</button>
-                </div>
-
-                <div class="date w-100" *ngIf="filter === 'BY RANGE'">
-                    <span class="fs-5 h-100 ms-3">FROM: </span>
-                    <input type="date" class="form-control w-25 ms-3" id="range_from" [(ngModel)]="range_from">
-
-                    <span class="fs-5 h-100 ms-5">TO: </span>
-                    <input type="date" class="form-control w-25 ms-3" id="range_to" [(ngModel)]="range_to">
-
-                    <button type="button" class="btn btn-secondary border border-dark border-2 form-control w-25 ms-4" (click)="filterWorkflow()">FILTER</button>
-                </div>
-
-                <div class="date w-100" *ngIf="filter === 'BY SITE'">
-                    <span class="fs-5 h-100 ms-3">FROM: </span>
-                    <select name="site" class="form-select w-25 ms-3" id="developer_location" [(ngModel)]="site">
-                        <option *ngFor="let location of locations" value="{{location.location}}">{{location.location}}</option>
-                        <option value="OFFICE">WALK-IN</option>
-                    </select>
-
-                    <button type="button" class="btn btn-secondary border border-dark border-2 form-control w-25 ms-4" (click)="filterWorkflow()">FILTER</button>
-                </div>
-
-            </div>
-        </div>
+        <div class="col-5"></div>
 
         <div class="col-1">
             <button type="button" class="btn btn-light form-control border border-dark" (click)="printPDF()">
@@ -184,6 +134,56 @@
         </div>
     </div>
 
+    <div class="mx-2 mt-3 w-100 row">
+        <div class="col-3">
+            <div class="filter-type-box d-flex">
+                <span class="fs-5 h-100">Filter By Site: </span>
+                <select name="site" class="form-select w-50 ms-3" id="developer_location" [(ngModel)]="site" (change)="filterWorkflow()">
+                    <option value="ALL">ALL</option>
+                    <option value="OFFICE">WALK-IN</option>
+                    <option *ngFor="let location of locations" value="{{location.location}}">{{location.location}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="filter-type-box d-flex">
+                <span class="fs-5 h-100">Filter By Date Received: </span>
+
+                <select name="category" class="form-select w-40 ms-3" id="category" (change)="changeFilterType($event)">
+                    <option value="ALL">ALL</option>
+                    <option value="BY DATE">BY DATE</option>
+                    <option value="BY MONTH">BY MONTH</option>
+                    <option value="BY RANGE">BY RANGE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="filter-type-box d-flex">
+
+                <div class="date w-100" *ngIf="filterByDate === 'BY DATE'">
+                    <span class="fs-5 h-100 ms-3">DATE: </span>
+                    <input type="date" class="form-control w-25 ms-3" id="date_date" [(ngModel)]="date_date"  (change)="filterWorkflow()">
+                </div>
+
+                <div class="month w-100" *ngIf="filterByDate === 'BY MONTH'">
+                    <span class="fs-5 h-100 ms-3">MONTH: </span>
+                    <input type="month" class="form-control w-25 ms-3" id="month_date" [(ngModel)]="month_date"  (change)="filterWorkflow()">
+                </div>
+
+                <div class="date w-100" *ngIf="filterByDate === 'BY RANGE'">
+                    <span class="fs-5 h-100 ms-3">FROM: </span>
+                    <input type="date" class="form-control w-25 ms-3" id="range_from" [(ngModel)]="range_from"  (change)="filterWorkflow()">
+
+                    <span class="fs-5 h-100 ms-5">TO: </span>
+                    <input type="date" class="form-control w-25 ms-3" id="range_to" [(ngModel)]="range_to"  (change)="filterWorkflow()">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="scroll-horizontal">
         <table class="table table-bordered table-hover my-4 mx-2 border-dark">
             <thead>
@@ -192,9 +192,10 @@
                     <th scope="col" class="header text-center" (click)="updateSort('ctrl_no')">Control No.</th>
                     <th scope="col" class="header text-center" (click)="updateSort('client_name')">Customer Name</th>
                     <th scope="col" class="header text-center" (click)="updateSort('client_address')">Address</th>
+                    <th scope="col" class="header text-center">No. of Units</th>
                     <th scope="col" class="header text-center" (click)="updateSort('client_contact_no')">Contact Number</th>
                     <th scope="col" class="header text-center" (click)="updateSort('date_received')">Date Received</th>
-                    <th scope="col" class="header text-center" (click)="updateSort('tracker_status')">Status</th>
+                    <th scope="col" class="header text-center" (click)="updateSort('status')">Status</th>
                     <th scope="col" colspan="2" class="text-center">Action</th>
                 </tr>
             </thead>
@@ -204,10 +205,11 @@
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.ctrl_no }}</td>
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_name }}</td>
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_address }}</td>
+                    <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.number_of_units }}</td>
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.client_contact_no }}</td>
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.date_received }}</td>
                     <td [ngClass]="getTextColor(workflow.bg)">{{ workflow.status }}</td>
-                    <td class="text-center" [ngClass]="getTextColor(workflow.bg)"><span class="tbl-link" data-bs-toggle="modal" data-bs-target="#update-status-modal" (click)="updateWorkflowId(workflow.id)">View Status Updates</span></td>
+                    <td class="text-center" [ngClass]="getTextColor(workflow.bg)"><span class="tbl-link" [routerLink]="workflow.statusLink">View Status Updates</span></td>
                     <td class="text-center" [ngClass]="getTextColor(workflow.bg)"><span class="tbl-link" [routerLink]="workflow.link">View Workflow</span></td>
                 </tr>
             </tbody>

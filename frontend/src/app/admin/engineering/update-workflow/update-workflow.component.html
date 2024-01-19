@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <h1 class="fw-bolder fs-1 text-center w-100"  *ngIf="permissionGranted">Workflow Details</h1>
+    <h1 class="fw-bolder fs-1 text-center w-100"  *ngIf="permissionGranted">Flow of Work Details</h1>
 
     <div class="container border border-dark mt-5 rounded"  *ngIf="permissionGranted">
         <div class="p-4">
@@ -151,7 +151,7 @@
 
                 <div class="mb-3">
                     <label for="image_proofs_pre_survey" class="form-label fs-5 me-4">Image Proofs</label>
-                    <button mat-raised-button color="primary" (click)="fileInputpresurvey.click()">Upload images</button>
+                    <button class="btn btn-primary" (click)="fileInputpresurvey.click()">Upload images</button>
                     <input type="file" hidden (change)="onFileSelectedPreSurvey($event)" accept="image/*" #fileInputpresurvey multiple>
                     <div class="mt-3">
                         <span class="nameSpan fs-6 mt-2">{{fileNamesPreSurvey}}</span>
@@ -177,7 +177,7 @@
         
                 <div class="mb-3">
                     <label for="image_proofs_documents" class="form-label fs-5 me-4">Available Documents</label>
-                    <button mat-raised-button color="primary" (click)="fileInputdocuments.click()">Upload Documents</button>
+                    <button class="btn btn-primary" (click)="fileInputdocuments.click()">Upload Documents</button>
                     <input type="file" hidden (change)="onFileSelectedDocuments($event)" #fileInputdocuments formControlName="documents" multiple>
                     <div class="mt-3">
                         <span class="nameSpan fs-6 mt-2">{{fileNamesDocuments}}</span>
@@ -188,6 +188,12 @@
             </form>
 
             <form [formGroup]="paymentForm" enctype="multipart/form-data" class="mb-2" *ngIf="step === 'payment'">
+
+                <div class="mb-3">
+                    <label for="package_price" class="form-label fs-5">Package Price</label>
+                    <input type="number" class="form-control" id="package_price" formControlName="package_price" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
                 <div class="mb-3">
                     <label for="payment_mark" class="form-label fs-5">Payment</label>
                     <select class="form-select" id="payment_mark" formControlName="payment_mark" (change)="changePaymentMark()">
@@ -232,7 +238,7 @@
 
                 <div class="mb-3">
                     <label for="image_proofs_job-order" class="form-label fs-5 me-4">Image Proofs</label>
-                    <button mat-raised-button color="primary" (click)="fileInputjoborder.click()">Upload images</button>
+                    <button class="btn btn-primary" (click)="fileInputjoborder.click()">Upload images</button>
                     <input type="file" hidden (change)="onFileSelectedJobOrder($event)" accept="image/*" #fileInputjoborder formControlName="job_order" multiple>
                     <div class="mt-3">
                         <span class="nameSpan fs-6 mt-2">{{fileNamesJobOrder}}</span>
@@ -263,7 +269,7 @@
 
                 <div class="mb-3">
                     <label for="image_proofs_job-order" class="form-label fs-5 me-4">Image Proofs</label>
-                    <button mat-raised-button color="primary" (click)="fileInputloadside.click()">Upload images</button>
+                    <button class="btn btn-primary" (click)="fileInputloadside.click()">Upload images</button>
                     <input type="file" hidden (change)="onFileSelectedLoadSide($event)" accept="image/*" #fileInputloadside formControlName="load_side" multiple>
                     <div class="mt-3">
                         <span class="nameSpan fs-6 mt-2">{{fileNamesLoadSide}}</span>
@@ -301,15 +307,20 @@
                     <label for="tracker_status" class="form-label fs-5">Tracker Status</label>
                     <select class="form-select" id="tracker_status" formControlName="tracker_status" (change)="select_trackerStatus()">
                         <option value="FOR CONTRACT FINALIZE">FOR CONTRACT FINALIZE</option>
-                        <option value="WITH CONTRACT">WITH CONTRACT</option>
+                        <option value="WITH CONTRACT">WITH CONTRACT / PENDING ENERGIZATION</option>
                         <option value="ENERGIZED">ENERGIZED</option>
                         <option value="AWAITING CUSTOMER COMPLIANCE / RETURN ORDER">AWAITING CUSTOMER COMPLIANCE / RETURN ORDER</option>
                         <option value="CANCELLED">CANCELLED</option>
                     </select>
                 </div>
 
+                <div class="mt-3 mb-3" *ngIf="isEnergized">
+                    <label for="date_energized" class="form-label fs-5">Date Energized: </label>
+                    <input type="date" class="form-control" id="date_energized" formControlName="date_energized" oninput="this.value = this.value.toUpperCase()">
+                </div>
+
                 <div class="mt-3 mb-3" *ngIf="return_order">
-                    <label for="other_structural_classification" class="form-label fs-5">Reason: </label>
+                    <label for="reason" class="form-label fs-5">Reason: </label>
                     <input type="text" class="form-control" id="reason" formControlName="reason" oninput="this.value = this.value.toUpperCase()">
                 </div>
         

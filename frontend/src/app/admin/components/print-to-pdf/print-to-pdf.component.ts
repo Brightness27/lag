@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import html2pdf from 'html2pdf.js';
 import { EmployeesService } from 'src/app/services/employee-service/employees.service';
@@ -11,7 +12,8 @@ import { ConstantsService } from 'src/app/services/constants/constants.service';
 @Component({
   selector: 'app-print-to-pdf',
   templateUrl: './print-to-pdf.component.html',
-  styleUrls: ['./print-to-pdf.component.css']
+  styleUrls: ['./print-to-pdf.component.css'],
+  providers: [DatePipe]
 })
 export class PrintToPdfComponent implements OnInit{
 
@@ -22,12 +24,15 @@ export class PrintToPdfComponent implements OnInit{
   inventories: any[] = [];
 
   tableData: any[] = [];
+  filterData: any = {};
+
+  filtered = false;
 
   token: any;
   admin_id: any;
   employee_id: any;
 
-  constructor(private activatedRoute: ActivatedRoute, private adminService: AdminServicesService , private employeeService: EmployeesService, private inventoryService: InventoryService, private location: Location, private shareData: ConstantsService){
+  constructor(private activatedRoute: ActivatedRoute, private adminService: AdminServicesService , private employeeService: EmployeesService, private inventoryService: InventoryService, private location: Location, private shareData: ConstantsService, private datePipe: DatePipe){
     this.type = this.activatedRoute.snapshot.params['type'];
   }
   
@@ -110,12 +115,30 @@ export class PrintToPdfComponent implements OnInit{
   getWorkflows() {
     this.shareData.tableData$.subscribe(data => {
       this.tableData = data;
-
-      this.downloadPDF();
-      this.location.back();
     });
 
-    
+    this.shareData.filterData$.subscribe(data => {
+      this.filterData = {
+          ... data,
+          date_date: this.transformDate(data.date_date),
+          month_date: this.transformMonth(data.month_date),
+          range_from: this.transformDate(data.range_from),
+          range_to: this.transformDate(data.range_to)
+        };
+
+      if(this.filterData.site === 'ALL' && this.filterData.filterType === 'ALL') {
+        this.filtered = false;
+      }
+      else {
+        this.filtered = true;
+      }
+
+      console.log(this.filtered, this.filterData);
+      
+    });
+
+    this.downloadPDF();
+    this.location.back();
   }
 
   getTextColor(bgColor: string | null) {
@@ -123,6 +146,16 @@ export class PrintToPdfComponent implements OnInit{
       return 'text-dark';
     else
       return 'text-white';
+  }
+
+  transformDate(date: string): string {
+    const transformedDate = this.datePipe.transform(date, 'MMMM d, y');
+    return transformedDate ? transformedDate.toUpperCase() : '';
+  }
+
+  transformMonth(date: string): string {
+    const transformedDate = this.datePipe.transform(date, 'MMMM y');
+    return transformedDate ? transformedDate.toUpperCase() : '';
   }
 
 

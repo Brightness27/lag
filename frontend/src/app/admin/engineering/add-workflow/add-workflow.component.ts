@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdminServicesService } from 'src/app/services/admin-services/admin-services.service';
 import { WorkflowService } from 'src/app/services/workflow-services/workflow.service';
-import { MatStepper } from '@angular/material/stepper';
 import { DatePipe } from '@angular/common';
 import { LoadingService } from 'src/app/services/loading-service/loading.service';
 import { Router } from '@angular/router';
@@ -19,8 +18,6 @@ interface SideNavToggle {
   providers: [DatePipe]
 })
 export class AddWorkflowComponent implements OnInit {
-  //@ViewChildren('stepper') stepper!: MatStepper;
-
   isSideNavCollapsed = false;
   screenWidth = 0;
 
@@ -49,6 +46,8 @@ export class AddWorkflowComponent implements OnInit {
 
   locations: any[] = [];
 
+  currentDate!: string | null;
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screen_width = window.innerWidth;
@@ -56,7 +55,9 @@ export class AddWorkflowComponent implements OnInit {
 
   permissionGranted: boolean = false;
 
-  constructor(private router: Router, private adminService: AdminServicesService, private builder: FormBuilder, private workflowService: WorkflowService, private datePipe: DatePipe, private loadingService: LoadingService) {}
+  constructor(private router: Router, private adminService: AdminServicesService, private builder: FormBuilder, private workflowService: WorkflowService, private datePipe: DatePipe, private loadingService: LoadingService) {
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+  }
 
   other_structural_classification = '';
   other_selected = false;
@@ -99,7 +100,7 @@ export class AddWorkflowComponent implements OnInit {
       lname: new FormControl(''),
       address: new FormControl(''),
       contact_no: new FormControl(''),
-      date_received: new FormControl(''),
+      date_received: new FormControl('', Validators.required),
       category: new FormControl(''),
       developer_location: new FormControl(''),
       new_location: new FormControl(''),
@@ -193,6 +194,9 @@ export class AddWorkflowComponent implements OnInit {
     } else {
       this.developer = false;
       this.addForm.get('developer_location')?.setValue('');
+
+      this.new_location = false;
+      this.addForm.get('new_location')?.setValue('');
     }
   }
 

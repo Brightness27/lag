@@ -22,7 +22,7 @@ module.exports = class Options {
 
     static selectAllOptionsBySelector(step, selector) {
         return db.execute(
-            'SELECT * FROM workflow_options WHERE workflow_step = ? AND workflow_selector = ?',
+            'SELECT * FROM workflow_options WHERE workflow_step = ? AND workflow_selector = ? ORDER BY workflow_options',
             [step, selector]
         );
     }

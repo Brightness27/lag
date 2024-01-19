@@ -79,12 +79,16 @@
 </div>
 
 <section class="body contents border p-5" [ngClass]="getBodyClass()">
-    <h1 class="fw-bolder fs-1 text-center w-100">Workflow Details</h1>
+    <h1 class="fw-bolder fs-1 text-center w-100">Flow of Work Details</h1>
+    
+    <div class="container d-flex justify-content-end">
+        <button class="btn btn-light mt-3 border border-dark" (click)="updateLink('payment')">View payment History</button>
+    </div>
 
-    <div class="container border border-dark p-5 mt-5 rounded">
+    <div class="container border border-dark p-5 mt-2 rounded">
         <div class="mb-1 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Customer Details</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('client_details')" *ngIf="permissions.client_details">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('client_details')" *ngIf="editClientDetails">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -129,7 +133,7 @@
 
         <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Pre-Survey</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('pre_survey')" *ngIf="permissions.pre_survey">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('pre_survey')" *ngIf="editPreSurvey">Edit</span>
         </div>
         
         <div class="mb-3">
@@ -191,7 +195,7 @@
 
         <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Documents</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('documents')" *ngIf="permissions.documents">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('documents')" *ngIf="editDocuments">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -219,43 +223,8 @@
         </div>
 
         <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
-            <label class="form-label fs-5">Payment</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('payment')" *ngIf="permissions.payment">Edit</span>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label fs-5">Paid</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.payment_mark">
-        </div>
-
-        <div class="mb-3" *ngIf="full_payment">
-            <label class="form-label fs-5">Amount</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.amount">
-        </div>
-
-        <div class="mb-3" *ngIf="!full_payment">
-            <label class="form-label fs-5">Down Payment</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.down_payment">
-        </div>
-
-        <div class="mb-3" *ngIf="!full_payment">
-            <label class="form-label fs-5">Balance</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.balance">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label fs-5">A.R / O.R No.</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.ar_or_number">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label fs-5">Remarks</label>
-            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.payment.remarks">
-        </div>
-
-        <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Job Order</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('job_order')" *ngIf="permissions.job_order">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('job_order')" *ngIf="editJobOrder">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -282,7 +251,7 @@
     
         <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Load Side</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('load_side')" *ngIf="permissions.load_side">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('load_side')" *ngIf="editLoadSide">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -314,7 +283,7 @@
     
         <div class="mb-1 mt-5 mb-3 border-bottom border-dark d-flex justify-content-between">
             <label class="form-label fs-5">Final Processing</label>
-            <span class="fs-5 edit-btn" (click)="updateLink('final_process')" *ngIf="permissions.final_process">Edit</span>
+            <span class="fs-5 edit-btn" (click)="updateLink('final_process')" *ngIf="editFinalprocess">Edit</span>
         </div>
 
         <div class="mb-3">
@@ -342,13 +311,14 @@
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.tracker_status">
         </div>
 
+        <div class="mb-3" *ngIf="isEnergized">
+            <label class="form-label fs-5">Date Energized</label>
+            <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.date_energized">
+        </div>
+
         <div class="mb-3" *ngIf="return_order">
             <label class="form-label fs-5">Reason</label>
             <input type="text" class="form-control input-bg border-secondary" disabled [value]="workflow.final_processing.reason">
         </div>
-    </div>
-
-   
-
-    
+    </div>    
 </section>

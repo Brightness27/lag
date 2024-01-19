@@ -1,0 +1,40 @@
+.body {
+    width: calc(100% - 5rem);
+    margin-left: 5rem;
+    z-index: 0;
+    position: relative;
+    top: 94px;
+    transition: all .3s ease;
+}
+
+.body-trimmed {
+    width: calc(100% - 16.5625rem);
+    margin-left: 16.5625rem;
+}
+
+.body-md-screen {
+    width: calc(100% - 5rem);
+    margin-left: 5rem;
+}
+
+table tbody tr {
+    cursor: pointer;
+}
+
+
+.tbl-link {
+    cursor: pointer;
+}
+
+.tbl-link:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+.tbl-link:active{
+    color: rgb(238, 96, 96);
+}
+
+.error-message {
+    color: red;
+}

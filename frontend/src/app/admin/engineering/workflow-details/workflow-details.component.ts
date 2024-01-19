@@ -39,6 +39,8 @@ export class WorkflowDetailsComponent implements OnInit {
 
   return_order: boolean = false;
 
+  isEnergized: boolean = false;
+
   full_payment: boolean = true;
 
   alertTitle: string = '';
@@ -55,6 +57,14 @@ export class WorkflowDetailsComponent implements OnInit {
   verificationMessage: any = '';
 
   screen_width!: number;
+
+  editClientDetails = false;
+  editPreSurvey = false;
+  editDocuments= false;
+  editPayment = false;
+  editJobOrder = false;
+  editLoadSide = false;
+  editFinalprocess = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -83,8 +93,6 @@ export class WorkflowDetailsComponent implements OnInit {
         this.setActiveDepartment();
       });
     }
-
-    this.getWorkflow();
     this.getPermissions();
 
     this.screen_width = window.innerWidth;
@@ -165,25 +173,57 @@ export class WorkflowDetailsComponent implements OnInit {
 
       const status = this.workflow.final_processing.tracker_status;
 
-      if (status === 'AWAITING CUSTOMER COMPLIANCE / RETURN ORDER') {
+      if (status === 'AWAITING CUSTOMER COMPLIANCE / RETURN ORDER' || status === 'CANCELLED') {
         this.return_order = true;
       } else {
         this.return_order = false;
       }
 
+      if (status === 'ENERGIZED') {
+        this.isEnergized = true;
+      } else {
+        this.isEnergized = false;
+      }
+
+      if(status === 'CANCELLED') {
+        this.editClientDetails = false;
+        this.editPreSurvey = false;
+        this.editDocuments= false;
+        this.editPayment = false;
+        this.editJobOrder = false;
+        this.editLoadSide = false;
+        this.editFinalprocess = false;
+
+        this.return_order = true;
+      }
+
+      else {
+        this.editClientDetails = true;
+        this.editPreSurvey = true;
+        this.editDocuments= true;
+        this.editPayment = true;
+        this.editJobOrder = true;
+        this.editLoadSide = true;
+        this.editFinalprocess = true;
+
+        this.return_order = false;
+      }
+
       const payment = this.workflow.payment.payment_mark;
 
-      if (status === 'Full Payment') {
+      if (payment === 'Full Payment') {
         this.full_payment = true;
       } else {
         this.full_payment = false;
       }
     });
+
+    
   }
 
   getSiteLocation(location: string) {
     if(location === 'OFFICE') {
-      return '';
+      return 'WALK IN';
     }
     else {
       return location;
@@ -195,6 +235,57 @@ export class WorkflowDetailsComponent implements OnInit {
       .getAdminPermissions(this.admin_id)
       .subscribe((permissions) => {
         this.permissions = permissions;
+
+        if(this.permissions.client_details) {
+          this.editClientDetails = true;
+        }
+        else {
+          this.editClientDetails = false;
+        }
+
+        if(this.permissions.pre_survey) {
+          this.editPreSurvey = true;
+        }
+        else {
+          this.editPreSurvey = false;
+        }
+
+        if(this.permissions.documents) {
+          this.editDocuments = true;
+        }
+        else {
+          this.editDocuments = false;
+        }
+
+        if(this.permissions.payment) {
+          this.editPayment = true;
+        }
+        else {
+          this.editPayment = false;
+        }
+
+        if(this.permissions.job_order) {
+          this.editJobOrder = true;
+        }
+        else {
+          this.editJobOrder = false;
+        }
+
+        if(this.permissions.load_side) {
+          this.editLoadSide = true;
+        }
+        else {
+          this.editLoadSide = false;
+        }
+
+        if(this.permissions.final_process) {
+          this.editFinalprocess = true;
+        }
+        else {
+          this.editFinalprocess = false;
+        }
+
+        this.getWorkflow();
       });
   }
 
@@ -217,7 +308,14 @@ export class WorkflowDetailsComponent implements OnInit {
   }
 
   updateLink(step: any) {
-    const link = `/admin/engineering/work-flow/update/${this.ctrlno}/${step}`;
+    let link = '';
+
+    if(step === 'payment') {
+      link = `/admin/engineering/work-flow/update/${this.ctrlno}/accounting/payment`;
+    }
+    else {
+      link = `/admin/engineering/work-flow/update/${this.ctrlno}/${step}`;
+    }
     this.router.navigate([link]);
   }
 
@@ -234,7 +332,7 @@ export class WorkflowDetailsComponent implements OnInit {
       id: this.confirm_admin_id,
       password: this.confirm_admin_password
     }
-
+    
     this.adminService.verifyAdmin(credentials).subscribe(verification => {
       this.verificationConfirmed = verification.verified;
       this.verificationMessage = verification.message;
@@ -242,6 +340,9 @@ export class WorkflowDetailsComponent implements OnInit {
       if(this.verificationConfirmed) {
         this.verificationConfirmed = false;
         this.verificationMessage = '';
+
+        this.confirm_admin_id = '';
+        this.confirm_admin_password = '';
 
         document.getElementById('delete-open-modal')?.click();
       }

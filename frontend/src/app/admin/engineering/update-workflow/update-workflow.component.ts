@@ -63,6 +63,7 @@ export class UpdateWorkflowComponent implements OnInit {
   other_load_side_selected = false;
 
   return_order = false;
+  isEnergized = false;
 
   full_payment: boolean = true;
 
@@ -239,6 +240,7 @@ export class UpdateWorkflowComponent implements OnInit {
   createPaymentFormGroup(): FormGroup {
     return new FormGroup({
       id: new FormControl(''),
+      package_price: new FormControl(''),
       payment_mark: new FormControl(''),
       amount: new FormControl(0),
       down_payment: new FormControl(0.),
@@ -274,6 +276,7 @@ export class UpdateWorkflowComponent implements OnInit {
       case_no: new FormControl(''),
       sin_no: new FormControl(''),
       tracker_status: new FormControl(''),
+      date_energized: new FormControl(''),
       reason: new FormControl('')
     });
   }
@@ -487,6 +490,14 @@ export class UpdateWorkflowComponent implements OnInit {
       this.return_order = false;
       this.finalProcessForm.get('reason')?.setValue('');
     }
+
+    if (status === 'ENERGIZED') {
+      this.isEnergized = true;
+      
+    } else {
+      this.isEnergized = false;
+      this.finalProcessForm.get('date_energized')?.setValue('');
+    }
   }
 
   dismissModal() {
@@ -532,7 +543,11 @@ export class UpdateWorkflowComponent implements OnInit {
 
       this.paymentForm.patchValue({
         id: this.workflow.payment.id,
+        package_price: this.workflow.payment.package_price,
         payment_mark: this.workflow.payment.payment_mark,
+        amount: this.workflow.payment.amount,
+        down_payment: this.workflow.payment.down_payment,
+        balance: this.workflow.payment.balance,
         ar_or_number: this.workflow.payment.ar_or_number,
         remarks: this.workflow.payment.remarks,
       });

@@ -113,10 +113,31 @@ export class InventoryComponent implements OnInit {
       this.inventories = inventories.map(inventory => {
         return {
           ...inventory,
-          link: '/admin/inventory/details/' + inventory.item_code
+          link: '/admin/inventory/details/' + inventory.item_code,
+          bg: this.getBgColor(inventory.quantity)
         };
       });
     });
+  }
+
+  getBgColor(remaining_quantity: any) {
+
+    let color = '';
+    if(remaining_quantity === '0') {
+      color = 'bg-danger';
+    }
+    else {
+      color = '';
+    }
+
+    return color;
+  }
+
+  getTextColor(bgColor: string | null) {
+    if(bgColor === 'bg-danger')
+      return 'text-white';
+    else
+      return 'text-dark';
   }
 
   updateSearchKey(event: any) {

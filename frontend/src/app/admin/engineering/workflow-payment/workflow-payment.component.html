@@ -1,0 +1,105 @@
+<app-admin-navbar></app-admin-navbar>
+
+<app-superadmin-side-nav (onToggleSideNav)="onToggleSideNav($event)" [name]="name"></app-superadmin-side-nav>
+<app-loading></app-loading>
+
+<div class="modal fade" tabindex="-1" id="alert-modal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ alertTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="update-close-btn"></button>
+            </div>
+
+            <div class="modal-body">
+                <span>{{ alertMessage }}</span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#alert-modal" id="update-open-modal">open modal</button>
+
+<section class="body contents border p-5" [ngClass]="getBodyClass()">
+
+    <!-- <div class="container d-flex justify-content-center align-items-center h-100" *ngIf="!permissionGranted">
+        <div>
+            <h1 class="font-monospace lh-lg fs-1 fw-bold">ERROR 401: Unauthorized</h1>
+            <h4 class="font-monospace lh-lg fs-5">You are trying to change something you are not permitted to.</h4>
+        </div>
+    </div> -->
+
+    <h1 class="fw-bolder fs-1 text-center w-100">Flow of Work Payment Details</h1>
+
+    <div class="d-flex justify-content-around w-100">
+    <!-- <div class="container border border-dark mt-5 rounded"  *ngIf="permissionGranted"> -->
+        <div class="container border border-dark mt-5 me-3  rounded" *ngIf="isPermitted">
+            <div class="p-4">
+                
+                <form enctype="multipart/form-data" class="mb-2" [formGroup]="updateForm">
+                <!-- <form [formGroup]="paymentForm" enctype="multipart/form-data" class="mb-2"> -->
+
+                    <div class="mb-3">
+                        <label for="package_price" class="form-label fs-5">Package Price</label>
+                        <input type="number" class="form-control" id="package_price" formControlName="package_price" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amount" class="form-label fs-5">Payment amount</label>
+                        <input type="number" class="form-control" id="amount" formControlName="amount" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="ar_or_number" class="form-label fs-5">A.R. / O.R. No.</label>
+                        <input type="text" class="form-control" id="ar_or_number" formControlName="ar_or_number" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date_of_payment" class="form-label fs-5">Date</label>
+                        <input type="date" class="form-control" id="date_of_payment" formControlName="date_of_payment" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+            
+                    <div class="mb-3">
+                        <label for="remarks_payment" class="form-label fs-5">Remarks</label>
+                        <textarea type="text" class="form-control" rows="5" id="remarks" formControlName="remarks" oninput="this.value = this.value.toUpperCase()"></textarea>
+                    </div>
+            
+                    <button type="button" class="btn btn-primary form-control" (click)="submitPayment()">Submit</button>
+                </form>
+                <button type="button" class="btn btn-danger form-control" [routerLink]="link">Cancel</button>
+                
+            </div>
+        </div>
+
+        <div class="container border border-dark mt-5 rounded" >
+            <div class="p-2">
+                <h2 class="w-100 text-center">Payment History</h2>
+                <table class="table table-bordered table-hover my-4 mx-2 border-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="header text-center">#</th>
+                            <th scope="col" class="header text-center">A.R / O.R No.</th>
+                            <th scope="col" class="header text-center">Amount</th>
+                            <th scope="col" class="header text-center">Date of Payment</th>
+                            <th scope="col" class="header text-center">Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let history of payment_history">
+                            <td>{{history.num}}</td>
+                            <td>{{history.ar_or_number}}</td>
+                            <td>{{history.amount}}</td>
+                            <td>{{history.date_of_payment}}</td>
+                            <td>{{history.balance}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</section>

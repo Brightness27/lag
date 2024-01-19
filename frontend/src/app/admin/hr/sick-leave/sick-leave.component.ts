@@ -181,8 +181,8 @@ export class SickLeaveComponent {
     });
   }
 
-  showLeaveDetails(leave_type: any, employeeId: any) {
-    this.leaveService.getSpecificLeavesByEmployee(leave_type, employeeId).subscribe(leaves => {
+  showLeaveDetails(leave_type: any, employeeId: any, id: any) {
+    this.leaveService.getSpecificLeavesByEmployee(leave_type, employeeId, id).subscribe(leaves => {
       this.leaveDetails = leaves;
 
       if(!this.leaveDetails.leaveDetails || this.leaveDetails.leaveDetails.length === 0){

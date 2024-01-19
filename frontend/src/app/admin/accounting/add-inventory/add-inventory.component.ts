@@ -76,6 +76,7 @@ export class AddInventoryComponent {
       category: new FormControl(''),
       quantity: new FormControl(''),
       unit: new FormControl(''),
+      size: new FormControl(''),
       last_purchase_date: new FormControl('')
     });
   }

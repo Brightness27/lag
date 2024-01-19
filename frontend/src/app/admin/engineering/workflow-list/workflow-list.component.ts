@@ -50,7 +50,7 @@ export class WorkflowListComponent implements OnInit {
   alertTitle = '';
   alertMessage = '';
 
-  filter: string = 'NONE';
+  filterByDate: string = 'ALL';
 
   date_date: any = '';
 
@@ -59,11 +59,13 @@ export class WorkflowListComponent implements OnInit {
   range_from: any = '';
   range_to: any = '';
 
-  site: any = '';
+  site: string = 'ALL';
 
   locations: any[] = [];
 
   printList = faPrint;
+
+  update_status = '';
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -98,7 +100,7 @@ export class WorkflowListComponent implements OnInit {
       this.hideAddText = false;
     }
 
-    this.getAllWorkflows();
+    this.filterWorkflow();
 
     this.getLocations();
     this.updateStatusForm = this.createForm();
@@ -160,7 +162,7 @@ export class WorkflowListComponent implements OnInit {
   searchItem() {
     var counter = 1;
     if(this.searchKey === "") {
-      this.getAllWorkflows();
+      this.filterWorkflow();
     }
     else {
       this.workflowService.searchWorkflows(this.searchKey).subscribe(workflows => {
@@ -170,6 +172,7 @@ export class WorkflowListComponent implements OnInit {
             ...workflow,
             client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
             link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+            statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
             num: counter++,
             bg: this.getBackgroundColor(workflow.tracker_status),
             status: this.getStatus(workflow.tracker_status)
@@ -193,6 +196,7 @@ export class WorkflowListComponent implements OnInit {
           ...workflow,
           client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
           link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+          statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
           num: counter++,
           bg: this.getBackgroundColor(workflow.tracker_status),
           status: this.getStatus(workflow.tracker_status)
@@ -202,7 +206,15 @@ export class WorkflowListComponent implements OnInit {
   }
 
   getStatus(trackerStatus: string | null): string {
-    return trackerStatus ?? 'ON PROCESS';
+    let status = '';
+
+    if(!trackerStatus) {
+      status = 'ON PROCESS';
+    }
+    else {
+      status = trackerStatus!;
+    }
+    return status;
   }
 
   getBackgroundColor(trackerStatus: string | null): string {
@@ -229,10 +241,10 @@ export class WorkflowListComponent implements OnInit {
 
   changeFilterType(event: any) {
     const type = event.target.value;
-    this.filter = type;
+    this.filterByDate = type;
 
-    if (this.filter === 'NONE') {
-      this.getAllWorkflows();
+    if (this.filterByDate === 'ALL') {
+      this.filterWorkflow();
     }
   }
 
@@ -278,7 +290,7 @@ export class WorkflowListComponent implements OnInit {
       return 'text-white';
   }
 
-  updateWorkflowId(id: any) {
+  updateWorkflowId(id: any, status: any) {
     this.workflowService.getWorkflowStatus(id).subscribe(workflow => {
       this.workflow = workflow;
 
@@ -288,6 +300,8 @@ export class WorkflowListComponent implements OnInit {
       else {
         this.noWorkflowStatus = false;
       }
+
+      this.update_status = status;
 
     });
   }
@@ -320,15 +334,16 @@ export class WorkflowListComponent implements OnInit {
   filterWorkflow() {
     var counter = 1;
 
-    switch (this.filter) {
+    switch (this.filterByDate) {
       case 'BY DATE':
         counter = 1;
-        this.workflowService.filterWorkflowByDay(this.date_date, 'ASC').subscribe(workflows => {
+        this.workflowService.filterWorkflowByDay(this.date_date, this.site).subscribe(workflows => {
           this.workflows = workflows.map(workflow => {
             return {
               ...workflow,
               client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
               link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
               num: counter++,
               bg: this.getBackgroundColor(workflow.tracker_status),
               status: this.getStatus(workflow.tracker_status)
@@ -340,12 +355,13 @@ export class WorkflowListComponent implements OnInit {
       
       case 'BY MONTH':
         counter = 1;
-        this.workflowService.filterWorkflowByMonth(this.month_date, 'ASC').subscribe(workflows => {
+        this.workflowService.filterWorkflowByMonth(this.month_date, this.site).subscribe(workflows => {
           this.workflows = workflows.map(workflow => {
             return {
               ...workflow,
               client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
               link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
               num: counter++,
               bg: this.getBackgroundColor(workflow.tracker_status),
               status: this.getStatus(workflow.tracker_status)
@@ -357,12 +373,13 @@ export class WorkflowListComponent implements OnInit {
 
       case 'BY RANGE':
         counter = 1;
-        this.workflowService.filterWorkflowByRange(this.range_from, this.range_to, 'ASC').subscribe(workflows => {
+        this.workflowService.filterWorkflowByRange(this.range_from, this.range_to, this.site).subscribe(workflows => {
           this.workflows = workflows.map(workflow => {
             return {
               ...workflow,
               client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
               link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+              statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
               num: counter++,
               bg: this.getBackgroundColor(workflow.tracker_status),
               status: this.getStatus(workflow.tracker_status)
@@ -372,27 +389,53 @@ export class WorkflowListComponent implements OnInit {
 
         break;
 
-        case 'BY SITE':
-        counter = 1;
-        this.workflowService.filterWorkflowBySite(this.site, 'ASC').subscribe(workflows => {
-          this.workflows = workflows.map(workflow => {
-            return {
-              ...workflow,
-              client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
-              link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
-              num: counter++,
-              bg: this.getBackgroundColor(workflow.tracker_status),
-              status: this.getStatus(workflow.tracker_status)
-            };
-          });
-        });
+        default:
 
-        break;
+          if(this.site === 'ALL') {
+            this.getAllWorkflows();
+          }
+          else {
+            this.workflowService.filterWorkflowBySite(this.site).subscribe(workflows => {
+              this.workflows = workflows.map(workflow => {
+                return {
+                  ...workflow,
+                  client_name: `${workflow.client_fname} ${workflow.client_mname} ${workflow.client_lname}`,
+                  link: '/admin/engineering/work-flow/details/' + workflow.ctrl_no,
+                  statusLink: '/admin/engineering/work-flow/status-updates/' + workflow.ctrl_no,
+                  num: counter++,
+                  bg: this.getBackgroundColor(workflow.tracker_status),
+                  status: this.getStatus(workflow.tracker_status)
+                };
+              });
+            });
+          }
+          
+          break;
     }
   }
 
   printPDF() {
+
+    let siteFilter = '';
+
+    if (this.site === 'OFFICE') {
+      siteFilter = 'WALK IN';
+    }
+    else {
+      siteFilter = this.site;
+    }
+
+    const filterData = {
+      site: siteFilter,
+      filterType: this.filterByDate,
+      date_date: this.date_date,
+      month_date: this.month_date,
+      range_from: this.range_from,
+      range_to: this.range_to
+    };
+
     this.shareData.setTableData(this.workflows);
+    this.shareData.setFilterData(filterData);
     this.router.navigate(['/admin/print/workflow']);
   }
 }
