@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ConstantsService {
 
-  root_url: string = 'http://192.168.68.106:3000';
+  root_url: string = 'http://192.168.68.127:3000';
 
   constructor() { }
 

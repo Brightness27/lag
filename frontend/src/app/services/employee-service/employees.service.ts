@@ -38,8 +38,8 @@ export class EmployeesService {
     return this.http.post(`${this.employee_url}/changeStatus/${employeeId}`, {status: status}, this.httpOptions);
   }
 
-  searchEmployees(searchKey: string, status: string): Observable<Employees[]> {
-    return this.http.get<Employees[]>(`${this.employee_url}/search/${searchKey}/${status}`, this.httpOptions);
+  searchEmployees(searchKey: string, status: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.employee_url}/search/${searchKey}/${status}`, this.httpOptions);
   }
 
 }

@@ -356,6 +356,13 @@ exports.addStatusUpdate = async (req, res, next) => {
 
     const workflow_id = req.params.id;
 
+    if(action_date === '0000-00-00' || action_date === '') {
+        return res.json({
+            error: true,
+            message: "Invalid Date"
+        });
+    }
+
     try {
 
             const update_details = {
